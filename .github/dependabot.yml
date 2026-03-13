@@ -1,0 +1,30 @@
+# =============================================================================
+# Dependabot — Automated dependency updates
+# https://docs.github.com/en/code-security/dependabot
+# =============================================================================
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: npm
+    directory: /OASIS
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    commit-message:
+      prefix: "deps"
+
+  # GitHub Actions versions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - github-actions
+    commit-message:
+      prefix: "ci"

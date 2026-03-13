@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+    <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="MasterDataService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="CustomCodeLists1" EntityType="MasterDataService.CustomCodeLists1">
+          <NavigationPropertyBinding Path="texts" Target="CustomCodeLists1_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="CustomCodeLists1_texts"/>
+        </EntitySet>
+        <EntitySet Name="CustomCodeLists1_texts" EntityType="MasterDataService.CustomCodeLists1_texts"/>
+        <EntitySet Name="CustomCodeLists2" EntityType="MasterDataService.CustomCodeLists2">
+          <NavigationPropertyBinding Path="texts" Target="CustomCodeLists2_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="CustomCodeLists2_texts"/>
+        </EntitySet>
+        <EntitySet Name="CustomCodeLists2_texts" EntityType="MasterDataService.CustomCodeLists2_texts"/>
+        <EntitySet Name="CustomCodeLists3" EntityType="MasterDataService.CustomCodeLists3">
+          <NavigationPropertyBinding Path="texts" Target="CustomCodeLists3_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="CustomCodeLists3_texts"/>
+        </EntitySet>
+        <EntitySet Name="CustomCodeLists3_texts" EntityType="MasterDataService.CustomCodeLists3_texts"/>
+        <EntitySet Name="CustomCodeLists4" EntityType="MasterDataService.CustomCodeLists4">
+          <NavigationPropertyBinding Path="texts" Target="CustomCodeLists4_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="CustomCodeLists4_texts"/>
+        </EntitySet>
+        <EntitySet Name="CustomCodeLists4_texts" EntityType="MasterDataService.CustomCodeLists4_texts"/>
+        <EntitySet Name="CustomCodeLists5" EntityType="MasterDataService.CustomCodeLists5">
+          <NavigationPropertyBinding Path="texts" Target="CustomCodeLists5_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="CustomCodeLists5_texts"/>
+        </EntitySet>
+        <EntitySet Name="CustomCodeLists5_texts" EntityType="MasterDataService.CustomCodeLists5_texts"/>
+        <EntitySet Name="Plants" EntityType="MasterDataService.Plants">
+          <NavigationPropertyBinding Path="texts" Target="Plants_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="Plants_texts"/>
+        </EntitySet>
+        <EntitySet Name="Plants_texts" EntityType="MasterDataService.Plants_texts"/>
+        <EntitySet Name="ProductGroups" EntityType="MasterDataService.ProductGroups">
+          <NavigationPropertyBinding Path="texts" Target="ProductGroups_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="ProductGroups_texts"/>
+        </EntitySet>
+        <EntitySet Name="ProductGroups_texts" EntityType="MasterDataService.ProductGroups_texts"/>
+        <EntitySet Name="ProductStructureHeaders" EntityType="MasterDataService.ProductStructureHeaders">
+          <NavigationPropertyBinding Path="nodes" Target="ProductStructureNodes"/>
+        </EntitySet>
+        <EntitySet Name="ProductStructureNodes" EntityType="MasterDataService.ProductStructureNodes">
+          <NavigationPropertyBinding Path="header" Target="ProductStructureHeaders"/>
+          <NavigationPropertyBinding Path="productGroup" Target="ProductGroups"/>
+          <NavigationPropertyBinding Path="product" Target="Products"/>
+          <NavigationPropertyBinding Path="planningPlant" Target="Plants"/>
+          <NavigationPropertyBinding Path="plants" Target="ProductStructureNodePlants"/>
+          <NavigationPropertyBinding Path="customCode1" Target="CustomCodeLists1"/>
+          <NavigationPropertyBinding Path="customCode2" Target="CustomCodeLists2"/>
+          <NavigationPropertyBinding Path="customCode3" Target="CustomCodeLists3"/>
+          <NavigationPropertyBinding Path="customCode4" Target="CustomCodeLists4"/>
+          <NavigationPropertyBinding Path="customCode5" Target="CustomCodeLists5"/>
+        </EntitySet>
+        <EntitySet Name="Products" EntityType="MasterDataService.Products">
+          <NavigationPropertyBinding Path="texts" Target="Products_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="Products_texts"/>
+        </EntitySet>
+        <EntitySet Name="Products_texts" EntityType="MasterDataService.Products_texts"/>
+        <EntitySet Name="SubProjectReferences" EntityType="MasterDataService.SubProjectReferences">
+          <NavigationPropertyBinding Path="texts" Target="SubProjectReferences_texts"/>
+          <NavigationPropertyBinding Path="localized" Target="SubProjectReferences_texts"/>
+        </EntitySet>
+        <EntitySet Name="SubProjectReferences_texts" EntityType="MasterDataService.SubProjectReferences_texts"/>
+        <FunctionImport Name="GetDataImportStatus" Function="MasterDataService.GetDataImportStatus"/>
+        <ActionImport Name="ImportCustomCodeLists1" Action="MasterDataService.ImportCustomCodeLists1"/>
+        <ActionImport Name="ImportCustomCodeLists2" Action="MasterDataService.ImportCustomCodeLists2"/>
+        <ActionImport Name="ImportCustomCodeLists3" Action="MasterDataService.ImportCustomCodeLists3"/>
+        <ActionImport Name="ImportCustomCodeLists4" Action="MasterDataService.ImportCustomCodeLists4"/>
+        <ActionImport Name="ImportCustomCodeLists5" Action="MasterDataService.ImportCustomCodeLists5"/>
+        <ActionImport Name="ImportPlants" Action="MasterDataService.ImportPlants"/>
+        <ActionImport Name="ImportProductGroups" Action="MasterDataService.ImportProductGroups"/>
+        <ActionImport Name="ImportProductStructures" Action="MasterDataService.ImportProductStructures"/>
+        <ActionImport Name="ImportProducts" Action="MasterDataService.ImportProducts"/>
+        <ActionImport Name="ImportSubProjectReferences" Action="MasterDataService.ImportSubProjectReferences"/>
+        <ActionImport Name="ProcessImportedData" Action="MasterDataService.ProcessImportedData"/>
+      </EntityContainer>
+      <EntityType Name="CustomCodeLists1">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.CustomCodeLists1_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.CustomCodeLists1_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="CustomCodeLists1_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="CustomCodeLists2">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.CustomCodeLists2_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.CustomCodeLists2_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="CustomCodeLists2_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="CustomCodeLists3">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.CustomCodeLists3_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.CustomCodeLists3_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="CustomCodeLists3_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="CustomCodeLists4">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.CustomCodeLists4_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.CustomCodeLists4_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="CustomCodeLists4_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="CustomCodeLists5">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.CustomCodeLists5_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.CustomCodeLists5_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="CustomCodeLists5_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="Plants">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.Plants_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.Plants_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="Plants_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="ProductGroups">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.ProductGroups_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.ProductGroups_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="ProductGroups_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="ProductStructureHeaders">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="productStructureType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString3" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="nodes" Type="Collection(MasterDataService.ProductStructureNodes)" Partner="header">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <Property Name="nodesModifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="isActive" Type="Edm.Boolean"/>
+      </EntityType>
+      <EntityType Name="ProductStructureNodes">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <NavigationProperty Name="header" Type="MasterDataService.ProductStructureHeaders" Partner="nodes">
+          <ReferentialConstraint Property="header_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="productGroup" Type="MasterDataService.ProductGroups">
+          <ReferentialConstraint Property="productGroup_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="product" Type="MasterDataService.Products">
+          <ReferentialConstraint Property="product_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="planningPlant" Type="MasterDataService.Plants">
+          <ReferentialConstraint Property="planningPlant_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="plants" Type="Collection(MasterDataService.ProductStructureNodePlants)">
+        </NavigationProperty>
+        <Property Name="sequence" Type="Edm.Int32"/>
+        <Property Name="nodeType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="nodeName" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="isSeries" Type="Edm.Boolean"/>
+        <Property Name="procurementType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="partType" Type="Edm.String"/>
+        <Property Name="quantity" Type="Edm.Decimal" Scale="3" Precision="13"/>
+        <Property Name="unitOfMeasure" Type="Edm.String" MaxLength="255"/>
+        <Property Name="itemCharacteristic1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="itemCharacteristic2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="packageCharacteristic" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString3" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString4" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString5" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString6" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString7" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString8" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString9" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString10" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString11" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString12" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldDate1" Type="Edm.Date"/>
+        <Property Name="customFieldDate2" Type="Edm.Date"/>
+        <Property Name="customFieldDate3" Type="Edm.Date"/>
+        <NavigationProperty Name="customCode1" Type="MasterDataService.CustomCodeLists1">
+          <ReferentialConstraint Property="customCode1_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="customCode2" Type="MasterDataService.CustomCodeLists2">
+          <ReferentialConstraint Property="customCode2_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="customCode3" Type="MasterDataService.CustomCodeLists3">
+          <ReferentialConstraint Property="customCode3_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="customCode4" Type="MasterDataService.CustomCodeLists4">
+          <ReferentialConstraint Property="customCode4_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="customCode5" Type="MasterDataService.CustomCodeLists5">
+          <ReferentialConstraint Property="customCode5_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <Property Name="header_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="productGroup_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="product_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="planningPlant_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode1_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode2_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode3_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode4_ID" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode5_ID" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="ProductStructureNodePlants">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="node_ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="plant_ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </EntityType>
+      <EntityType Name="Products">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString3" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString4" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString5" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldDate1" Type="Edm.Date"/>
+        <Property Name="customFieldDate2" Type="Edm.Date"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.Products_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.Products_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="Products_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <EntityType Name="SubProjectReferences">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="eTag" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="texts" Type="Collection(MasterDataService.SubProjectReferences_texts)">
+          <OnDelete Action="Cascade"/>
+        </NavigationProperty>
+        <NavigationProperty Name="localized" Type="MasterDataService.SubProjectReferences_texts">
+          <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="SubProjectReferences_texts">
+        <Key>
+          <PropertyRef Name="locale"/>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </EntityType>
+      <ComplexType Name="CustomCodeListImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="delete" Type="Edm.Boolean"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="texts" Type="Collection(MasterDataService.CustomCodeListImportTexts)" Nullable="false"/>
+      </ComplexType>
+      <ComplexType Name="CustomCodeListImportTexts">
+        <Property Name="locale" Type="Edm.String" MaxLength="14"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+      <ComplexType Name="DataImportStatus">
+        <Property Name="sessionId" Type="Edm.Guid"/>
+        <Property Name="importStatusCode" Type="Edm.String"/>
+        <Property Name="processedRecords" Type="Edm.Int32"/>
+        <Property Name="totalRecords" Type="Edm.Int32"/>
+      </ComplexType>
+      <ComplexType Name="PlantImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="delete" Type="Edm.Boolean"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="texts" Type="Collection(MasterDataService.PlantImportTexts)" Nullable="false"/>
+      </ComplexType>
+      <ComplexType Name="PlantImportTexts">
+        <Property Name="locale" Type="Edm.String" MaxLength="14"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+      <ComplexType Name="ProductStructureNodePlantImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="plantId" Type="Edm.String" MaxLength="255" Nullable="false"/>
+      </ComplexType>
+      <ComplexType Name="ProductGroupImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="delete" Type="Edm.Boolean"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="texts" Type="Collection(MasterDataService.ProductGroupImportTexts)" Nullable="false"/>
+      </ComplexType>
+      <ComplexType Name="ProductGroupImportTexts">
+        <Property Name="locale" Type="Edm.String" MaxLength="14"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+      <ComplexType Name="ProductImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="delete" Type="Edm.Boolean"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="texts" Type="Collection(MasterDataService.ProductImportTexts)" Nullable="false"/>
+        <Property Name="customFieldString1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString3" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString4" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString5" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldDate1" Type="Edm.Date"/>
+        <Property Name="customFieldDate2" Type="Edm.Date"/>
+      </ComplexType>
+      <ComplexType Name="ProductImportTexts">
+        <Property Name="locale" Type="Edm.String" MaxLength="14"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+      <ComplexType Name="ProductStructureHeaderImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="delete" Type="Edm.Boolean"/>
+        <Property Name="isActive" Type="Edm.Boolean"/>
+        <Property Name="productStructureType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString3" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+      <ComplexType Name="ProductStructureNodeImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="delete" Type="Edm.Boolean"/>
+        <Property Name="headerId" Type="Edm.String" MaxLength="255"/>
+        <Property Name="planningPlantId" Type="Edm.String" MaxLength="255"/>
+        <Property Name="plants" Type="Collection(MasterDataService.ProductStructureNodePlantImport)"/>
+        <Property Name="productGroupId" Type="Edm.String" MaxLength="255"/>
+        <Property Name="productId" Type="Edm.String" MaxLength="255"/>
+        <Property Name="sequence" Type="Edm.Int32"/>
+        <Property Name="nodeType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="nodeName" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="isSeries" Type="Edm.Boolean"/>
+        <Property Name="procurementType" Type="Edm.String" MaxLength="255"/>
+        <Property Name="partType" Type="Edm.String"/>
+        <Property Name="quantity" Type="Edm.Decimal" Scale="3" Precision="13"/>
+        <Property Name="unitOfMeasure" Type="Edm.String" MaxLength="255"/>
+        <Property Name="itemCharacteristic1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="itemCharacteristic2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="packageCharacteristic" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString1" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString2" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString3" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString4" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString5" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString6" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString7" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString8" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString9" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString10" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString11" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldString12" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customFieldDate1" Type="Edm.Date"/>
+        <Property Name="customFieldDate2" Type="Edm.Date"/>
+        <Property Name="customFieldDate3" Type="Edm.Date"/>
+        <Property Name="customCode1Id" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode2Id" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode3Id" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode4Id" Type="Edm.String" MaxLength="255"/>
+        <Property Name="customCode5Id" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+      <ComplexType Name="SubProjectReferenceImport">
+        <Property Name="ID" Type="Edm.String" MaxLength="255" Nullable="false"/>
+        <Property Name="deleted" Type="Edm.Boolean"/>
+        <Property Name="delete" Type="Edm.Boolean"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="texts" Type="Collection(MasterDataService.SubProjectReferenceImportTexts)" Nullable="false"/>
+      </ComplexType>
+      <ComplexType Name="SubProjectReferenceImportTexts">
+        <Property Name="locale" Type="Edm.String" MaxLength="14"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+      <Function Name="GetDataImportStatus" IsBound="false" IsComposable="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <ReturnType Type="MasterDataService.DataImportStatus"/>
+      </Function>
+      <Action Name="ImportCustomCodeLists1" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="customCodeLists1" Type="Collection(MasterDataService.CustomCodeListImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportCustomCodeLists2" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="customCodeLists2" Type="Collection(MasterDataService.CustomCodeListImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportCustomCodeLists3" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="customCodeLists3" Type="Collection(MasterDataService.CustomCodeListImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportCustomCodeLists4" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="customCodeLists4" Type="Collection(MasterDataService.CustomCodeListImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportCustomCodeLists5" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="customCodeLists5" Type="Collection(MasterDataService.CustomCodeListImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportPlants" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="plants" Type="Collection(MasterDataService.PlantImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportProductGroups" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="productGroups" Type="Collection(MasterDataService.ProductGroupImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportProductStructures" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="headers" Type="Collection(MasterDataService.ProductStructureHeaderImport)" Nullable="false"/>
+        <Parameter Name="nodes" Type="Collection(MasterDataService.ProductStructureNodeImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportProducts" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="products" Type="Collection(MasterDataService.ProductImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ImportSubProjectReferences" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+        <Parameter Name="subProjectReferences" Type="Collection(MasterDataService.SubProjectReferenceImport)" Nullable="false"/>
+      </Action>
+      <Action Name="ProcessImportedData" IsBound="false">
+        <Parameter Name="sessionId" Type="Edm.Guid" Nullable="false"/>
+      </Action>
+      <Annotations Target="MasterDataService.EntityContainer/CustomCodeLists1">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/CustomCodeLists2">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/CustomCodeLists3">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/CustomCodeLists4">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/CustomCodeLists5">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/Plants">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/ProductGroups">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/ProductStructureHeaders">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.ProductStructureHeaders/name">
+        <Annotation Term="Common.Label" String="ID"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+      </Annotations>
+      <Annotations Target="MasterDataService.ProductStructureHeaders/description">
+        <Annotation Term="Common.Label" String="Name"/>
+        <Annotation Term="Core.Immutable" Bool="true"/>
+      </Annotations>
+      <Annotations Target="MasterDataService.ProductStructureHeaders/nodesModifiedAt">
+        <Annotation Term="Common.Label" String="Last Updated"/>
+      </Annotations>
+      <Annotations Target="MasterDataService.ProductStructureHeaders/isActive">
+        <Annotation Term="Common.Label" String="Activation Status"/>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/ProductStructureNodes">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/Products">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="MasterDataService.EntityContainer/SubProjectReferences">
+        <Annotation Term="Capabilities.DeleteRestrictions">
+          <Record Type="Capabilities.DeleteRestrictionsType">
+            <PropertyValue Property="Deletable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.InsertRestrictions">
+          <Record Type="Capabilities.InsertRestrictionsType">
+            <PropertyValue Property="Insertable" Bool="false"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Capabilities.UpdateRestrictions">
+          <Record Type="Capabilities.UpdateRestrictionsType">
+            <PropertyValue Property="Updatable" Bool="false"/>
+          </Record>
+        </Annotation>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

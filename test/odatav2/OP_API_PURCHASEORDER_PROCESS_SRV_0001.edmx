@@ -1,0 +1,1582 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='')/$value"
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="API_PURCHASEORDER_PROCESS_SRV" xml:lang="en" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="A_POSubcontractingComponentType" sap:label="Subcontracting Components" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                    <PropertyRef Name="PurchaseOrderItem"/>
+                    <PropertyRef Name="ScheduleLine"/>
+                    <PropertyRef Name="ReservationItem"/>
+                    <PropertyRef Name="RecordType"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Document"/>
+                <Property Name="PurchaseOrderItem" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="NonNegative" sap:label="Purchasing Document Item"/>
+                <Property Name="ScheduleLine" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="NonNegative" sap:label="Schedule Line" sap:quickinfo="Delivery Schedule Line Counter"/>
+                <Property Name="ReservationItem" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="NonNegative" sap:label="Reservation Item" sap:creatable="false"/>
+                <Property Name="RecordType" Type="Edm.String" Nullable="false" MaxLength="1" sap:display-format="UpperCase" sap:label="Reservation Record Type" sap:creatable="false"/>
+                <Property Name="Material" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Material" sap:quickinfo="Material Number"/>
+                <Property Name="BOMItemDescription" Type="Edm.String" MaxLength="40" sap:label="BOM Item Text" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="RequiredQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="BaseUnit" sap:label="Requirement Quantity" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="BaseUnit" Type="Edm.String" MaxLength="3" sap:label="Base Unit of Measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="RequirementDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Requirement Date" sap:quickinfo="Material Component Requirement Date"/>
+                <Property Name="QuantityInEntryUnit" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="EntryUnit" sap:label="Quantity in Unit of Entry"/>
+                <Property Name="EntryUnit" Type="Edm.String" MaxLength="3" sap:label="Unit of Entry" sap:quickinfo="Unit of entry" sap:semantics="unit-of-measure"/>
+                <Property Name="WithdrawnQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="BaseUnit" sap:label="Withdrawn Quantity" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Plant"/>
+                <Property Name="Batch" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Batch" sap:quickinfo="Batch Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="RequirementSegment" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Requirement Segment"/>
+            </EntityType>
+            <EntityType Name="A_PurchaseOrderType" sap:label="Purchase Order" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchase Order" sap:quickinfo="Purchase Order Number"/>
+                <Property Name="CompanyCode" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Company Code"/>
+                <Property Name="PurchaseOrderType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Purchasing Doc. Type" sap:quickinfo="Purchasing Document Type"/>
+                <Property Name="PurchasingDocumentDeletionCode" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Deletion Code" sap:quickinfo="Purchase Order Deletion Code" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchasingProcessingStatus" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Proc. State" sap:quickinfo="Purchasing Document Processing State" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="User of person who created a purchasing document" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CreationDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Created On" sap:quickinfo="Creation Date of Purchasing Document" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Last Changed" sap:quickinfo="Change Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="Supplier" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Supplier"/>
+                <Property Name="PurchaseOrderSubtype" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Control indicator" sap:quickinfo="Control indicator for purchasing document type" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="Language" Type="Edm.String" MaxLength="2" sap:label="Language Key"/>
+                <Property Name="PaymentTerms" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Payment Terms" sap:quickinfo="Terms of Payment Key"/>
+                <Property Name="CashDiscount1Days" Type="Edm.Decimal" Precision="3" Scale="0" sap:label="Days 1" sap:quickinfo="Cash Discount Days 1"/>
+                <Property Name="CashDiscount2Days" Type="Edm.Decimal" Precision="3" Scale="0" sap:label="Days 2" sap:quickinfo="Cash Discount Days 2"/>
+                <Property Name="NetPaymentDays" Type="Edm.Decimal" Precision="3" Scale="0" sap:label="Days Net" sap:quickinfo="Net Payment Terms Period"/>
+                <Property Name="CashDiscount1Percent" Type="Edm.Decimal" Precision="5" Scale="3" sap:label="CD Percentage 1" sap:quickinfo="Cash Discount Percentage 1"/>
+                <Property Name="CashDiscount2Percent" Type="Edm.Decimal" Precision="5" Scale="3" sap:label="CD Percentage 2" sap:quickinfo="Cash Discount Percentage 2"/>
+                <Property Name="PurchasingOrganization" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Purch. Organization" sap:quickinfo="Purchasing Organization"/>
+                <Property Name="PurchasingDocumentOrigin" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Status" sap:quickinfo="Status of Purchasing Document" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchasingGroup" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Purchasing Group"/>
+                <Property Name="PurchaseOrderDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Purchase Order Date"/>
+                <Property Name="DocumentCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="ExchangeRate" Type="Edm.String" MaxLength="12"/>
+                <Property Name="ExchangeRateIsFixed" Type="Edm.Boolean" sap:label="Fixed Exchange Rate" sap:quickinfo="Indicator for Fixed Exchange Rate"/>
+                <Property Name="ValidityStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Validity Per. Start" sap:quickinfo="Start of Validity Period"/>
+                <Property Name="ValidityEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Validity Period End" sap:quickinfo="End of Validity Period"/>
+                <Property Name="SupplierQuotationExternalID" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Quotation" sap:quickinfo="Quotation Number"/>
+                <Property Name="PurchasingCollectiveNumber" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Collective Number"/>
+                <Property Name="SupplierRespSalesPersonName" Type="Edm.String" MaxLength="30" sap:label="Salesperson" sap:quickinfo="Responsible Salesperson at Supplier's Office"/>
+                <Property Name="SupplierPhoneNumber" Type="Edm.String" MaxLength="16" sap:label="Supplier Phone" sap:quickinfo="Supplier's Phone Number"/>
+                <Property Name="SupplyingSupplier" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Goods Supplier"/>
+                <Property Name="SupplyingPlant" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Supplying Plant" sap:quickinfo="Supplying (issuing) plant in case of stock transport order"/>
+                <Property Name="IncotermsClassification" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Incoterms" sap:quickinfo="Incoterms (Part 1)"/>
+                <Property Name="CorrespncExternalReference" Type="Edm.String" MaxLength="12" sap:label="Your Reference"/>
+                <Property Name="CorrespncInternalReference" Type="Edm.String" MaxLength="12" sap:label="Our Reference"/>
+                <Property Name="InvoicingParty" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Invoicing Party" sap:quickinfo="Different Invoicing Party"/>
+                <Property Name="ReleaseIsNotCompleted" Type="Edm.Boolean" sap:label="Subject to Release" sap:quickinfo="Release Not Yet Completely Effected" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchasingCompletenessStatus" Type="Edm.Boolean" sap:label="Incomplete" sap:quickinfo="Purchase order not yet complete"/>
+                <Property Name="IncotermsVersion" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Incoterms Version"/>
+                <Property Name="IncotermsLocation1" Type="Edm.String" MaxLength="70" sap:label="Incoterms Location 1"/>
+                <Property Name="IncotermsLocation2" Type="Edm.String" MaxLength="70" sap:label="Incoterms Location 2"/>
+                <Property Name="ManualSupplierAddressID" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Address Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsEndOfPurposeBlocked" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Busin. Purp. Cmpltd." sap:quickinfo="Business Purpose Completed" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="AddressCityName" Type="Edm.String" MaxLength="40" sap:label="City"/>
+                <Property Name="AddressFaxNumber" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Fax Number" sap:quickinfo="Complete Number: Dialing Code+Number+Extension"/>
+                <Property Name="AddressHouseNumber" Type="Edm.String" MaxLength="10" sap:label="House Number"/>
+                <Property Name="AddressName" Type="Edm.String" MaxLength="40" sap:label="Name" sap:quickinfo="Name 1"/>
+                <Property Name="AddressPostalCode" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Postal Code" sap:quickinfo="City postal code"/>
+                <Property Name="AddressStreetName" Type="Edm.String" MaxLength="60" sap:label="Street"/>
+                <Property Name="AddressPhoneNumber" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Telephone number" sap:quickinfo="Complete Number: Dialing Code+Number+Extension"/>
+                <Property Name="AddressRegion" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Region" sap:quickinfo="Region (State, Province, County)"/>
+                <Property Name="AddressCountry" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Country/Region Key"/>
+                <Property Name="AddressCorrespondenceLanguage" Type="Edm.String" MaxLength="2" sap:label="Language Key"/>
+                <Property Name="PurgAggrgdProdCmplncSuplrSts" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Supplier Check Sts" sap:quickinfo="Product Compliance Supplier Check Status (All Items)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgAggrgdProdMarketabilitySts" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Prod. Marktablty Sts" sap:quickinfo="Product Marketability Status (All Items)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgAggrgdSftyDataSheetStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Sfty Data Sheet Sts" sap:quickinfo="Safety Data Sheet Status (All Items)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgProdCmplncTotDngrsGoodsSts" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Dangerous Goods Sts" sap:quickinfo="Dangerous Goods Status (All Items)" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_PurchaseOrderItem" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_B82FE5DCCFCFC7E372EA017CC6733068" FromRole="FromRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068" ToRole="ToRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068"/>
+                <NavigationProperty Name="to_PurchaseOrderNote" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_2466C19B748A2B2CBE2B1754B1434472" FromRole="FromRole_assoc_2466C19B748A2B2CBE2B1754B1434472" ToRole="ToRole_assoc_2466C19B748A2B2CBE2B1754B1434472"/>
+            </EntityType>
+            <EntityType Name="A_PurchaseOrderItemType" sap:label="Item" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                    <PropertyRef Name="PurchaseOrderItem"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchase Order" sap:quickinfo="Purchase Order Number"/>
+                <Property Name="PurchaseOrderItem" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="NonNegative" sap:label="Purchase Order Item" sap:quickinfo="Item Number of Purchase Order"/>
+                <Property Name="PurchasingDocumentDeletionCode" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Deletion Indicator" sap:quickinfo="Deletion Indicator in Purchasing Document" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseOrderItemText" Type="Edm.String" MaxLength="40" sap:label="Short Text"/>
+                <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Plant"/>
+                <Property Name="StorageLocation" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Storage Location"/>
+                <Property Name="MaterialGroup" Type="Edm.String" MaxLength="9" sap:display-format="UpperCase" sap:label="Material Group"/>
+                <Property Name="PurchasingInfoRecord" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing info rec." sap:quickinfo="Number of purchasing info record"/>
+                <Property Name="SupplierMaterialNumber" Type="Edm.String" MaxLength="35" sap:display-format="UpperCase" sap:label="Supplier Mat. No." sap:quickinfo="Material Number Used by Supplier"/>
+                <Property Name="OrderQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="PurchaseOrderQuantityUnit" sap:label="Order Quantity" sap:quickinfo="Purchase Order Quantity"/>
+                <Property Name="PurchaseOrderQuantityUnit" Type="Edm.String" MaxLength="3" sap:label="Order Unit" sap:quickinfo="Purchase Order Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="OrderPriceUnit" Type="Edm.String" MaxLength="3" sap:label="Order Price Unit" sap:quickinfo="Order Price Unit (Purchasing)" sap:semantics="unit-of-measure"/>
+                <Property Name="OrderPriceUnitToOrderUnitNmrtr" Type="Edm.Decimal" Precision="5" Scale="0" sap:label="Quantity Conversion" sap:quickinfo="Numerator for Conversion of Order Price Unit into Order Unit"/>
+                <Property Name="OrdPriceUnitToOrderUnitDnmntr" Type="Edm.Decimal" Precision="5" Scale="0" sap:label="Quantity Conversion" sap:quickinfo="Denominator for Conv. of Order Price Unit into Order Unit"/>
+                <Property Name="DocumentCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="NetPriceAmount" Type="Edm.Decimal" Precision="12" Scale="3" sap:unit="DocumentCurrency" sap:label="Net Order Price" sap:quickinfo="Net Price in Purchasing Document (in Document Currency)"/>
+                <Property Name="NetPriceQuantity" Type="Edm.Decimal" Precision="5" Scale="0" sap:unit="OrderPriceUnit" sap:label="Price Unit"/>
+                <Property Name="TaxCode" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Tax Code" sap:quickinfo="Tax on sales/purchases code"/>
+                <Property Name="ShippingInstruction" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Shipping Instr." sap:quickinfo="Shipping Instructions"/>
+                <Property Name="TaxDeterminationDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Tax Date" sap:quickinfo="Date for Determining Tax Rates"/>
+                <Property Name="TaxCountry" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Tax Ctry/Reg." sap:quickinfo="Tax Reporting Country/Region"/>
+                <Property Name="PriceIsToBePrinted" Type="Edm.Boolean" sap:label="Print Price" sap:quickinfo="Price Printout"/>
+                <Property Name="OverdelivTolrtdLmtRatioInPct" Type="Edm.Decimal" Precision="3" Scale="1" sap:label="Overdeliv. Tolerance" sap:quickinfo="Overdelivery Tolerance"/>
+                <Property Name="UnlimitedOverdeliveryIsAllowed" Type="Edm.Boolean" sap:label="Unltd Overdelivery" sap:quickinfo="Unlimited Overdelivery Allowed"/>
+                <Property Name="UnderdelivTolrtdLmtRatioInPct" Type="Edm.Decimal" Precision="3" Scale="1" sap:label="Underdel. Tolerance" sap:quickinfo="Underdelivery Tolerance"/>
+                <Property Name="ValuationType" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Valuation Type"/>
+                <Property Name="IsCompletelyDelivered" Type="Edm.Boolean" sap:label="Delivery Completed" sap:quickinfo="&quot;Delivery Completed&quot; Indicator"/>
+                <Property Name="IsFinallyInvoiced" Type="Edm.Boolean" sap:label="Final Invoice" sap:quickinfo="Final Invoice Indicator"/>
+                <Property Name="PurchaseOrderItemCategory" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Item Category" sap:quickinfo="Item category in purchasing document"/>
+                <Property Name="AccountAssignmentCategory" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Acct Assignment Cat." sap:quickinfo="Account Assignment Category"/>
+                <Property Name="MultipleAcctAssgmtDistribution" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Distrib. Indicator" sap:quickinfo="Distribution Indicator for Multiple Account Assignment"/>
+                <Property Name="PartialInvoiceDistribution" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Partial invoice" sap:quickinfo="Partial invoice indicator"/>
+                <Property Name="GoodsReceiptIsExpected" Type="Edm.Boolean" sap:label="Goods Receipt" sap:quickinfo="Goods Receipt Indicator"/>
+                <Property Name="GoodsReceiptIsNonValuated" Type="Edm.Boolean" sap:label="GR Non-Valuated" sap:quickinfo="Goods Receipt, Non-Valuated"/>
+                <Property Name="InvoiceIsExpected" Type="Edm.Boolean" sap:label="Invoice Receipt" sap:quickinfo="Invoice Receipt Indicator"/>
+                <Property Name="InvoiceIsGoodsReceiptBased" Type="Edm.Boolean" sap:label="GR-Based Inv. Verif." sap:quickinfo="Indicator: GR-Based Invoice Verification"/>
+                <Property Name="PurchaseContract" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Outline agreement" sap:quickinfo="Number of principal purchase agreement"/>
+                <Property Name="PurchaseContractItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Agreement Item" sap:quickinfo="Item Number of Principal Purchase Agreement"/>
+                <Property Name="Customer" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Customer"/>
+                <Property Name="Subcontractor" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Supplier" sap:quickinfo="Supplier to be Supplied/Who is to Receive Delivery"/>
+                <Property Name="SupplierIsSubcontractor" Type="Edm.Boolean" sap:label="SC Supplier" sap:quickinfo="Subcontracting Supplier"/>
+                <Property Name="ItemNetWeight" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="ItemWeightUnit" sap:label="Net Weight"/>
+                <Property Name="ItemWeightUnit" Type="Edm.String" MaxLength="3" sap:label="Unit of Weight" sap:semantics="unit-of-measure"/>
+                <Property Name="TaxJurisdiction" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="Tax Jurisdiction"/>
+                <Property Name="PricingDateControl" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Pricing Date Control" sap:quickinfo="Price Determination (Pricing) Date Control"/>
+                <Property Name="ItemVolume" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="ItemVolumeUnit" sap:label="Volume"/>
+                <Property Name="ItemVolumeUnit" Type="Edm.String" MaxLength="3" sap:label="Volume Unit" sap:semantics="unit-of-measure"/>
+                <Property Name="SupplierConfirmationControlKey" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Confirmation Control" sap:quickinfo="Confirmation Control Key"/>
+                <Property Name="IncotermsClassification" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Incoterms" sap:quickinfo="Incoterms (Part 1)"/>
+                <Property Name="IncotermsTransferLocation" Type="Edm.String" MaxLength="28" sap:label="Incoterms (Part 2)"/>
+                <Property Name="EvaldRcptSettlmtIsAllowed" Type="Edm.Boolean" sap:label="Eval. Receipt Sett." sap:quickinfo="Evaluated Receipt Settlement (ERS)"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchase Requisition" sap:quickinfo="Purchase Requisition Number"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Item of requisition" sap:quickinfo="Item number of purchase requisition"/>
+                <Property Name="IsReturnsItem" Type="Edm.Boolean" sap:label="Returns Item"/>
+                <Property Name="RequisitionerName" Type="Edm.String" MaxLength="12" sap:label="Requisitioner" sap:quickinfo="Name of requisitioner/requester"/>
+                <Property Name="ServicePackage" Type="Edm.String" MaxLength="10" sap:display-format="NonNegative" sap:label="Package number"/>
+                <Property Name="EarmarkedFunds" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Earmarked Funds" sap:quickinfo="Document Number for Earmarked Funds"/>
+                <Property Name="EarmarkedFundsDocument" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Earmarked Funds" sap:quickinfo="Document Number for Earmarked Funds"/>
+                <Property Name="EarmarkedFundsItem" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Document Item" sap:quickinfo="Earmarked Funds: Document Item"/>
+                <Property Name="EarmarkedFundsDocumentItem" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Document Item" sap:quickinfo="Earmarked Funds: Document Item"/>
+                <Property Name="IncotermsLocation1" Type="Edm.String" MaxLength="70" sap:label="Incoterms Location 1"/>
+                <Property Name="IncotermsLocation2" Type="Edm.String" MaxLength="70" sap:label="Incoterms Location 2"/>
+                <Property Name="Material" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Material" sap:quickinfo="Material Number"/>
+                <Property Name="InternationalArticleNumber" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="EAN/UPC" sap:quickinfo="International Article Number (EAN/UPC)"/>
+                <Property Name="ManufacturerMaterial" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Material" sap:quickinfo="Material number"/>
+                <Property Name="ServicePerformer" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Service Performer"/>
+                <Property Name="ProductType" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Product Type Group"/>
+                <Property Name="ExpectedOverallLimitAmount" Type="Edm.Decimal" Precision="14" Scale="3" sap:unit="DocumentCurrency" sap:label="Expected Value" sap:quickinfo="Expected Value of Overall Limit"/>
+                <Property Name="OverallLimitAmount" Type="Edm.Decimal" Precision="14" Scale="3" sap:unit="DocumentCurrency" sap:label="Overall Limit"/>
+                <Property Name="PurContractForOverallLimit" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Contract For Limit" sap:quickinfo="Purchase Contract for Enhanced Limit"/>
+                <Property Name="PurchasingParentItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Higher-Level Item" sap:quickinfo="Higher-Level Item in Purchasing Documents"/>
+                <Property Name="PurgConfigurableItemNumber" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Hierarchy Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgDocAggrgdSubitemCategory" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Sub-items" sap:quickinfo="Subitems Exist"/>
+                <Property Name="PurgDocSubitemCategory" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Subitem Category" sap:quickinfo="Subitem Category, Purchasing Document" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgExternalSortNumber" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="External Sort No." sap:quickinfo="External Sort Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="Batch" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Batch" sap:quickinfo="Batch Number"/>
+                <Property Name="PurchasingItemIsFreeOfCharge" Type="Edm.Boolean" sap:label="Free of Charge" sap:quickinfo="Free Item"/>
+                <Property Name="ReferenceDeliveryAddressID" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Address" sap:quickinfo="Number of delivery address"/>
+                <Property Name="DeliveryAddressID" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Address" sap:quickinfo="Manual address number in purchasing document item" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="DeliveryAddressName" Type="Edm.String" MaxLength="40" sap:label="Name" sap:quickinfo="Name 1"/>
+                <Property Name="DeliveryAddressName2" Type="Edm.String" MaxLength="40" sap:label="Name 2"/>
+                <Property Name="DeliveryAddressFullName" Type="Edm.String" MaxLength="80" sap:label="Full Name" sap:quickinfo="Full Name of Person" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="DeliveryAddressStreetName" Type="Edm.String" MaxLength="60" sap:label="Street"/>
+                <Property Name="DeliveryAddressHouseNumber" Type="Edm.String" MaxLength="10" sap:label="House Number"/>
+                <Property Name="DeliveryAddressCityName" Type="Edm.String" MaxLength="40" sap:label="City"/>
+                <Property Name="DeliveryAddressPostalCode" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Postal Code" sap:quickinfo="City postal code"/>
+                <Property Name="DeliveryAddressRegion" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Region" sap:quickinfo="Region (State, Province, County)"/>
+                <Property Name="DeliveryAddressCountry" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Country/Region Key"/>
+                <Property Name="DeliveryAddressDistrictName" Type="Edm.String" MaxLength="40" sap:label="District"/>
+                <Property Name="DownPaymentType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Down Payment" sap:quickinfo="Down Payment Indicator"/>
+                <Property Name="DownPaymentPercentageOfTotAmt" Type="Edm.Decimal" Precision="5" Scale="2" sap:label="Down Payment %" sap:quickinfo="Down Payment Percentage"/>
+                <Property Name="DownPaymentAmount" Type="Edm.Decimal" Precision="12" Scale="3" sap:unit="DocumentCurrency" sap:label="Down Payment Amount" sap:quickinfo="Down Payment Amount in Document Currency"/>
+                <Property Name="DownPaymentDueDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Due Date for DP" sap:quickinfo="Due Date for Down Payment"/>
+                <Property Name="BR_MaterialUsage" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Material Usage" sap:quickinfo="Usage of the material"/>
+                <Property Name="BR_MaterialOrigin" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Material Origin" sap:quickinfo="Origin of the material"/>
+                <Property Name="BR_CFOPCategory" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Matl. CFOP Category" sap:quickinfo="Material CFOP Category"/>
+                <Property Name="BR_IsProducedInHouse" Type="Edm.Boolean" sap:label="In-House Production"/>
+                <Property Name="ConsumptionTaxCtrlCode" Type="Edm.String" MaxLength="16" sap:display-format="UpperCase" sap:label="NCM Code" sap:quickinfo="Brazilian NCM Code"/>
+                <Property Name="PurgProdCmplncSupplierStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Supplier Check Sts" sap:quickinfo="Product Compliance Supplier Check Status (Item)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgProductMarketabilityStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Prod. Marktablty Sts" sap:quickinfo="Product Marketability Status (Item)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgSafetyDataSheetStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Sfty Data Sheet Sts" sap:quickinfo="Safety Data Sheet Status (Item)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurgProdCmplncDngrsGoodsStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Dangerous Goods Sts" sap:quickinfo="Dangerous Goods Status (Item)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProductSeasonYear" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Season Year"/>
+                <Property Name="ProductSeason" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Season"/>
+                <Property Name="ProductCollection" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Collection" sap:quickinfo="Fashion Collection"/>
+                <Property Name="ProductTheme" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Theme" sap:quickinfo="Fashion Theme"/>
+                <Property Name="SeasonCompletenessStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Season Comp.Ind" sap:quickinfo="Season Completeness Indicator"/>
+                <Property Name="ProductCharacteristic1" Type="Edm.String" MaxLength="18" sap:label="Characteristic 1" sap:quickinfo="Characteristic Value 1"/>
+                <Property Name="ProductCharacteristic2" Type="Edm.String" MaxLength="18" sap:label="Characteristic 2" sap:quickinfo="Characteristic Value 2"/>
+                <Property Name="ProductCharacteristic3" Type="Edm.String" MaxLength="18" sap:label="Characteristic 3" sap:quickinfo="Characteristic Value 3"/>
+                <Property Name="SubItemCategory" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Subitem Category" sap:quickinfo="Subitem Category, Purchasing Document"/>
+                <Property Name="CrossPlantConfigurableProduct" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Cross-plant CM" sap:quickinfo="Cross-Plant Configurable Material"/>
+                <Property Name="DiversionStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Diversion Status" sap:quickinfo="Status of Diversion process"/>
+                <Property Name="ReferenceDocumentNumber" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Reference Document" sap:quickinfo="Reference Document number for PO Traceability"/>
+                <Property Name="ReferenceDocumentItem" Type="Edm.String" MaxLength="6" sap:display-format="NonNegative" sap:label="Reference Item" sap:quickinfo="Reference Item number for PO Traceability"/>
+                <Property Name="PurchaseOrderReferenceType" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Reference Action" sap:quickinfo="Action for Traceability in  PO"/>
+                <Property Name="ReferenceDocumentScheduleLine" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="Reference Schedule Line Item number for PO Traceability" sap:heading=""/>
+                <Property Name="ArticleCategory" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Material Category"/>
+                <Property Name="ItemHasValueAddedService" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="VAS Relevant"/>
+                <Property Name="ValAddedSrvcParentItmNumber" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Item Number of Purchasing Document"/>
+                <Property Name="StockSegment" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Stock Segment"/>
+                <Property Name="RequirementSegment" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Requirement Segment"/>
+                <NavigationProperty Name="to_PurchaseOrder" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_B82FE5DCCFCFC7E372EA017CC6733068" FromRole="ToRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068" ToRole="FromRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068"/>
+                <NavigationProperty Name="to_AccountAssignment" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_19BBE09FA429018258275EDA1C9534B1" FromRole="FromRole_assoc_19BBE09FA429018258275EDA1C9534B1" ToRole="ToRole_assoc_19BBE09FA429018258275EDA1C9534B1"/>
+                <NavigationProperty Name="to_PurchaseOrderItemNote" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_FC8A787F328FE0E8BF79CA62ADFB77F4" FromRole="FromRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4" ToRole="ToRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4"/>
+                <NavigationProperty Name="to_PurchaseOrderPricingElement" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_EFF2B310CC1279C17A53542CD0A7DF92" FromRole="FromRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92" ToRole="ToRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92"/>
+                <NavigationProperty Name="to_ScheduleLine" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_8A637AB8579B29B7A7F36730E8B65ACD" FromRole="FromRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD" ToRole="ToRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD"/>
+                <NavigationProperty Name="to_ValueAddedService_2" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_832AC0EB7279F05849D498EE543F75B0" FromRole="FromRole_assoc_832AC0EB7279F05849D498EE543F75B0" ToRole="ToRole_assoc_832AC0EB7279F05849D498EE543F75B0"/>
+            </EntityType>
+            <EntityType Name="A_PurchaseOrderItemNoteType" sap:label="Item Notes" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                    <PropertyRef Name="PurchaseOrderItem"/>
+                    <PropertyRef Name="TextObjectType"/>
+                    <PropertyRef Name="Language"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Document" sap:quickinfo="Purchasing Document Number"/>
+                <Property Name="PurchaseOrderItem" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Item Number of Purchasing Document"/>
+                <Property Name="TextObjectType" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="UpperCase" sap:label="Text ID"/>
+                <Property Name="Language" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Language Key"/>
+                <Property Name="PlainLongText" Type="Edm.String" sap:label="Long Text" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="A_PurchaseOrderNoteType" sap:label="Header Notes" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                    <PropertyRef Name="TextObjectType"/>
+                    <PropertyRef Name="Language"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Document" sap:quickinfo="Purchasing Document Number"/>
+                <Property Name="TextObjectType" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="UpperCase" sap:label="Text ID"/>
+                <Property Name="Language" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Language Key"/>
+                <Property Name="PlainLongText" Type="Edm.String" sap:label="Long Text" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="A_PurchaseOrderScheduleLineType" sap:label="Schedule Lines" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchasingDocument"/>
+                    <PropertyRef Name="PurchasingDocumentItem"/>
+                    <PropertyRef Name="ScheduleLine"/>
+                </Key>
+                <Property Name="PurchasingDocument" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Document" sap:quickinfo="Purchasing Document Number"/>
+                <Property Name="PurchasingDocumentItem" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Item Number of Purchasing Document"/>
+                <Property Name="ScheduleLine" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="NonNegative" sap:label="Schedule Line" sap:quickinfo="Delivery Schedule Line Counter"/>
+                <Property Name="DelivDateCategory" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Deliv. date category" sap:quickinfo="Category of delivery date"/>
+                <Property Name="ScheduleLineDeliveryDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Delivery Date" sap:quickinfo="Item Delivery Date"/>
+                <Property Name="PurchaseOrderQuantityUnit" Type="Edm.String" MaxLength="3" sap:label="Order Unit" sap:quickinfo="Purchase Order Unit of Measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="ScheduleLineOrderQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="PurchaseOrderQuantityUnit" sap:label="Scheduled Quantity"/>
+                <Property Name="ScheduleLineDeliveryTime" Type="Edm.Time" Precision="0" sap:label="Time" sap:quickinfo="Delivery Date Time-Spot"/>
+                <Property Name="SchedLineStscDeliveryDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Stat.-Rel. Del. Date" sap:quickinfo="Statistics-Relevant Delivery Date"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchase Requisition" sap:quickinfo="Purchase Requisition Number"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Item of requisition" sap:quickinfo="Item number of purchase requisition"/>
+                <Property Name="ScheduleLineCommittedQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="PurchaseOrderQuantityUnit" sap:label="Committed Quantity"/>
+                <Property Name="PerformancePeriodStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Start Date" sap:quickinfo="Start Date for Period of Performance"/>
+                <Property Name="PerformancePeriodEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="End Date" sap:quickinfo="End Date for Period of Performance"/>
+                <NavigationProperty Name="to_SubcontractingComponent" Relationship="API_PURCHASEORDER_PROCESS_SRV.assoc_6E3D67F4936B508A3D2BD2F5F3688B55" FromRole="FromRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55" ToRole="ToRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55"/>
+            </EntityType>
+            <EntityType Name="A_PurOrdAccountAssignmentType" sap:label="Account Assignment" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                    <PropertyRef Name="PurchaseOrderItem"/>
+                    <PropertyRef Name="AccountAssignmentNumber"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Document" sap:quickinfo="Purchasing Document Number"/>
+                <Property Name="PurchaseOrderItem" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Item Number of Purchasing Document"/>
+                <Property Name="AccountAssignmentNumber" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="NonNegative" sap:label="Account Assgmt No." sap:quickinfo="Sequential Number of Account Assignment"/>
+                <Property Name="IsDeleted" Type="Edm.Boolean" sap:label="Deletion Indicator" sap:quickinfo="Deletion Indicator: Purchasing Document Account Assignment" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseOrderQuantityUnit" Type="Edm.String" MaxLength="3" sap:label="Order Unit" sap:quickinfo="Purchase Order Unit of Measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="Quantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="PurchaseOrderQuantityUnit" sap:label="Quantity"/>
+                <Property Name="MultipleAcctAssgmtDistrPercent" Type="Edm.Decimal" Precision="3" Scale="1" sap:label="Distribution (%)" sap:quickinfo="Distribution percentage in the case of multiple acct assgt"/>
+                <Property Name="DocumentCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="PurgDocNetAmount" Type="Edm.Decimal" Precision="14" Scale="3" sap:unit="DocumentCurrency" sap:label="Net Order Value" sap:quickinfo="Net Order Value in PO Currency"/>
+                <Property Name="GLAccount" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="G/L Account" sap:quickinfo="G/L Account Number"/>
+                <Property Name="BusinessArea" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Business Area"/>
+                <Property Name="CostCenter" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Cost Center"/>
+                <Property Name="SalesOrder" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="SD Document" sap:quickinfo="Sales and Distribution Document Number"/>
+                <Property Name="SalesOrderItem" Type="Edm.String" MaxLength="6" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Sales Document Item"/>
+                <Property Name="SalesOrderScheduleLine" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="Schedule Line Number"/>
+                <Property Name="MasterFixedAsset" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Asset" sap:quickinfo="Main Asset Number"/>
+                <Property Name="FixedAsset" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Subnumber" sap:quickinfo="Asset Subnumber"/>
+                <Property Name="GoodsRecipientName" Type="Edm.String" MaxLength="12" sap:label="Goods Recipient"/>
+                <Property Name="UnloadingPointName" Type="Edm.String" MaxLength="25" sap:label="Unloading Point"/>
+                <Property Name="ControllingArea" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Controlling Area"/>
+                <Property Name="CostObject" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Cost Object"/>
+                <Property Name="OrderID" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Order" sap:quickinfo="Order Number"/>
+                <Property Name="ProfitCenter" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Profit Center"/>
+                <Property Name="WBSElementInternalID" Type="Edm.String" MaxLength="24" sap:display-format="NonNegative" sap:label="WBS Element" sap:quickinfo="Work Breakdown Structure Element (WBS Element)"/>
+                <Property Name="WBSElement" Type="Edm.String" MaxLength="24" sap:display-format="UpperCase" sap:label="WBS Element" sap:quickinfo="Work Breakdown Structure Element (WBS Element)"/>
+                <Property Name="WBSElementExternalID" Type="Edm.String" MaxLength="24" sap:display-format="UpperCase" sap:label="WBS Element" sap:quickinfo="Work Breakdown Structure Element (WBS Element) Edited"/>
+                <Property Name="ProjectNetwork" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Network" sap:quickinfo="Network Number for Account Assignment"/>
+                <Property Name="NetworkActivity" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Oper./Act." sap:quickinfo="Operation/Activity Number"/>
+                <Property Name="RealEstateObject" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Real Estate Key" sap:quickinfo="Internal Key for Real Estate Object"/>
+                <Property Name="PartnerAccountNumber" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Partner" sap:quickinfo="Partner account number"/>
+                <Property Name="CommitmentItem" Type="Edm.String" MaxLength="24" sap:display-format="UpperCase" sap:label="Commitment item" sap:quickinfo="Commitment Item"/>
+                <Property Name="JointVentureRecoveryCode" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Recovery Indicator"/>
+                <Property Name="FundsCenter" Type="Edm.String" MaxLength="16" sap:display-format="UpperCase" sap:label="Funds Center"/>
+                <Property Name="Fund" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Fund"/>
+                <Property Name="FunctionalArea" Type="Edm.String" MaxLength="16" sap:display-format="UpperCase" sap:label="Functional Area"/>
+                <Property Name="SettlementReferenceDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Reference date" sap:quickinfo="Reference date for settlement"/>
+                <Property Name="TaxCode" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Tax Code" sap:quickinfo="Tax on sales/purchases code"/>
+                <Property Name="TaxJurisdiction" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="Tax Jurisdiction"/>
+                <Property Name="CostCtrActivityType" Type="Edm.String" MaxLength="6" sap:display-format="UpperCase" sap:label="Activity Type"/>
+                <Property Name="BusinessProcess" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Business Process"/>
+                <Property Name="EarmarkedFundsDocument" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Earmarked Funds" sap:quickinfo="Document Number for Earmarked Funds"/>
+                <Property Name="EarmarkedFundsDocumentItem" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Document Item" sap:quickinfo="Earmarked Funds: Document Item"/>
+                <Property Name="GrantID" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Grant"/>
+                <Property Name="BudgetPeriod" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Budget Period"/>
+            </EntityType>
+            <EntityType Name="A_PurOrdPricingElementType" sap:label="Pricing Element" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                    <PropertyRef Name="PurchaseOrderItem"/>
+                    <PropertyRef Name="PricingDocument"/>
+                    <PropertyRef Name="PricingDocumentItem"/>
+                    <PropertyRef Name="PricingProcedureStep"/>
+                    <PropertyRef Name="PricingProcedureCounter"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Document" sap:quickinfo="Purchasing Document Number"/>
+                <Property Name="PurchaseOrderItem" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Item Number of Purchasing Document"/>
+                <Property Name="PricingDocument" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Doc. Condition No." sap:quickinfo="Number of the Document Condition"/>
+                <Property Name="PricingDocumentItem" Type="Edm.String" Nullable="false" MaxLength="6" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Condition item number"/>
+                <Property Name="PricingProcedureStep" Type="Edm.String" Nullable="false" MaxLength="3" sap:display-format="NonNegative" sap:label="Step Number"/>
+                <Property Name="PricingProcedureCounter" Type="Edm.String" Nullable="false" MaxLength="3" sap:display-format="NonNegative" sap:label="Counter" sap:quickinfo="Condition Counter"/>
+                <Property Name="ConditionType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Condition Type"/>
+                <Property Name="ConditionRateValue" Type="Edm.Decimal" Precision="24" Scale="9" sap:label="Amount" sap:quickinfo="Condition Amount or Percentage"/>
+                <Property Name="ConditionCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="PriceDetnExchangeRate" Type="Edm.String" MaxLength="12" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="TransactionCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Document Currency" sap:quickinfo="SD Document Currency" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="ConditionAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Condition Value" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionQuantityUnit" Type="Edm.String" MaxLength="3" sap:label="Condition Unit" sap:quickinfo="Condition Unit in the Document" sap:semantics="unit-of-measure"/>
+                <Property Name="ConditionQuantity" Type="Edm.Decimal" Precision="5" Scale="0" sap:unit="ConditionQuantityUnit" sap:label="Pricing Unit" sap:quickinfo="Condition Pricing Unit"/>
+                <Property Name="ConditionApplication" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Application" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PricingDateTime" Type="Edm.String" MaxLength="14" sap:display-format="UpperCase" sap:label="Valid From" sap:quickinfo="Timestamp for Pricing" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionCalculationType" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Calculation Type" sap:quickinfo="Calculation Type for Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionBaseValue" Type="Edm.Decimal" Precision="24" Scale="9" sap:label="Condition Basis" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionToBaseQtyNmrtr" Type="Edm.Decimal" Precision="10" Scale="0" sap:label="Numerator" sap:quickinfo="Numerator for Converting to Base UoM"/>
+                <Property Name="ConditionToBaseQtyDnmntr" Type="Edm.Decimal" Precision="10" Scale="0" sap:label="Denominator" sap:quickinfo="Denominator for Converting to Base UoM"/>
+                <Property Name="ConditionCategory" Type="Edm.String" MaxLength="1" sap:label="Condition Category" sap:quickinfo="Condition Category (Examples: Tax, Freight, Price, Cost)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionIsForStatistics" Type="Edm.Boolean" sap:label="Statistical" sap:quickinfo="Condition is used for statistics" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PricingScaleType" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Scale Type" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsRelevantForAccrual" Type="Edm.Boolean" sap:label="Accruals" sap:quickinfo="Condition is Relevant for Accrual  (e.g. Freight)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CndnIsRelevantForInvoiceList" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Invoice List Cond." sap:quickinfo="Condition for Invoice List" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionOrigin" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Condition Origin" sap:quickinfo="Origin of the Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsGroupCondition" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Group Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CndnIsRelevantForLimitValue" Type="Edm.Boolean" sap:label="Condition Update" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionSequentialNumber" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Sequent.No. of Cond." sap:quickinfo="Sequential Number of the Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionControl" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Condition Control" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionInactiveReason" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Inactive Condition" sap:quickinfo="Condition is Inactive" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionClass" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Condition Class" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="FactorForConditionBasisValue" Type="Edm.Double" sap:label="Condition Factor" sap:quickinfo="Factor for Condition Base Value" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PricingScaleBasis" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Scale Basis" sap:quickinfo="Scale Basis Indicator" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionScaleBasisValue" Type="Edm.Decimal" Precision="24" Scale="9" sap:label="Scale Base Val." sap:quickinfo="Scale Base Value" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionScaleBasisCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Scale Currency" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="ConditionScaleBasisUnit" Type="Edm.String" MaxLength="3" sap:label="Scale Unit of Meas." sap:quickinfo="Condition Scale Unit of Measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="CndnIsRelevantForIntcoBilling" Type="Edm.Boolean" sap:label="Intercomp.Billing" sap:quickinfo="Condition for Intercompany Billing" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionIsForConfiguration" Type="Edm.Boolean" sap:label="UsedforVariantConfig" sap:quickinfo="Condition Used for Variant Configuration" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionIsManuallyChanged" Type="Edm.Boolean" sap:label="Changed Manually" sap:quickinfo="Condition Changed Manually" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionRecord" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Condition Record No." sap:quickinfo="Number of Condition Record" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="AccessNumberOfAccessSequence" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Access" sap:quickinfo="Access sequence - Access number" sap:creatable="false" sap:updatable="false"/>
+            </EntityType>
+            <EntityType Name="A_ValAddedSrvcMM_2Type" sap:label="Item Value Added Service" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                    <PropertyRef Name="PurchaseOrderItem"/>
+                    <PropertyRef Name="ValueAddedServiceType"/>
+                    <PropertyRef Name="ValueAddedSubServiceType"/>
+                </Key>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Reference Document" sap:quickinfo="Reference Document Number"/>
+                <Property Name="PurchaseOrderItem" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="NonNegative" sap:label="Reference item" sap:quickinfo="Item of reference document"/>
+                <Property Name="ValueAddedServiceType" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="NonNegative" sap:label="VAS Service Types"/>
+                <Property Name="ValueAddedSubServiceType" Type="Edm.String" Nullable="false" MaxLength="5" sap:display-format="UpperCase" sap:label="VAS Sub Services"/>
+                <Property Name="ValueAddedServiceProduct" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Material Number" sap:quickinfo="VAS Material Number"/>
+                <Property Name="ValAddedSrvcHasToBeOrdered" Type="Edm.Boolean" sap:label="Req Relevance" sap:quickinfo="Requirement Relevancy Flag for VAS Material"/>
+                <Property Name="ValAddedSrvcIncrement" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="Increment" sap:quickinfo="VAS Increment"/>
+                <Property Name="ValueAddedServiceChargeCode" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="VAS Charge Code" sap:quickinfo="VAS Charge Codes"/>
+                <Property Name="ValAddedSrvcIsCreatedManually" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Manual Entry Ind." sap:quickinfo="Manual Entry Indicator" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ValueAddedServiceDeletionCode" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="VAS Del. Indicator" sap:quickinfo="VAS Deletion Indicator" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ValAddedSrvcItemNumberInMM" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="VAS Item Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ValueAddedServiceText1" Type="Edm.String" MaxLength="20" sap:label="Field1" sap:quickinfo="VAS Field 1 for Free Use by Customer"/>
+                <Property Name="ValueAddedServiceText2" Type="Edm.String" MaxLength="20" sap:label="Field2" sap:quickinfo="VAS Field 2 for Free Use by Customer"/>
+                <Property Name="ValueAddedServiceText3" Type="Edm.String" MaxLength="20" sap:label="Field3" sap:quickinfo="VAS Field 3 for Free Use by Customer"/>
+                <Property Name="ValueAddedServiceLongText" Type="Edm.String" MaxLength="132" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ValAddedSrvcTransactionNumber" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Transaction Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ValAddedSrvcItemGroup" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Item Group" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ValAddedSrvcItemNumber" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Item Number" sap:creatable="false" sap:updatable="false"/>
+            </EntityType>
+            <ComplexType Name="DummyFunctionImportResult">
+                <Property Name="IsInvalid" Type="Edm.Boolean" sap:label="TRUE"/>
+            </ComplexType>
+            <ComplexType Name="GetPDFResult">
+                <Property Name="PurchaseOrderBinary" Type="Edm.String" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </ComplexType>
+            <Association Name="assoc_19BBE09FA429018258275EDA1C9534B1" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType" Multiplicity="1" Role="FromRole_assoc_19BBE09FA429018258275EDA1C9534B1">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignmentType" Multiplicity="*" Role="ToRole_assoc_19BBE09FA429018258275EDA1C9534B1"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_19BBE09FA429018258275EDA1C9534B1">
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_19BBE09FA429018258275EDA1C9534B1">
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_FC8A787F328FE0E8BF79CA62ADFB77F4" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType" Multiplicity="1" Role="FromRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemNoteType" Multiplicity="*" Role="ToRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4">
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4">
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_EFF2B310CC1279C17A53542CD0A7DF92" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType" Multiplicity="1" Role="FromRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType" Multiplicity="*" Role="ToRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92">
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92">
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_8A637AB8579B29B7A7F36730E8B65ACD" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType" Multiplicity="1" Role="FromRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLineType" Multiplicity="*" Role="ToRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD">
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD">
+                        <PropertyRef Name="PurchasingDocumentItem"/>
+                        <PropertyRef Name="PurchasingDocument"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_832AC0EB7279F05849D498EE543F75B0" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType" Multiplicity="1" Role="FromRole_assoc_832AC0EB7279F05849D498EE543F75B0"/>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_ValAddedSrvcMM_2Type" Multiplicity="*" Role="ToRole_assoc_832AC0EB7279F05849D498EE543F75B0"/>
+            </Association>
+            <Association Name="assoc_2466C19B748A2B2CBE2B1754B1434472" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType" Multiplicity="1" Role="FromRole_assoc_2466C19B748A2B2CBE2B1754B1434472">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderNoteType" Multiplicity="*" Role="ToRole_assoc_2466C19B748A2B2CBE2B1754B1434472"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_2466C19B748A2B2CBE2B1754B1434472">
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_2466C19B748A2B2CBE2B1754B1434472">
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_B82FE5DCCFCFC7E372EA017CC6733068" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType" Multiplicity="1" Role="FromRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType" Multiplicity="*" Role="ToRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068">
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068">
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_6E3D67F4936B508A3D2BD2F5F3688B55" sap:content-version="1">
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLineType" Multiplicity="1" Role="FromRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="API_PURCHASEORDER_PROCESS_SRV.A_POSubcontractingComponentType" Multiplicity="*" Role="ToRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55">
+                        <PropertyRef Name="ScheduleLine"/>
+                        <PropertyRef Name="PurchasingDocumentItem"/>
+                        <PropertyRef Name="PurchasingDocument"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55">
+                        <PropertyRef Name="ScheduleLine"/>
+                        <PropertyRef Name="PurchaseOrderItem"/>
+                        <PropertyRef Name="PurchaseOrder"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="API_PURCHASEORDER_PROCESS_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="A_POSubcontractingComponent" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_POSubcontractingComponentType" sap:content-version="1"/>
+                <EntitySet Name="A_PurchaseOrder" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType" sap:content-version="1"/>
+                <EntitySet Name="A_PurchaseOrderItem" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType" sap:content-version="1"/>
+                <EntitySet Name="A_PurchaseOrderItemNote" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemNoteType" sap:content-version="1"/>
+                <EntitySet Name="A_PurchaseOrderNote" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderNoteType" sap:content-version="1"/>
+                <EntitySet Name="A_PurchaseOrderScheduleLine" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLineType" sap:content-version="1"/>
+                <EntitySet Name="A_PurOrdAccountAssignment" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignmentType" sap:content-version="1"/>
+                <EntitySet Name="A_PurOrdPricingElement" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType" sap:content-version="1"/>
+                <EntitySet Name="A_ValAddedSrvcMM_2" EntityType="API_PURCHASEORDER_PROCESS_SRV.A_ValAddedSrvcMM_2Type" sap:content-version="1"/>
+                <AssociationSet Name="assoc_2466C19B748A2B2CBE2B1754B1434472" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_2466C19B748A2B2CBE2B1754B1434472" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrder" Role="FromRole_assoc_2466C19B748A2B2CBE2B1754B1434472"/>
+                    <End EntitySet="A_PurchaseOrderNote" Role="ToRole_assoc_2466C19B748A2B2CBE2B1754B1434472"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_8A637AB8579B29B7A7F36730E8B65ACD" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_8A637AB8579B29B7A7F36730E8B65ACD" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrderItem" Role="FromRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD"/>
+                    <End EntitySet="A_PurchaseOrderScheduleLine" Role="ToRole_assoc_8A637AB8579B29B7A7F36730E8B65ACD"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_FC8A787F328FE0E8BF79CA62ADFB77F4" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_FC8A787F328FE0E8BF79CA62ADFB77F4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrderItem" Role="FromRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4"/>
+                    <End EntitySet="A_PurchaseOrderItemNote" Role="ToRole_assoc_FC8A787F328FE0E8BF79CA62ADFB77F4"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_832AC0EB7279F05849D498EE543F75B0" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_832AC0EB7279F05849D498EE543F75B0" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrderItem" Role="FromRole_assoc_832AC0EB7279F05849D498EE543F75B0"/>
+                    <End EntitySet="A_ValAddedSrvcMM_2" Role="ToRole_assoc_832AC0EB7279F05849D498EE543F75B0"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_19BBE09FA429018258275EDA1C9534B1" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_19BBE09FA429018258275EDA1C9534B1" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrderItem" Role="FromRole_assoc_19BBE09FA429018258275EDA1C9534B1"/>
+                    <End EntitySet="A_PurOrdAccountAssignment" Role="ToRole_assoc_19BBE09FA429018258275EDA1C9534B1"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_B82FE5DCCFCFC7E372EA017CC6733068" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_B82FE5DCCFCFC7E372EA017CC6733068" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrder" Role="FromRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068"/>
+                    <End EntitySet="A_PurchaseOrderItem" Role="ToRole_assoc_B82FE5DCCFCFC7E372EA017CC6733068"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_6E3D67F4936B508A3D2BD2F5F3688B55" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_6E3D67F4936B508A3D2BD2F5F3688B55" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrderScheduleLine" Role="FromRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55"/>
+                    <End EntitySet="A_POSubcontractingComponent" Role="ToRole_assoc_6E3D67F4936B508A3D2BD2F5F3688B55"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_EFF2B310CC1279C17A53542CD0A7DF92" Association="API_PURCHASEORDER_PROCESS_SRV.assoc_EFF2B310CC1279C17A53542CD0A7DF92" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_PurchaseOrderItem" Role="FromRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92"/>
+                    <End EntitySet="A_PurOrdPricingElement" Role="ToRole_assoc_EFF2B310CC1279C17A53542CD0A7DF92"/>
+                </AssociationSet>
+                <FunctionImport Name="GetOutputBinaryData" ReturnType="API_PURCHASEORDER_PROCESS_SRV.GetPDFResult" m:HttpMethod="GET" sap:action-for="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType">
+                    <Parameter Name="PurchaseOrder" Type="Edm.String" Mode="In" MaxLength="10" Nullable="true" sap:label="Purchase Order"/>
+                </FunctionImport>
+                <FunctionImport Name="GetPDF" ReturnType="API_PURCHASEORDER_PROCESS_SRV.GetPDFResult" m:HttpMethod="GET" sap:action-for="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType">
+                    <Parameter Name="PurchaseOrder" Type="Edm.String" Mode="In" MaxLength="11000"/>
+                </FunctionImport>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/GetOutputBinaryData"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.Description" String="Retrieves a specific purchase order in PDF format."/>
+                <Annotation Term="Core.LongDescription" String="Retrieves a specific purchase order from the system in PDF format, which shows how the purchase order looks after it has been output"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/GetPDF"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Core.Description" String="Retrieves a specific purchase order in PDF format."/>
+                <Annotation Term="Core.LongDescription" String="Retrieves a specific purchase order from the system in PDF format, which shows how the purchase order looks after it has been output"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/to_AccountAssignment"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/to_PurchaseOrderItemNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/to_PurchaseOrderPricingElement"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/to_ScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLineType/to_SubcontractingComponent"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/to_PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/to_PurchaseOrderNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/Plant"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/PurchaseOrderType"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/Supplier"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItemNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="PlainLongText"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>PlainLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+                <Annotation Term="Capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>PlainLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="PlainLongText"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>PlainLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+                <Annotation Term="Capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>PlainLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_ValAddedSrvcMM"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>ValueAddedServiceLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>ValueAddedServiceLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_ValAddedSrvcMM_2"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>ValueAddedServiceLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>ValueAddedServiceLongText</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_POSubcontractingComponentType/PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_POSubcontractingComponentType/PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_POSubcontractingComponentType/ScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignmentType/PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignmentType/PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemNoteType/PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemNoteType/PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderNoteType/PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLineType/PurchasingDocument"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLineType/PurchasingDocumentItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.Immutable"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderItem"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderNote"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_AccountAssignment"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrder"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderItemNote"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderPricingElement"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ScheduleLine"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ValueAddedService"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ValueAddedService_2"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_SubcontractingComponent"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_POSubcontractingComponent"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdAccountAssignment"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdPricingElement"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="PurchaseOrder"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignmentType/DocumentCurrency"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignmentType/TaxCode"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="SalesTaxCode"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignmentType/TaxJurisdiction"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="TaxJurisdiction"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/ConditionCalculationType"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PriceConditionCalculationType"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/ConditionCategory"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PriceConditionCategory"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/ConditionClass"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PriceConditionClass"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/ConditionControl"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PriceConditionControl"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/ConditionCurrency"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/ConditionInactiveReason"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PriceConditionInactiveReason"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/ConditionOrigin"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PriceConditionOrigin"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElementType/TransactionCurrency"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/AccountAssignmentCategory"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="AccountAssignmentCategory"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/DocumentCurrency"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/IncotermsClassification"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="IncotermsClassification"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/ProductType"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="ProductType"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/StorageLocation"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="StorageLocation"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemType/TaxJurisdiction"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="TaxJurisdiction"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/DocumentCurrency"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/IncotermsClassification"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="IncotermsClassification"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/IncotermsVersion"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="IncotermsVersion"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/PaymentTerms"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PaymentTerms"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderType/PurchasingGroup"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PurchasingGroup"/>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the header details of all the purchase orders in the system"/>
+                        <PropertyValue Property="LongDescription" String="Gets the header details of all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the header details of a purchase order"/>
+                                <PropertyValue Property="LongDescription" String="Gets the header details such as supplier, company code, currency and so on of a purchase order using the purchase order number provided."/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the item details of all the items, in all the purchase orders in the system"/>
+                        <PropertyValue Property="LongDescription" String="Gets the item details of all the items, in all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the item details of an item in a purchase order."/>
+                                <PropertyValue Property="LongDescription" String="Gets the item details such as material, plant, quantity and so on of an item in a purchase order using the purchase order number and item number provided."/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the schedule line details of all the items, in all the purchase orders in the system"/>
+                        <PropertyValue Property="LongDescription" String="Gets the schedule line details of all the items, in all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the schedule line details of an item in a purchase order."/>
+                                <PropertyValue Property="LongDescription" String="Gets the schedule line details such as quantity, delivery date and so on of an item in a purchase order using the purchase order number, item number and schedule line number provided. "/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdAccountAssignment"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the account assignment details of all the accounting lines of all the items, in all the POs in the system."/>
+                        <PropertyValue Property="LongDescription" String="Gets the account assignment details of all the accounting lines of all the items, in all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the account assignment details of a particular accounting line of an item in a purchase order"/>
+                                <PropertyValue Property="LongDescription" String="Gets the account assignment details of a particular accounting line of an item in a purchase order, such as GL acocunt, cost center and so on using the purchase order number, item number and serial number of the accounting line provided."/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the header texts or notes of all the purchase orders in the system."/>
+                        <PropertyValue Property="LongDescription" String="Gets the header texts or notes of all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the header texts or notes of a purchase order."/>
+                                <PropertyValue Property="LongDescription" String="Gets the header note of a particular note type in a purchase order using the purchase order number, text ID that identifies the type of note and language key provided. If the header note is not available in the requested language, then it returns the note in the language in which it was created."/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItemNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the item texts/notes of all the items, in all the purchase orders in the system."/>
+                        <PropertyValue Property="LongDescription" String="Gets the item texts/notes of all the items, in all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the item texts/notes of a particular note type in a purchase order item."/>
+                                <PropertyValue Property="LongDescription" String="Gets the item note of a particular note type in a purchase order item using the purchase order number, item number, text ID that identifies the type of note and language key provided. If the item note is not  available in the requested language, then it returns the note in the language in which it was created."/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdPricingElement"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the pricing details of all the condition lines of all the items, in all the POs in the system."/>
+                        <PropertyValue Property="LongDescription" String="Gets the pricing details of all the condition lines of all the items, in all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the pricing details of a particular condition line of an item in a purchase order."/>
+                                <PropertyValue Property="LongDescription" String="Gets the pricing details of a particular condition line of an item in a purchase order, such as condition value, unit of measure so on using the purchase order number, item number, document condition number, document condition item number, condition sequence number and condition counter in pricing procedure of the condition line provided."/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_POSubcontractingComponent"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Gets the component details of all the subcontracting items, in all the POs in the system."/>
+                        <PropertyValue Property="LongDescription" String="Gets the component details of all the subcontracting items, in all the purchase orders in the system. Note that if there are many purchase orders in the system, this operation might take a while."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Gets the component details of a particular item in a purchase order."/>
+                                <PropertyValue Property="LongDescription" String="Gets the component details of a particular subcontracting item in a purchase order such as material, BOM item description, quantity so on using the purchase order number, item number, schedule line counter, reservation item and record type provided."/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderItem"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets the item details of all the items in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Gets the item details such as material, plant, quantity so on of all the items in a purchase order using the purchase order number provided."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderNote"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets all the header notes or texts of a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Gets all the header notes or texts of a purchase order using the purchase order number provided."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderItem"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Adds an item to a purchase order"/>
+                                            <PropertyValue Property="LongDescription" String="Adds an item to a purchase order using the purchase order number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; in the request body along with details like material, plant, quantity and so on."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderNote"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Adds or creates a note or text to a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Adds or creates a note or text to a purchase order using the purchase order number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; in the request body along with details like text object id, language and texts to be added."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_AccountAssignment"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets the account assignment details of all the accounting lines of an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Gets the account assignment details of all the accounting lines of an item in a purchase order using the purchase order number and item number provided."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderItemNote"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets all the item notes of an item in a purchase order"/>
+                                            <PropertyValue Property="LongDescription" String="Gets all the item notes of an item in a purchase order using the purchase order number and item number provided."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderPricingElement"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets the pricing details of all the conditions of an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Gets the pricing details of all the conditions of an item in a purchase order using the purchase order number and item number provided."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ScheduleLine"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets all the schedule lines of an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Gets all the schedule lines of an item in a purchase order using the purchase order number and item number provided. "/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrder"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets the header details of an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Gets the header details of an item in a purchase order using the purchase order number and item number provided. "/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ScheduleLine"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Adds the schedule line details to an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Adds the schedule line details such as quantity, delivery date so on to an item in a purchase order, using the purchase order number and item number provided. It is mandatory to pass the purchase order number &quot;PurchasingDocument&quot; and item number &quot;PurchasingDocumentItem&quot; in the request body."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderPricingElement"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Adds the pricing condition details to an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Adds the pricing condition details such as condition type, condition value, Currency and so on to an item in a purchase order, using the purchase order number and item number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; and item number &quot;PurchaseOrderItem&quot; in the request body."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_AccountAssignment"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Adds the account assignment details to an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Adds the account assignment details such as Cost center, GL account, WBS element and so on to an item in a purchase order using the purchase order number and item number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; and item number &quot;PurchaseOrderItem&quot; in the request body."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_PurchaseOrderItemNote"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Adds or creates a note or text to an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Adds or creates a note or text to an item in a purchase order using the purchase order number and item number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; and item number &quot;PurchaseOrderItem&quot;, in the request body along with details like text object id, language and texts to be added."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_SubcontractingComponent"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Gets all the subcontracting component details of a schedule line of an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Gets all the subcontracting component details of a schedule line of an item in a purchase order using the purchase order number, item number, schedule line number, reservation number and record type provided."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_SubcontractingComponent"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Adds the subcontracting component details to a schedule line of an item in a purchase order."/>
+                                            <PropertyValue Property="LongDescription" String="Adds the subcontracting component details such as material, requirement date, quantity so on to a schedule line of an item in a  purchase order, using the purchase order number, item number and schedule line number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot;, item number &quot;PurchaseOrderItem&quot; and schedule line number &quot;ScheduleLine&quot; in the request body."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the header details of a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Updates the header details of a purchase order using the purchase order number provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Creates a new purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Creates a new purchase order with the header and item details passed in the request body."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrder"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes all items of a purchase order that has been posted."/>
+                        <PropertyValue Property="LongDescription" String="Deletes the purchase order details."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Adds an item to a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Adds an item with details like material, quantity, price unit, and so on to a purchase order using the purchase order number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; in the request body."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the item details of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Updates the item details of an item in a purchase order, using the purchase order number, and item number provided. "/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItem"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Deletes an item in a purchase order using the purchase order number and item number provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Adds new text or note to a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Adds new text types or note data to the purchase order for example header text, terms of delivery, so on using the purchase order number provided. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; in the request body."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the header text or note of a particular text type in a purchase order. "/>
+                        <PropertyValue Property="LongDescription" String="Updates the header text or note of a particular text type in a purchase order using the purchase order number, text ID that identifies the type of text and language key provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes the header text or note of a particular text type in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Deletes the header text or note of a particular text type in a purchase order using the purchase order number, text ID that identifies the type of text and language key provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdAccountAssignment"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Adds a new accounting line to an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Adds a new accounting line to an item in a purchase order. It is mandatory to provide the purchase order number &quot;PurchaseOrder&quot; and item number &quot;PurchaseOrderItem&quot; in the request body. "/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdAccountAssignment"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the account assignment details of a particular accounting line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Updates the account assignment details of a particular accounting line of an item in a purchase order, using the purchase order number, item number and serial number of the accounting line provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdAccountAssignment"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes an accounting line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Deletes a particular accounting line of an item in a purchase order, using the purchase order number, item number and serial number of the accounting line provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItemNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Adds new text or note to a purchase order item."/>
+                        <PropertyValue Property="LongDescription" String="Adds new text or note to a purchase order item for example item text, delivery text. It is mandatory to pass the purchase order number &quot;PurchaseOrder&quot; and item number &quot;PurchaseOrderItem&quot; in the request body."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItemNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the item text or note of a particular text type in a purchase order item."/>
+                        <PropertyValue Property="LongDescription" String="Updates the item text or note of a particular text type in a purchase order item using the purchase order number, item number, text ID that identifies the type of text and language key provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderItemNote"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes the item text or note of a particular text type in a purchase order item."/>
+                        <PropertyValue Property="LongDescription" String="Deletes the item text or note of a particular text type in a purchase order item using the purchase order number, item number, text ID that identifies the type of text and language key provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdPricingElement"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Adds a new condition line to an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Adds a new condition line to an item in a purchase order. Condition details like condition value, currency, order price unit and so on can be added. It is mandatory to provide the purchase order number &quot;PurchaseOrder&quot; and item number &quot;PurchaseOrderItem&quot; in the request body. "/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdPricingElement"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the pricing details of a particular condition line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Updates the pricing details of a particular condition line of an item in a purchase order using the purchase order number, item number, document condition number, document condition item number, condition sequence number and condition counter in pricing procedure of the condition line provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurOrdPricingElement"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes the pricing details of a particular condition line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Deletes the pricing details of a particular condition line of an item in a purchase order using the purchase order number, item number, document condition number, document condition item number, condition sequence number and condition counter in pricing procedure of the condition line provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Adds a new schedule line to an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Adds a new schedule line to an item in a purchase order. It is mandatory to provide the purchase order number &quot;PurchasingDocument&quot; and item number &quot;PurchasingDocumentItem&quot; in the request body. "/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the schedule line details of a particular schedule line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Updates the schedule line details of a particular schedule line of an item in a purchase order using the purchase order number, item number, and sequence number of the schedule line provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_PurchaseOrderScheduleLine"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes the schedule line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Deletes a particular schedule line of an item in a purchase order using the purchase order number, item number and sequence number of the schedule line provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_POSubcontractingComponent"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Adds a subcontracting component line to an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Adds a subcontracting component line to an item in a purchase order. It is mandatory to provide the purchase order number &quot;PurchaseOrder&quot; and item number &quot;PurchaseOrderItem&quot; in the request body. "/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_POSubcontractingComponent"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Updates the subcontracting component details of a particular schedule line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Updates the subcontracting component details of a particular schedule line of an item in a purchase order using the purchase order number, item number, sequence number of the schedule line, reservation item number and record type provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities/A_POSubcontractingComponent"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Deletes the subcontracting component details of a schedule line of an item in a purchase order."/>
+                        <PropertyValue Property="LongDescription" String="Deletes the subcontracting component details of a particular schedule line of an item in a purchase order using the purchase order number, item number, sequence number of the schedule line, reservation item number and record type provided."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="API_PURCHASEORDER_PROCESS_SRV.API_PURCHASEORDER_PROCESS_SRV_Entities"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <atom:link rel="self" href="/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
