@@ -1,0 +1,15 @@
+{
+  "name": "oasis-api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "odata-csdl": "^0.11.1",
+    "odata-openapi": "^0.29.0",
+    "sax": "^1.4.1"
+  }
+}

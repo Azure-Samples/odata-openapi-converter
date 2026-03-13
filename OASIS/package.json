@@ -1,0 +1,64 @@
+{
+  "name": "oasis-odata-openapi",
+  "version": "1.0.0",
+  "description": "OASIS - Convert OData CSDL specifications (XML/JSON) to OpenAPI 3.0 format",
+  "main": "api/lib/converter.js",
+  "bin": {
+    "oasis-odata-openapi": "./cli/cli.js"
+  },
+  "files": [
+    "api/lib/",
+    "cli/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "convert": "node cli/cli.js convert",
+    "batch": "node cli/cli.js batch",
+    "info": "node cli/cli.js info",
+    "test": "node --test",
+    "lint": "eslint api/lib/ cli/cli.js",
+    "bundle": "node esbuild.config.js",
+    "build:win-x64": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-windows-x64 --outfile dist/oasis-converter-win-x64.exe",
+    "build:mac-x64": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-darwin-x64 --outfile dist/oasis-converter-mac-x64",
+    "build:mac-arm64": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-darwin-arm64 --outfile dist/oasis-converter-mac-arm64",
+    "build:linux-x64": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-linux-x64 --outfile dist/oasis-converter-linux-x64",
+    "build:linux-arm64": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-linux-arm64 --outfile dist/oasis-converter-linux-arm64",
+    "build:all": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-windows-x64 --outfile dist/oasis-converter-win-x64.exe && bun build dist/cli-bundled.cjs --compile --target=bun-darwin-x64 --outfile dist/oasis-converter-mac-x64 && bun build dist/cli-bundled.cjs --compile --target=bun-darwin-arm64 --outfile dist/oasis-converter-mac-arm64 && bun build dist/cli-bundled.cjs --compile --target=bun-linux-x64 --outfile dist/oasis-converter-linux-x64 && bun build dist/cli-bundled.cjs --compile --target=bun-linux-arm64 --outfile dist/oasis-converter-linux-arm64"
+  },
+  "keywords": [
+    "odata",
+    "openapi",
+    "swagger",
+    "converter",
+    "csdl",
+    "api",
+    "specification",
+    "metadata",
+    "sap"
+  ],
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thanmayee75/odata-openapi-converter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thanmayee75/odata-openapi-converter/issues"
+  },
+  "homepage": "https://github.com/thanmayee75/odata-openapi-converter#readme",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "odata-csdl": "^0.11.1",
+    "odata-openapi": "^0.29.0",
+    "sax": "^1.4.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.2",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0",
+    "javascript-obfuscator": "^5.1.0"
+  }
+}
