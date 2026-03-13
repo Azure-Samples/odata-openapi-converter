@@ -1,0 +1,84 @@
+---
+name: Bug Report
+description: Report a bug in the OData to OpenAPI converter
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Which version are you using? (run `oasis-odata-openapi --version`)
+      placeholder: "v1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - macOS (Intel)
+        - macOS (Apple Silicon)
+        - Linux
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Conversion Mode
+      options:
+        - Single file
+        - Batch (folder)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Run `oasis-odata-openapi input.xml output.json`
+        2. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: trace
+    attributes:
+      label: Trace output
+      description: Paste the `[TRACE]` line from the CLI output (if available).
+      render: json
+
+  - type: textarea
+    id: input-sample
+    attributes:
+      label: Input file sample
+      description: |
+        If possible, attach a minimal OData CSDL file that reproduces the issue.
+        **Do not share confidential metadata.** Redact sensitive entity/property names.
+      render: xml

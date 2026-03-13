@@ -1,0 +1,109 @@
+# =============================================================================
+# Release — Manual trigger with version input
+#
+# How to use:
+#   1. Go to Actions → Release → Run workflow
+#   2. Enter the version (e.g. 1.2.0) and optional release notes
+#   3. Click "Run workflow"
+#
+# The workflow will: lint → test → bundle → build binaries → tag → publish.
+# =============================================================================
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. 1.2.0, without the 'v' prefix)"
+        required: true
+        type: string
+      release_notes:
+        description: "Release notes (leave empty for auto-generated notes)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release v${{ inputs.version }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: OASIS
+
+    steps:
+      - name: Validate version format
+        working-directory: .
+        run: |
+          if ! echo "${{ inputs.version }}" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Error: Version must be in format X.Y.Z (e.g. 1.2.0)"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: OASIS/package-lock.json
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Bundle (with telemetry key and version)
+        env:
+          OASIS_APPINSIGHTS_IKEY: ${{ secrets.OASIS_APPINSIGHTS_IKEY }}
+          OASIS_VERSION: ${{ inputs.version }}
+        run: npm run bundle
+
+      - name: Build platform binaries
+        run: |
+          bun build dist/cli-bundled.cjs --compile --target=bun-windows-x64  --outfile dist/oasis-converter-win-x64.exe
+          bun build dist/cli-bundled.cjs --compile --target=bun-darwin-x64   --outfile dist/oasis-converter-mac-x64
+          bun build dist/cli-bundled.cjs --compile --target=bun-darwin-arm64 --outfile dist/oasis-converter-mac-arm64
+          bun build dist/cli-bundled.cjs --compile --target=bun-linux-x64   --outfile dist/oasis-converter-linux-x64
+          bun build dist/cli-bundled.cjs --compile --target=bun-linux-arm64 --outfile dist/oasis-converter-linux-arm64
+
+      - name: Generate checksums
+        run: |
+          cd dist
+          sha256sum oasis-converter-* > oasis-converter-v${{ inputs.version }}-checksums.txt
+          echo "--- Checksums ---"
+          cat oasis-converter-v${{ inputs.version }}-checksums.txt
+
+      - name: Create tag
+        working-directory: .
+        run: |
+          git tag "v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}
+          name: v${{ inputs.version }}
+          body: ${{ inputs.release_notes || '' }}
+          generate_release_notes: ${{ inputs.release_notes == '' }}
+          files: |
+            OASIS/dist/oasis-converter-win-x64.exe
+            OASIS/dist/oasis-converter-mac-x64
+            OASIS/dist/oasis-converter-mac-arm64
+            OASIS/dist/oasis-converter-linux-x64
+            OASIS/dist/oasis-converter-linux-arm64
+            OASIS/dist/oasis-converter-v${{ inputs.version }}-checksums.txt
