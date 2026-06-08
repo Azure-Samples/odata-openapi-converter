@@ -65,6 +65,8 @@ build({
     __APPINSIGHTS_IKEY__: JSON.stringify(APPINSIGHTS_IKEY),
     __VERSION__: JSON.stringify(PKG_VERSION),
   },
+  // Ensure core/ modules are bundled with the CLI
+  external: [],
 }).then(() => {
   console.log("✓ Build complete — dist/cli-bundled.cjs");
 });

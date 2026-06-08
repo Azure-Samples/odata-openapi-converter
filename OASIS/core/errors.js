@@ -53,7 +53,6 @@ class InvalidContentError extends Error {
 
 /**
  * Thrown when XML content is malformed and cannot be parsed by SAX.
- * Includes line/column info when available.
  */
 class XmlParseError extends Error {
   constructor(detail, cause) {
@@ -82,9 +81,7 @@ class JsonParseError extends Error {
 }
 
 /**
- * Thrown when xml2json conversion fails (e.g. unexpected root element,
- * missing required attributes, structural CSDL errors).
- * Includes validation messages collected before the failure.
+ * Thrown when xml2json conversion fails (structural CSDL errors).
  */
 class CsdlParseError extends Error {
   constructor(detail, cause, messages) {
@@ -115,7 +112,7 @@ class OpenApiConversionError extends Error {
 }
 
 /**
- * Thrown when post-processing (e.g. addPutMethods) fails.
+ * Thrown when post-processing fails.
  */
 class PostProcessingError extends Error {
   constructor(detail, cause) {
@@ -127,9 +124,7 @@ class PostProcessingError extends Error {
 }
 
 /**
- * Thrown when a file system operation (read, write, mkdir) fails.
- * Preserves the original system error code (ENOENT, EACCES, etc.)
- * while providing a stable API-facing code.
+ * Thrown when a file system operation fails.
  */
 class FileIOError extends Error {
   constructor(detail, cause) {

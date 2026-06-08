@@ -7,12 +7,13 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import { ArrowUploadRegular } from "@fluentui/react-icons";
+import { UI } from "../strings.js";
 
 /* ------------------------------------------------------------------ */
-/*  Defaults                                                          */
+/*  Defaults — aligned with core/constants.js                         */
 /* ------------------------------------------------------------------ */
 const DEFAULT_EXTENSIONS = new Set([".xml", ".edmx", ".json"]);
-const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024; // 4 MiB
+const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024; // 4 MiB — matches core/constants.js
 
 function hasValidExtension(name, accepted) {
   const dot = name.lastIndexOf(".");
@@ -144,7 +145,7 @@ function DropZone({
         if (!hasValidExtension(f.name, acceptedExtensions)) {
           skipped.push(f.name);
         } else if (f.size > MAX_FILE_SIZE_BYTES) {
-          skipped.push(`${f.name} (exceeds 4 MiB limit)`);
+          skipped.push(UI.errors.fileTooLarge(f.name));
         } else {
           eligible.push(f);
         }
@@ -199,7 +200,7 @@ function DropZone({
     <div
       role="button"
       tabIndex={0}
-      aria-label="Drop files or folders here, or click to browse"
+      aria-label={UI.dropZone.ariaLabel}
       className={mergeClasses(
         styles.dropZone,
         dragging && styles.dropZoneActive,
@@ -220,12 +221,10 @@ function DropZone({
       <Text className={styles.dropLabel}>
         {label || (
           <>
-            Drag &amp; drop files or folders here, or{" "}
-            <Link as="span" inline>
-              browse
-            </Link>
+            {UI.dropZone.instruction}{" "}
+            <Link as="span" inline>{UI.dropZone.browse}</Link>
             <br />
-            Maximum file size: 4 MiB
+            {UI.dropZone.sizeLimit}
           </>
         )}
       </Text>

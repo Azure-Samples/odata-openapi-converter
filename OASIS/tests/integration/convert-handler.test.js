@@ -19,8 +19,18 @@ const SAMPLE_FILE = "SAP-APIM-GWSAMPLE.xml";
 const sampleAvailable = fs.existsSync(path.join(SAMPLE_DIR, SAMPLE_FILE));
 
 /** Creates a mock Azure Functions HttpRequest. */
-function mockRequest(body) {
-  return { json: async () => body };
+function mockRequest(body, requestId) {
+  const headers = new Map();
+  if (requestId) {
+    headers.set("x-ms-request-id", requestId);
+  }
+
+  return {
+    json: async () => body,
+    headers: {
+      get: (name) => headers.get(name.toLowerCase()),
+    },
+  };
 }
 
 /** Mock Azure Functions InvocationContext. */
@@ -50,9 +60,22 @@ describe("convertHandler — success", () => {
     );
 
     assert.equal(response.status, undefined); // No error status = 200
+    assert.ok(response.headers["x-ms-request-id"]);
     assert.ok(response.jsonBody.data.openapi);
     assert.ok(response.jsonBody.fileName.endsWith("-openapi.json"));
     assert.ok(Array.isArray(response.jsonBody.warnings));
+  });
+
+  it("should reuse a client-provided x-ms-request-id", async () => {
+    if (!sampleAvailable) return;
+
+    const correlationId = "test-request-id";
+    const response = await convertHandler(
+      mockRequest({ fileName: SAMPLE_FILE, content: sampleXml }, correlationId),
+      mockContext
+    );
+
+    assert.equal(response.headers["x-ms-request-id"], correlationId);
   });
 });
 

@@ -7,7 +7,7 @@
 
 const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
-const { postProcess } = require("../../api/lib/helper.js");
+const { postProcess } = require("../../core/index.js");
 
 // ── postProcess (pipeline entry point) ───────────────────────
 
@@ -428,12 +428,11 @@ describe("postProcess — addHeadMethods behaviour", () => {
       undefined,
       "POST should NOT have If-Match"
     );
-    // GET should NOT have If-Match
-    assert.equal(
-      result.paths["/Items"].get.parameters,
-      undefined,
-      "GET should not have If-Match"
-    );
+    // GET should NOT have If-Match (may have SAP params via $ref)
+    const getIfMatch = result.paths["/Items"].get.parameters
+      ? result.paths["/Items"].get.parameters.find((p) => p.name === "If-Match")
+      : undefined;
+    assert.equal(getIfMatch, undefined, "GET should not have If-Match");
   });
 });
 
@@ -519,7 +518,9 @@ describe("postProcess — addHeaderParameters behaviour", () => {
     };
 
     const result = postProcess(spec);
-    assert.equal(result.paths["/Items"].get.parameters, undefined);
+    const getParams = result.paths["/Items"].get.parameters;
+    const ifMatch = getParams ? getParams.find((p) => p.name === "If-Match") : undefined;
+    assert.equal(ifMatch, undefined, "GET should not have If-Match");
   });
 
   it("should NOT add If-Match header to HEAD operations", () => {
@@ -530,7 +531,9 @@ describe("postProcess — addHeaderParameters behaviour", () => {
     };
 
     const result = postProcess(spec);
-    assert.equal(result.paths["/"].head.parameters, undefined);
+    const headParams = result.paths["/"].head.parameters;
+    const ifMatch = headParams ? headParams.find((p) => p.name === "If-Match") : undefined;
+    assert.equal(ifMatch, undefined, "HEAD should not have If-Match");
   });
 
   it("should not duplicate If-Match when it already exists", () => {
@@ -577,7 +580,7 @@ describe("postProcess — addHeaderParameters behaviour", () => {
 
     const result = postProcess(spec);
     const params = result.paths["/Items('{id}')"].patch.parameters;
-    assert.equal(params.length, 2);
+    assert.ok(params.length >= 2, "Should have at least custom param + If-Match");
     assert.ok(params.find((p) => p.name === "X-Custom"));
     assert.ok(params.find((p) => p.name === "If-Match"));
   });
@@ -597,7 +600,10 @@ describe("postProcess — addHeaderParameters behaviour", () => {
     assert.ok(result.paths["/Items('{id}')"].patch.parameters.find((p) => p.name === "If-Match"));
     assert.ok(result.paths["/Items('{id}')"].put.parameters.find((p) => p.name === "If-Match"));
     assert.ok(result.paths["/Items('{id}')"].delete.parameters.find((p) => p.name === "If-Match"));
-    assert.equal(result.paths["/Items('{id}')"].get.parameters, undefined);
+    const getIfMatchMulti = result.paths["/Items('{id}')"].get.parameters
+      ? result.paths["/Items('{id}')"].get.parameters.find((p) => p.name === "If-Match")
+      : undefined;
+    assert.equal(getIfMatchMulti, undefined, "GET should not have If-Match");
   });
 
   it("should handle spec with no paths property", () => {

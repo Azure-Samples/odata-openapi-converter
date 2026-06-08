@@ -11,6 +11,7 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import ConvertPage from "./convert.jsx";
+import { UI } from "./strings.js";
 
 const useStyles = makeStyles({
   container: {
@@ -104,18 +105,18 @@ function LandingPage({ onGetStarted }) {
   return (
     <div className={styles.container}>
         <Text as="h1" className={styles.heading}>
-          SAP ODATA to OpenAPI Converter
+          {UI.landing.heading}
         </Text>
 
         <Text as="p" className={styles.description}>
-          Bridging the gap between OData and OpenAPI. Convert CSDL / EDMX metadata (v2, v3, v4) to fully compliant OpenAPI 3.x specifications that seamlessly integrate as fully functional APIs into Azure API Management.
+          {UI.landing.description}
         </Text>
 
         {/* Replace src with your actual demo GIF or video */}
         <img
           className={styles.demo}
           src="/demo.gif"
-          alt="Demo of OData to OpenAPI conversion"
+          alt={UI.landing.demoAlt}
         />
 
         <Checkbox
@@ -124,13 +125,13 @@ function LandingPage({ onGetStarted }) {
           onChange={(_, data) => setAccepted(data.checked)}
           label={
             <>
-              I agree to send non-personal application data.{" "}
+              {UI.landing.consent}{" "}
               <Link
                 href="https://github.com/Azure-Samples/odata-openapi-converter/blob/main/README.md#telemetry"
                 target="_blank"
                 inline
               >
-                Learn more
+                {UI.landing.consentLink}
               </Link>
             </>
           }
@@ -145,7 +146,7 @@ function LandingPage({ onGetStarted }) {
           disabled={!accepted}
           onClick={onGetStarted}
         >
-          Get Started
+          {UI.landing.getStarted}
         </Button>
     </div>
   );

@@ -11,9 +11,9 @@ const {
   detectFormat,
   isSupportedFile,
   validateExtension,
-  parseXml,
-  parseJson,
-} = require("../../api/lib/validation.js");
+} = require("../../core/index.js");
+const { convert: parseXml } = require("../../core/converter/XmlConverter.js");
+const { convert: parseJson } = require("../../core/converter/JsonConverter.js");
 
 // ── detectFormat ───────────────────────────────────────────────
 

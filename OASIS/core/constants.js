@@ -3,7 +3,8 @@
 // copyright (c) Microsoft Corporation. All rights reserved.
 // </copyright>
 //
-// @fileoverview Shared constants for the OASIS converter pipeline.
+// @fileoverview Single source of truth for all OASIS converter constants.
+// All consumers (API, CLI, Web App) import from here — no hardcoding.
 // ---------------------------------------------------------------
 
 /**
@@ -18,7 +19,6 @@ const FORMATS = Object.freeze({
 
 /**
  * Enum-style format identifiers returned by detectFormat().
- * e.g. FORMAT.XML === "xml", FORMAT.JSON === "json"
  */
 const FORMAT = Object.freeze(
   Object.fromEntries(
@@ -28,13 +28,11 @@ const FORMAT = Object.freeze(
 
 /**
  * File extensions recognised as valid OData CSDL input.
- * Derived from FORMATS — no manual sync needed.
  */
 const SUPPORTED_EXTENSIONS = Object.keys(FORMATS).map((k) => FORMATS[k].ext);
 
 /**
  * Regex that matches supported input extensions (case-insensitive).
- * Derived from FORMATS — no manual sync needed.
  */
 const INPUT_EXTENSION_RE = new RegExp(
   `\\.(${Object.keys(FORMATS).join("|")})$`,
@@ -48,8 +46,14 @@ const OPENAPI_OUTPUT_SUFFIX = "-openapi.json";
 
 /**
  * Maximum allowed file size in bytes (4 MiB).
+ * Azure API Management limits OpenAPI spec imports to 4 MiB.
  */
 const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024;
+
+/**
+ * Human-readable file size limit string for UI display.
+ */
+const MAX_FILE_SIZE_DISPLAY = "4 MiB";
 
 /**
  * Unicode BOM character (U+FEFF) that some editors prepend to files.
@@ -58,7 +62,6 @@ const BOM = "\uFEFF";
 
 /**
  * Maps custom error class names to HTTP status codes for the API layer.
- * Add new error → status mappings here as needed.
  */
 const HTTP_STATUS_MAP = Object.freeze({
   InvalidContentError: 400,
@@ -67,7 +70,7 @@ const HTTP_STATUS_MAP = Object.freeze({
   XmlParseError: 422,
   JsonParseError: 422,
   CsdlParseError: 422,
-  OpenApiConversionError: 500,
+  OpenApiConversionError: 422,
   PostProcessingError: 500,
 });
 
@@ -84,12 +87,11 @@ const ERROR_CODE = Object.freeze({
   IO_ERROR: "IO_ERROR",
   FILE_TOO_LARGE: "FILE_TOO_LARGE",
   INTERNAL_ERROR: "INTERNAL_ERROR",
+  NETWORK_ERROR: "NETWORK_ERROR",
 });
 
 /**
  * Contextual note shown alongside conversion warnings.
- * Explains that warnings originate from the underlying OASIS open-source SDK
- * (odata-csdl / odata-openapi), not from this tool.
  */
 const SDK_WARNING_NOTE =
   "These warnings originate from the underlying OASIS open-source SDK " +
@@ -100,6 +102,54 @@ const SDK_WARNING_NOTE =
   "No action is required. Learn more: " +
   "https://github.com/Azure-Samples/odata-openapi-converter#known-limitations";
 
+/**
+ * Warning patterns that are suppressed from user-facing output.
+ * These are non-actionable annotation resolution warnings from the OASIS SDK.
+ */
+const SUPPRESSED_WARNING_PATTERNS = Object.freeze([
+  /^Invalid annotation target '/,
+  /^More than two annotation target path segments$/,
+]);
+
+/**
+ * App Insights telemetry ingestion endpoint.
+ */
+const TELEMETRY_INGESTION_URL = "https://dc.services.visualstudio.com/v2/track";
+
+/**
+ * App Insights event name for conversion runs.
+ */
+const TELEMETRY_EVENT_NAME = "OasisRun";
+
+/**
+ * Telemetry timeout in milliseconds for CLI (hard ceiling).
+ */
+const TELEMETRY_TIMEOUT_MS = 3000;
+
+/**
+ * Error codes considered internal (5xx) for telemetry scrubbing.
+ * Only these include error messages in telemetry payloads.
+ */
+const INTERNAL_ERROR_CODES = Object.freeze(new Set(["INTERNAL_ERROR", "IO_ERROR"]));
+
+/**
+ * CLI exit codes.
+ */
+const EXIT_CODE = Object.freeze({
+  SUCCESS: 0,
+  ERROR: 1,
+});
+
+/**
+ * HTTP methods that require write-operation headers (If-Match, CSRF).
+ */
+const WRITE_METHODS = Object.freeze(["patch", "put", "delete"]);
+
+/**
+ * All HTTP methods supported in OpenAPI paths.
+ */
+const ALL_HTTP_METHODS = Object.freeze(["get", "post", "put", "patch", "delete", "head"]);
+
 module.exports = {
   FORMATS,
   FORMAT,
@@ -107,8 +157,17 @@ module.exports = {
   OPENAPI_OUTPUT_SUFFIX,
   INPUT_EXTENSION_RE,
   MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_DISPLAY,
   BOM,
   HTTP_STATUS_MAP,
   ERROR_CODE,
   SDK_WARNING_NOTE,
+  SUPPRESSED_WARNING_PATTERNS,
+  TELEMETRY_INGESTION_URL,
+  TELEMETRY_EVENT_NAME,
+  TELEMETRY_TIMEOUT_MS,
+  INTERNAL_ERROR_CODES,
+  EXIT_CODE,
+  WRITE_METHODS,
+  ALL_HTTP_METHODS,
 };

@@ -15,7 +15,7 @@ const {
   convertContent,
   convertFile,
   convertFolder,
-} = require("../../api/lib/converter.js");
+} = require("../../core/index.js");
 
 const SAMPLE_DIR = path.resolve(__dirname, "../../INPUT");
 const SAMPLE_FILE = "SAP-APIM-GWSAMPLE.xml";

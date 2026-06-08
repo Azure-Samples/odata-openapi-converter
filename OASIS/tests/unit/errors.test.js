@@ -16,8 +16,8 @@ const {
   OpenApiConversionError,
   PostProcessingError,
   FileIOError,
-} = require("../../api/lib/errors.js");
-const { ERROR_CODE } = require("../../api/lib/constants.js");
+} = require("../../core/errors.js");
+const { ERROR_CODE } = require("../../core/constants.js");
 
 describe("UnsupportedExtensionError", () => {
   it("should be an instance of Error", () => {

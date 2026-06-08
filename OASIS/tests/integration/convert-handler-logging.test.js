@@ -19,8 +19,18 @@ const assert = require("node:assert/strict");
 const { convertHandler } = require("../../api/lib/convert-handler.js");
 
 /** Creates a mock Azure Functions HttpRequest. */
-function mockRequest(body) {
-  return { json: async () => body };
+function mockRequest(body, requestId) {
+  const headers = new Map();
+  if (requestId) {
+    headers.set("x-ms-request-id", requestId);
+  }
+
+  return {
+    json: async () => body,
+    headers: {
+      get: (name) => headers.get(name.toLowerCase()),
+    },
+  };
 }
 
 /** Creates a mock context that captures the error log. */
@@ -50,10 +60,14 @@ describe("convertHandler — 4xx error logging", () => {
     assert.equal(logs.errors.length, 1);
 
     const loggedObj = logs.errors[0][1];
-    assert.equal(loggedObj.name, "UnsupportedExtensionError");
-    assert.equal(loggedObj.code, "UNSUPPORTED_EXTENSION");
-    assert.equal(loggedObj.message, undefined, "Should NOT log message for 4xx");
-    assert.equal(loggedObj.stack, undefined, "Should NOT log stack for 4xx");
+    assert.equal(logs.errors[0][0], "Operation failed");
+    assert.equal(loggedObj.errorName, "UnsupportedExtensionError");
+    assert.equal(loggedObj.errorCode, "UNSUPPORTED_EXTENSION");
+    assert.equal(typeof loggedObj.correlationId, "string");
+    assert.equal(typeof loggedObj.durationMs, "number");
+    assert.equal(response.headers["x-ms-request-id"], loggedObj.correlationId);
+    assert.equal(loggedObj.errorMessage, undefined, "Should NOT log message for 4xx");
+    assert.equal(loggedObj.errorStack, undefined, "Should NOT log stack for 4xx");
   });
 
   it("should expose error message in response body for 4xx", async () => {
@@ -80,8 +94,8 @@ describe("convertHandler — 4xx error logging", () => {
     assert.equal(logs.errors.length, 1);
 
     const loggedObj = logs.errors[0][1];
-    assert.equal(loggedObj.message, undefined, "Should NOT log message for 422");
-    assert.equal(loggedObj.stack, undefined, "Should NOT log stack for 422");
+    assert.equal(loggedObj.errorMessage, undefined, "Should NOT log message for 422");
+    assert.equal(loggedObj.errorStack, undefined, "Should NOT log stack for 422");
   });
 
   it("should expose error message in response body for 422", async () => {
@@ -117,10 +131,14 @@ describe("convertHandler — 5xx error logging", () => {
   it("should log scrubbed message for 500 errors", async () => {
     // Force a 500 by making request.json() throw an error with a path
     const { ctx, logs } = createMockContext();
+    const correlationId = "client-request-id";
     const badRequest = {
       json: async () => {
         const err = new Error("Crash at C:\\Users\\dev\\converter.js:42");
         throw err;
+      },
+      headers: {
+        get: (name) => (name.toLowerCase() === "x-ms-request-id" ? correlationId : undefined),
       },
     };
 
@@ -130,9 +148,12 @@ describe("convertHandler — 5xx error logging", () => {
     assert.equal(logs.errors.length, 1);
 
     const loggedObj = logs.errors[0][1];
-    assert.ok(loggedObj.message, "Should log message for 5xx");
-    assert.ok(!loggedObj.message.includes("C:\\Users"), "Should scrub Windows paths");
-    assert.ok(loggedObj.message.includes("<path>"), "Should replace with <path>");
+    assert.equal(response.headers["x-ms-request-id"], correlationId);
+    assert.equal(loggedObj.correlationId, correlationId);
+    assert.equal(typeof loggedObj.durationMs, "number");
+    assert.ok(loggedObj.errorMessage, "Should log message for 5xx");
+    assert.ok(!loggedObj.errorMessage.includes("C:\\Users"), "Should scrub Windows paths");
+    assert.ok(loggedObj.errorMessage.includes("<path>"), "Should replace with <path>");
   });
 
   it("should log scrubbed stack trace for 500 errors", async () => {
@@ -146,9 +167,9 @@ describe("convertHandler — 5xx error logging", () => {
     const response = await convertHandler(badRequest, ctx);
 
     const loggedObj = logs.errors[0][1];
-    assert.ok(loggedObj.stack, "Should log stack for 5xx");
+    assert.ok(loggedObj.errorStack, "Should log stack for 5xx");
     // The stack will contain the actual throw location which has real paths
-    assert.ok(!loggedObj.stack.includes("/home/user/"), "Should scrub Unix paths from stack");
+    assert.ok(!loggedObj.errorStack.includes("/home/user/"), "Should scrub Unix paths from stack");
   });
 
   it("should NOT expose internal details in 5xx response body", async () => {
@@ -163,7 +184,7 @@ describe("convertHandler — 5xx error logging", () => {
 
     assert.equal(response.status, 500);
     assert.ok(!response.jsonBody.error.includes("Sensitive"), "5xx should hide message");
-    assert.ok(response.jsonBody.error.includes("internal error"), "Should use generic message");
+    assert.ok(response.jsonBody.error.toLowerCase().includes("internal server error"), "Should use generic message");
     assert.equal(response.jsonBody.code, "INTERNAL_ERROR");
   });
 
@@ -204,7 +225,7 @@ describe("convertHandler — ERROR_CODE fallback", () => {
     const response = await convertHandler(badRequest, ctx);
 
     assert.equal(response.jsonBody.code, "INTERNAL_ERROR");
-    assert.equal(logs.errors[0][1].code, "INTERNAL_ERROR");
+    assert.equal(logs.errors[0][1].errorCode, "INTERNAL_ERROR");
   });
 
   it("should use err.code when available", async () => {
@@ -270,8 +291,8 @@ describe("convertHandler — path scrubbing edge cases", () => {
     await convertHandler(badRequest, ctx);
 
     const loggedObj = logs.errors[0][1];
-    assert.ok(!loggedObj.message.includes("C:\\Users"), "Should scrub first path");
-    assert.ok(!loggedObj.message.includes("/opt/app"), "Should scrub second path");
+    assert.ok(!loggedObj.errorMessage.includes("C:\\Users"), "Should scrub first path");
+    assert.ok(!loggedObj.errorMessage.includes("/opt/app"), "Should scrub second path");
   });
 
   it("should handle error with no message gracefully", async () => {
@@ -287,6 +308,6 @@ describe("convertHandler — path scrubbing edge cases", () => {
     await convertHandler(badRequest, ctx);
 
     const loggedObj = logs.errors[0][1];
-    assert.equal(typeof loggedObj.message, "string");
+    assert.equal(typeof loggedObj.errorMessage, "string");
   });
 });

@@ -16,8 +16,7 @@ const {
   BOM,
   HTTP_STATUS_MAP,
   ERROR_CODE,
-} = require("../../api/lib/constants.js");
-
+} = require("../../core/constants.js");
 // ── FORMATS ────────────────────────────────────────────────────
 
 describe("FORMATS", () => {
@@ -151,8 +150,11 @@ describe("HTTP_STATUS_MAP", () => {
   });
 
   it("should map server errors to 5xx", () => {
-    assert.equal(HTTP_STATUS_MAP.OpenApiConversionError, 500);
     assert.equal(HTTP_STATUS_MAP.PostProcessingError, 500);
+  });
+
+  it("should map conversion errors to 422", () => {
+    assert.equal(HTTP_STATUS_MAP.OpenApiConversionError, 422);
   });
 
   it("should not include FileIOError (CLI-only, never reaches API)", () => {
