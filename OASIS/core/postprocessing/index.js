@@ -9,11 +9,11 @@ const { addPutMethods } = require("./transforms/addPutMethods.js");
 const { addHeadMethods } = require("./transforms/addHeadMethods.js");
 const { addIfMatchHeaders, IF_MATCH_HEADER } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters, SAP_PARAMETERS } = require("./transforms/addSapParameters.js");
+const { fixDanglingRefs, PLACEHOLDER_SCHEMA } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
 /**
- * Convenience function that applies the standard post-processing pipeline.
- * Drop-in replacement for the old helper.js postProcess() function.
+ * Applies the standard post-processing pipeline.
  *
  * @param {object|string} openApiSpec - OpenAPI spec object or JSON string
  * @returns {object} Fully post-processed OpenAPI specification
@@ -29,7 +29,9 @@ module.exports = {
   addHeadMethods,
   addIfMatchHeaders,
   addSapParameters,
+  fixDanglingRefs,
   removeDefaultServer,
   IF_MATCH_HEADER,
   SAP_PARAMETERS,
+  PLACEHOLDER_SCHEMA,
 };

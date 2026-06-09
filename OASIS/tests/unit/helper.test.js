@@ -25,6 +25,99 @@ describe("postProcess", () => {
     assert.equal(result.paths["/b"].put, undefined, "No PUT for /b (no PATCH)");
   });
 
+  it("should create placeholder schemas for dangling schema references", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: { title: "Test", version: "1.0.0" },
+      paths: {
+        "/items": {
+          get: {
+            responses: {
+              "200": {
+                description: "OK",
+                content: {
+                  "application/json": {
+                    schema: {
+                      allOf: [
+                        { $ref: "#/components/schemas/Existing" },
+                        { $ref: "#/components/schemas/MissingEntity" },
+                      ],
+                      properties: {
+                        download: {
+                          items: { $ref: "#/components/schemas/MissingDownload" },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Existing: { type: "object" },
+        },
+      },
+    };
+
+    const result = postProcess(spec);
+
+    assert.deepEqual(result.components.schemas.MissingEntity, {
+      type: "object",
+      description:
+        "Schema definition not available (entity set marked non-addressable in source metadata)",
+    });
+    assert.deepEqual(result.components.schemas.MissingDownload, {
+      type: "object",
+      description:
+        "Schema definition not available (entity set marked non-addressable in source metadata)",
+    });
+  });
+
+  it("should leave valid schema references unchanged", () => {
+    const spec = {
+      openapi: "3.0.0",
+      info: { title: "Test", version: "1.0.0" },
+      paths: {
+        "/items": {
+          get: {
+            parameters: [{ $ref: "#/components/parameters/ExistingParameter" }],
+            responses: {
+              "200": {
+                description: "OK",
+                content: {
+                  "application/json": {
+                    schema: { $ref: "#/components/schemas/Existing" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Existing: { type: "object" },
+        },
+        parameters: {
+          ExistingParameter: {
+            name: "id",
+            in: "query",
+            schema: { type: "string" },
+          },
+        },
+      },
+    };
+
+    const result = postProcess(spec);
+
+    assert.deepEqual(result.components.schemas, {
+      Existing: { type: "object" },
+    });
+  });
+
   it("should accept and parse a JSON string", () => {
     const json = JSON.stringify({
       paths: { "/x": { patch: { summary: "X" } } },

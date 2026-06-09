@@ -9,7 +9,12 @@
 
 const { convertContent, convertFile, convertFolder, extractApiType } = require("./converter/pipeline.js");
 const { createConverter, registerConverter } = require("./converter/ConverterFactory.js");
-const { PostProcessorBuilder, postProcess } = require("./postprocessing/index.js");
+const {
+  PostProcessorBuilder,
+  postProcess,
+  fixDanglingRefs,
+  PLACEHOLDER_SCHEMA,
+} = require("./postprocessing/index.js");
 const { detectFormat, isSupportedFile, validateExtension, validateFileSize } = require("./validation/index.js");
 const { TelemetryClient, nodeHttpsTransport, fetchTransport, scrubPaths, TELEMETRY_FIELDS } = require("./telemetry/index.js");
 const { Logger } = require("./logging/index.js");
@@ -31,6 +36,8 @@ module.exports = {
   // Post-processing
   PostProcessorBuilder,
   postProcess,
+  fixDanglingRefs,
+  PLACEHOLDER_SCHEMA,
 
   // Validation
   detectFormat,

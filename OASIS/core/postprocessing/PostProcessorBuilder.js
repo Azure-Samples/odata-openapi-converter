@@ -11,6 +11,7 @@ const { addPutMethods } = require("./transforms/addPutMethods.js");
 const { addHeadMethods } = require("./transforms/addHeadMethods.js");
 const { addIfMatchHeaders } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters } = require("./transforms/addSapParameters.js");
+const { fixDanglingRefs } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
 /**
@@ -23,6 +24,7 @@ const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
  *   .withHeadMethods()
  *   .withIfMatchHeaders()
  *   .withSapParameters()
+ *   .withFixDanglingRefs()
  *   .withRemoveDefaultServer()
  *   .build();
  *
@@ -71,6 +73,15 @@ class PostProcessorBuilder {
   }
 
   /**
+   * Creates placeholder schemas for dangling component schema references.
+   * @returns {PostProcessorBuilder} this (for chaining)
+   */
+  withFixDanglingRefs() {
+    this._transforms.push(fixDanglingRefs);
+    return this;
+  }
+
+  /**
    * Removes default localhost server URLs.
    * @returns {PostProcessorBuilder} this (for chaining)
    */
@@ -81,7 +92,7 @@ class PostProcessorBuilder {
 
   /**
    * Adds a custom transform function.
-   * @param {function(object): object} transformFn - Transform function
+   * @param {function(object): (object|{ spec: object, warnings: string[] })} transformFn - Transform function
    * @returns {PostProcessorBuilder} this (for chaining)
    */
   withCustomTransform(transformFn) {
@@ -99,6 +110,36 @@ class PostProcessorBuilder {
   build() {
     const transforms = [...this._transforms];
 
+    /**
+     * Normalizes the caller input into an OpenAPI object.
+     *
+     * @param {object|string} openApiSpec - OpenAPI spec object or JSON string
+     * @returns {object} Parsed OpenAPI specification
+     */
+    function parseSpec(openApiSpec) {
+      if (openApiSpec === null || openApiSpec === undefined) {
+        throw new Error("OpenAPI spec is null or undefined.");
+      }
+
+      if (typeof openApiSpec === "string") {
+        try {
+          return JSON.parse(openApiSpec);
+        } catch (err) {
+          throw new Error(
+            `Failed to parse OpenAPI spec string as JSON: ${err.message}`
+          );
+        }
+      }
+
+      if (typeof openApiSpec === "object" && !Array.isArray(openApiSpec)) {
+        return openApiSpec;
+      }
+
+      throw new Error(
+        `Expected an OpenAPI object or JSON string, received ${typeof openApiSpec}.`
+      );
+    }
+
     return {
       /**
        * Applies all configured transforms in sequence.
@@ -108,26 +149,7 @@ class PostProcessorBuilder {
        * @throws {Error} If spec is invalid or any transform fails
        */
       apply(openApiSpec) {
-        if (openApiSpec === null || openApiSpec === undefined) {
-          throw new Error("OpenAPI spec is null or undefined.");
-        }
-
-        let spec;
-        if (typeof openApiSpec === "string") {
-          try {
-            spec = JSON.parse(openApiSpec);
-          } catch (err) {
-            throw new Error(
-              `Failed to parse OpenAPI spec string as JSON: ${err.message}`
-            );
-          }
-        } else if (typeof openApiSpec === "object" && !Array.isArray(openApiSpec)) {
-          spec = openApiSpec;
-        } else {
-          throw new Error(
-            `Expected an OpenAPI object or JSON string, received ${typeof openApiSpec}.`
-          );
-        }
+        let spec = parseSpec(openApiSpec);
 
         for (const transform of transforms) {
           spec = transform(spec);
@@ -150,6 +172,7 @@ class PostProcessorBuilder {
       .withHeadMethods()
       .withIfMatchHeaders()
       .withSapParameters()
+      .withFixDanglingRefs()
       .withRemoveDefaultServer();
   }
 }
