@@ -68,13 +68,25 @@ const useStyles = makeStyles({
     fontSize: "14px",
     lineHeight: "20px",
     color: tokens.colorNeutralForeground2,
-    textAlign: "center",
+    textAlign: "left",
+    alignSelf: "stretch",
     marginTop: "-8px",
   },
 
-  /* buttons */
+  /* inputs */
   fullWidth: {
     alignSelf: "stretch",
+    "& .fui-Input::after": {
+      borderBottomColor: tokens.colorNeutralForeground1,
+    },
+  },
+  skippedNotice: {
+    alignSelf: "stretch",
+    display: "flex",
+    gap: "8px",
+    padding: "8px 12px",
+    borderRadius: "4px",
+    backgroundColor: tokens.colorNeutralBackground3,
   },
   buttonBase: {
     alignSelf: "stretch",
@@ -116,6 +128,11 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     rowGap: "4px",
+  },
+  progressBar: {
+    "& .fui-ProgressBar__bar": {
+      backgroundColor: tokens.colorNeutralForeground1,
+    },
   },
   progressLabel: {
     fontSize: "12px",
@@ -220,11 +237,6 @@ function ConvertPage() {
       }
       if (validFiles.length === 0) return;
       setFiles(validFiles);
-      setServerUrl("");
-      setApiTitle("");
-      setResults(null);
-      setConverted(0);
-      setTotalToConvert(0);
     },
     [],
   );
@@ -396,11 +408,7 @@ function ConvertPage() {
   /* ---- clear / reset ---- */
   const handleClear = () => {
     setFiles([]);
-    setServerUrl("");
-    setApiTitle("");
-    setResults(null);
-    setConverted(0);
-    setTotalToConvert(0);
+    setSkippedFiles([]);
   };
 
   const handleReset = () => {
@@ -439,13 +447,6 @@ function ConvertPage() {
         {UI.convert.description}
       </Text>
 
-      {/* Skipped files warning */}
-      {skippedFiles.length > 0 && (
-        <MessageBar intent="error" aria-label={UI.convert.skippedAriaLabel}>
-          <MessageBarBody>{UI.convert.skippedWarning(skippedFiles)}</MessageBarBody>
-        </MessageBar>
-      )}
-
       {/* Server URL input */}
       <Field
         label={UI.convert.serverUrlLabel}
@@ -475,7 +476,23 @@ function ConvertPage() {
       </Field>
 
       {/* Drop zone */}
-      <DropZone onFilesSelected={onFilesSelected} disabled={converting} />
+      <DropZone onFilesSelected={onFilesSelected} disabled={inputsDisabled} />
+
+      {/* Skipped files notice */}
+      {skippedFiles.length > 0 && (
+        <div className={styles.skippedNotice}>
+          <WarningRegular style={{ fontSize: "16px", color: tokens.colorPaletteYellowForeground2, flexShrink: 0 }} />
+          <div>
+            <Text size={200} weight="semibold">{UI.convert.skippedTitle(skippedFiles.length)}</Text>
+            {skippedFiles.map((name, i) => (
+              <Text key={i} size={200} block style={{ color: tokens.colorNeutralForeground2 }}>{name}</Text>
+            ))}
+            <Text size={100} style={{ color: tokens.colorNeutralForeground3, marginTop: "4px", display: "block" }}>
+              {UI.convert.skippedFooter}
+            </Text>
+          </div>
+        </div>
+      )}
 
       {/* Loaded files accordion */}
       {hasFiles && (
@@ -512,6 +529,7 @@ function ConvertPage() {
                 size="small"
                 style={{ marginTop: 8 }}
                 onClick={handleClear}
+                disabled={inputsDisabled}
               >
                 {UI.convert.clearAll}
               </Button>
@@ -527,6 +545,7 @@ function ConvertPage() {
             value={progressValue}
             max={1}
             thickness="large"
+            className={styles.progressBar}
             aria-label={UI.convert.progressLabel}
           />
           <Text className={styles.progressLabel}>
@@ -581,7 +600,7 @@ function ConvertPage() {
                     <li key={r.name} className={styles.listItem}>
                       <DismissCircleRegular className={styles.errorIcon} />
                       <Text>
-                        {r.name} — {r.error}{" "}
+                        {r.name}: {r.error}{" "}
                         <Link
                           href={`https://github.com/Azure-Samples/odata-openapi-converter/issues/new?title=${encodeURIComponent(UI.convert.issueTitle(r.name))}&body=${encodeURIComponent(UI.convert.issueBody(r.name, r.error, r.errorType, r.code))}`}
                           target="_blank"

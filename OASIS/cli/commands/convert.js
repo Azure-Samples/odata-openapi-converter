@@ -28,8 +28,8 @@ Usage:
 
 Flags:
   -o, --output-file string   Output file path (overrides positional OUTPUT_FILE)
-  -s, --server-url  string   Server URL for the OpenAPI spec (e.g., https://host/sap/opu/odata/sap/API_NAME)
-  -T, --title       string   Custom title for openapi.info.title (how users find the API in APIM workspace)
+  -s, --server-url  string   The base URL for the generated OpenAPI spec (e.g., https://your-sap-server.com/sap/opu/odata/sap/API_NAME)
+  -T, --title       string   Custom title is how users find this API in the APIM workspace
   -V, --verbose              Show detailed step-by-step conversion logs
   -h, --help                 Show this help message
 

@@ -96,8 +96,8 @@ const ERROR_CODE = Object.freeze({
 const SDK_WARNING_NOTE =
   "These warnings originate from the underlying OASIS open-source SDK " +
   "(odata-csdl / odata-openapi) due to known limitations in the OData V2 to V4 " +
-  "conversion pipeline. Some annotations — such as operation descriptions or " +
-  "query-parameter restrictions — may not carry over to the OpenAPI output. " +
+  "conversion pipeline. Some annotations (such as operation descriptions or " +
+  "query-parameter restrictions) may not carry over to the OpenAPI output. " +
   "All API endpoints are still generated; only metadata quality is affected. " +
   "No action is required. Learn more: " +
   "https://github.com/Azure-Samples/odata-openapi-converter#known-limitations";

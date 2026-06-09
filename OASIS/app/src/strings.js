@@ -24,8 +24,8 @@ export const UI = Object.freeze({
     description:
       "Upload OData CSDL / EDMX files (.xml, .edmx, .json), individually or as a folder, and convert them to OpenAPI 3.x specifications.",
     skippedAriaLabel: "Unsupported files skipped",
-    skippedWarning: (names) =>
-      `${names.length} file${names.length === 1 ? "" : "s"} skipped: ${names.join(", ")}. Please upload valid OData CSDL / EDMX files with .xml, .edmx, or .json extensions.`,
+    skippedTitle: (count) => `${count} file${count === 1 ? "" : "s"} skipped:`,
+    skippedFooter: "Supported formats: .xml, .edmx, .json (max 4 MiB each).",
     serverUrlLabel: "Server URL (optional)",
     serverUrlHint:
       "The base URL for the generated OpenAPI spec (e.g., https://your-sap-server.com/sap/opu/odata/sap/API_NAME)",

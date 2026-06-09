@@ -26,7 +26,7 @@ Usage:
 
 Flags:
   -t, --target-dir   string  Output directory for converted files
-  -s, --server-url   string  Server URL shared across all files (e.g., https://host/sap/opu/odata/sap/)
+  -s, --server-url   string  The base URL for the generated OpenAPI spec, shared across all files (e.g., https://your-sap-server.com/sap/opu/odata/sap/)
   -c, --concurrency  string  Maximum files to process in parallel (default: min(cpu count, 8))
   -r, --recursive            Search for OData files in subdirectories
   -O, --overwrite            Overwrite existing output files
@@ -251,7 +251,7 @@ async function execute(args, ctx) {
 
     failCount++;
     errors.push({ message: result.error.message, code: result.error.code, file: result.relativeFile });
-    console.log(`  ${num} ✗ ${result.relativeFile} — ${result.error.message}`);
+    console.log(`  ${num} ✗ ${result.relativeFile}: ${result.error.message}`);
   }
 
   const total = okCount + failCount;
