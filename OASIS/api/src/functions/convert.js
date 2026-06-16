@@ -8,7 +8,7 @@
 // ---------------------------------------------------------------
 
 const { app } = require("@azure/functions");
-const { convertHandler } = require("../../lib/convert-handler.js");
+const { convertHandler } = require("./convert-handler.js");
 
 app.http("convert", {
   methods: ["POST"],

@@ -16,7 +16,7 @@ const fs = require("fs");
 const path = require("path");
 const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
-const { convertContent } = require("../../api/lib/converter.js");
+const { convertContent } = require("../../core/index.js");
 
 const TEST_DATA_ROOT = path.resolve(__dirname, "../../../test");
 

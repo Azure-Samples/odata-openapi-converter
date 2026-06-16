@@ -426,10 +426,3 @@ INPUT/
 *.env.local
 *.env.build
 **/local.settings.json
-
-# Config files (regenerated locally)
-**/host.json
-
-# Lock files (keep root OASIS/package-lock.json for CI reproducibility)
-OASIS/api/package-lock.json
-OASIS/app/package-lock.json

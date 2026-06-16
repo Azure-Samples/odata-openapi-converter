@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "description": "OASIS - Convert OData CSDL specifications (XML/JSON) to OpenAPI 3.0 format",
-  "main": "api/lib/converter.js",
+  "main": "core/index.js",
   "bin": {
-    "oasis-odata-openapi": "./cli/cli.js"
+    "odata-converter": "./cli/cli.js"
   },
   "files": [
-    "api/lib/",
+    "core/",
     "cli/",
     "README.md",
     "LICENSE"
@@ -18,7 +18,7 @@
     "batch": "node cli/cli.js batch",
     "info": "node cli/cli.js info",
     "test": "node --test",
-    "lint": "eslint api/lib/ cli/cli.js",
+    "lint": "eslint api/src/ cli",
     "bundle": "node esbuild.config.js",
     "build:win-x64": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-windows-x64 --outfile dist/oasis-converter-win-x64.exe",
     "build:mac-x64": "npm run bundle && bun build dist/cli-bundled.cjs --compile --target=bun-darwin-x64 --outfile dist/oasis-converter-mac-x64",

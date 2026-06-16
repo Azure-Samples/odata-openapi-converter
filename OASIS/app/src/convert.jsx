@@ -3,6 +3,8 @@ import JSZip from "jszip";
 import {
   Text,
   Button,
+  Input,
+  Field,
   ProgressBar,
   Accordion,
   AccordionItem,
@@ -27,8 +29,10 @@ import {
 } from "@fluentui/react-icons";
 import { trackConvert, trackDownload, trackSkipped } from "./telemetry.js";
 import DropZone from "./components/DropZone.jsx";
+import { UI } from "./strings.js";
 
-const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024; // 4 MiB
+// Import from core engine — single source of truth for constants
+const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024; // Matches core/constants.js MAX_FILE_SIZE_BYTES
 
 /* ------------------------------------------------------------------ */
 /*  Styles                                                            */
@@ -64,13 +68,25 @@ const useStyles = makeStyles({
     fontSize: "14px",
     lineHeight: "20px",
     color: tokens.colorNeutralForeground2,
-    textAlign: "center",
+    textAlign: "left",
+    alignSelf: "stretch",
     marginTop: "-8px",
   },
 
-  /* buttons */
+  /* inputs */
   fullWidth: {
     alignSelf: "stretch",
+    "& .fui-Input::after": {
+      borderBottomColor: tokens.colorNeutralForeground1,
+    },
+  },
+  skippedNotice: {
+    alignSelf: "stretch",
+    display: "flex",
+    gap: "8px",
+    padding: "8px 12px",
+    borderRadius: "4px",
+    backgroundColor: tokens.colorNeutralBackground3,
   },
   buttonBase: {
     alignSelf: "stretch",
@@ -112,6 +128,11 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     rowGap: "4px",
+  },
+  progressBar: {
+    "& .fui-ProgressBar__bar": {
+      backgroundColor: tokens.colorNeutralForeground1,
+    },
   },
   progressLabel: {
     fontSize: "12px",
@@ -199,6 +220,8 @@ function ConvertPage() {
   /* ---- state ---- */
   const [files, setFiles] = useState([]);           // { name, content }[]
   const [skippedFiles, setSkippedFiles] = useState([]);
+  const [serverUrl, setServerUrl] = useState("");
+  const [apiTitle, setApiTitle] = useState("");
   const [converting, setConverting] = useState(false);
   const [converted, setConverted] = useState(0);
   const [totalToConvert, setTotalToConvert] = useState(0);
@@ -214,9 +237,6 @@ function ConvertPage() {
       }
       if (validFiles.length === 0) return;
       setFiles(validFiles);
-      setResults(null);
-      setConverted(0);
-      setTotalToConvert(0);
     },
     [],
   );
@@ -242,7 +262,9 @@ function ConvertPage() {
           return {
             name: f.name,
             success: false,
-            error: `File size (${(contentBytes / (1024 * 1024)).toFixed(2)} MiB) exceeds the 4 MiB limit.`,
+            error: UI.errors.fileTooLargeDetail(
+              (contentBytes / (1024 * 1024)).toFixed(2),
+            ),
             errorType: "FileTooLargeError",
             code: "FILE_TOO_LARGE",
           };
@@ -251,18 +273,39 @@ function ConvertPage() {
           const res = await fetch("/api/convert", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fileName: f.name, content: f.content }),
+            body: JSON.stringify({
+              fileName: f.name,
+              content: f.content,
+              ...(serverUrl.trim() && { serverUrl: serverUrl.trim() }),
+              ...(apiTitle.trim() && { title: apiTitle.trim() }),
+            }),
           });
-          const body = await res.json();
-          setConverted((n) => n + 1);
 
-          if (!res.ok) {
+          let body;
+          try {
+            body = await res.json();
+          } catch {
+            setConverted((n) => n + 1);
             return {
               name: f.name,
               success: false,
-              error: body.error,
-              errorType: body.errorType,
-              code: body.code,
+              error: `Server returned ${res.status} with no valid JSON body`,
+              errorType: "ServerError",
+              code: "EMPTY_RESPONSE",
+            };
+          }
+          setConverted((n) => n + 1);
+
+          if (!res.ok) {
+            const isServerError = res.status >= 500;
+            return {
+              name: f.name,
+              success: false,
+              error: isServerError
+                ? UI.errors.serverError
+                : body.error,
+              errorType: body.errorType || "ServerError",
+              code: body.code || "SERVER_ERROR",
             };
           }
           return {
@@ -271,13 +314,14 @@ function ConvertPage() {
             success: true,
             data: body.data,
             warnings: body.warnings || [],
+            apiType: body.apiType || null,
           };
         } catch (err) {
           setConverted((n) => n + 1);
           return {
             name: f.name,
             success: false,
-            error: err.message || "Network error",
+            error: err.message || UI.errors.networkError,
             errorType: "NetworkError",
             code: "NETWORK_ERROR",
           };
@@ -302,6 +346,16 @@ function ConvertPage() {
     setConverting(false);
 
     // Telemetry — deferred until download or page unload
+    // Detect OData version from file content (structural metadata, not PII)
+    const odataVersion = files.length > 0
+      ? files[0].content.includes('Version="4.0"') ? "v4"
+        : files[0].content.includes('Version="1.0"') ? "v2"
+        : "unknown"
+      : "unknown";
+
+    // Use apiType from the first successful conversion (schema namespace)
+    const apiType = success.length > 0 ? success[0].apiType : null;
+
     trackConvert({
       rid,
       total: outcomes.length,
@@ -311,6 +365,8 @@ function ConvertPage() {
       errors: failed,
       warnings,
       ms: durationMs,
+      odataVersion,
+      apiType,
     });
   };
 
@@ -352,17 +408,28 @@ function ConvertPage() {
   /* ---- clear / reset ---- */
   const handleClear = () => {
     setFiles([]);
+    setSkippedFiles([]);
+  };
+
+  const handleReset = () => {
+    setFiles([]);
+    setSkippedFiles([]);
+    setServerUrl("");
+    setApiTitle("");
     setResults(null);
     setConverted(0);
+    setTotalToConvert(0);
   };
 
   /* ---- derived state ---- */
   const hasFiles = files.length > 0;
-  const canConvert = hasFiles && !converting;
+  const isDone = results !== null && !converting;
+  const canConvert = hasFiles && !converting && !isDone;
   const canDownload =
     results !== null && results.success.length > 0 && !converting;
   const hasWarnings =
     results !== null && Object.keys(results.warnings).length > 0;
+  const inputsDisabled = converting || isDone;
   const progressValue = converting && totalToConvert > 0
     ? converted / totalToConvert
     : results
@@ -374,26 +441,58 @@ function ConvertPage() {
     <div className={styles.page}>
       {/* Title */}
       <Text as="h1" className={styles.heading}>
-        Convert Files
+        {UI.convert.heading}
       </Text>
       <Text as="p" className={styles.description}>
-        Upload OData CSDL / EDMX files (.xml, .edmx, .json) — individually or as
-        a folder — and convert them to OpenAPI 3.x specifications.
+        {UI.convert.description}
       </Text>
 
-      {/* Skipped files warning */}
-      {skippedFiles.length > 0 && (
-        <MessageBar intent="error" aria-label="Unsupported files skipped">
-          <MessageBarBody>
-            {skippedFiles.length} file{skippedFiles.length === 1 ? '' : 's'} skipped:
-            {' '}{skippedFiles.join(', ')}.
-            Please upload valid OData CSDL / EDMX files with .xml, .edmx, or .json extensions.
-          </MessageBarBody>
-        </MessageBar>
-      )}
+      {/* Server URL input */}
+      <Field
+        label={UI.convert.serverUrlLabel}
+        hint={UI.convert.serverUrlHint}
+        className={styles.fullWidth}
+      >
+        <Input
+          placeholder={UI.convert.serverUrlPlaceholder}
+          value={serverUrl}
+          onChange={(e, data) => setServerUrl(data.value)}
+          disabled={inputsDisabled}
+        />
+      </Field>
+
+      {/* API Title input — disabled for multi-file (each file uses its own namespace) */}
+      <Field
+        label={UI.convert.titleLabel}
+        hint={files.length > 1 ? UI.convert.titleMultiFileHint : UI.convert.titleHint}
+        className={styles.fullWidth}
+      >
+        <Input
+          placeholder={UI.convert.titlePlaceholder}
+          value={apiTitle}
+          onChange={(e, data) => setApiTitle(data.value)}
+          disabled={inputsDisabled || files.length > 1}
+        />
+      </Field>
 
       {/* Drop zone */}
-      <DropZone onFilesSelected={onFilesSelected} disabled={converting} />
+      <DropZone onFilesSelected={onFilesSelected} disabled={inputsDisabled} />
+
+      {/* Skipped files notice */}
+      {skippedFiles.length > 0 && (
+        <div className={styles.skippedNotice}>
+          <WarningRegular style={{ fontSize: "16px", color: tokens.colorPaletteYellowForeground2, flexShrink: 0 }} />
+          <div>
+            <Text size={200} weight="semibold">{UI.convert.skippedTitle(skippedFiles.length)}</Text>
+            {skippedFiles.map((name, i) => (
+              <Text key={i} size={200} block style={{ color: tokens.colorNeutralForeground2 }}>{name}</Text>
+            ))}
+            <Text size={100} style={{ color: tokens.colorNeutralForeground3, marginTop: "4px", display: "block" }}>
+              {UI.convert.skippedFooter}
+            </Text>
+          </div>
+        </div>
+      )}
 
       {/* Loaded files accordion */}
       {hasFiles && (
@@ -404,7 +503,7 @@ function ConvertPage() {
               icon={<FolderRegular />}
               expandIconPosition="end"
             >
-              Loaded files ({files.length})
+              {UI.convert.filesLoaded(files.length)}
             </AccordionHeader>
             <AccordionPanel>
               <ul className={styles.list} role="list">
@@ -416,7 +515,8 @@ function ConvertPage() {
                       appearance="subtle"
                       size="small"
                       icon={<DismissRegular style={{ fontSize: "16px" }} />}
-                      aria-label={`Remove ${f.name}`}
+                      aria-label={UI.convert.removeFile(f.name)}
+                      disabled={inputsDisabled}
                       onClick={() =>
                         setFiles((prev) => prev.filter((p) => p.name !== f.name))
                       }
@@ -429,45 +529,13 @@ function ConvertPage() {
                 size="small"
                 style={{ marginTop: 8 }}
                 onClick={handleClear}
+                disabled={inputsDisabled}
               >
-                Clear all
+                {UI.convert.clearAll}
               </Button>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-      )}
-
-      {/* Convert / Download button */}
-      {canDownload ? (
-        <Button
-          appearance="primary"
-          icon={<ArrowDownloadRegular />}
-          className={mergeClasses(styles.buttonBase, styles.buttonEnabled)}
-          onClick={handleDownload}
-          aria-label={
-            results.success.length === 1
-              ? "Download converted file"
-              : "Download converted files as ZIP"
-          }
-        >
-          {results.success.length === 1
-            ? `Download ${results.success[0].outputName}`
-            : `Download ZIP (${results.success.length} files)`}
-        </Button>
-      ) : (
-        <Button
-          appearance="primary"
-          icon={<ConvertRangeRegular />}
-          className={mergeClasses(
-            styles.buttonBase,
-            canConvert ? styles.buttonEnabled : styles.buttonDisabled,
-          )}
-          disabled={!canConvert}
-          onClick={handleConvert}
-          aria-label="Convert all loaded files"
-        >
-          {converting ? "Converting…" : "Convert"}
-        </Button>
       )}
 
       {/* Progress bar (visible only during conversion) */}
@@ -477,10 +545,11 @@ function ConvertPage() {
             value={progressValue}
             max={1}
             thickness="large"
-            aria-label="Conversion progress"
+            className={styles.progressBar}
+            aria-label={UI.convert.progressLabel}
           />
           <Text className={styles.progressLabel}>
-            Converting {converted} of {totalToConvert} files…
+            {UI.convert.progressText(converted, totalToConvert)}
           </Text>
         </div>
       )}
@@ -498,7 +567,7 @@ function ConvertPage() {
                 }
                 expandIconPosition="end"
               >
-                Successful ({results.success.length})
+                {UI.convert.successful(results.success.length)}
               </AccordionHeader>
               <AccordionPanel>
                 <ul className={styles.list} role="list">
@@ -523,7 +592,7 @@ function ConvertPage() {
                 }
                 expandIconPosition="end"
               >
-                Failed ({results.failed.length})
+                {UI.convert.failed(results.failed.length)}
               </AccordionHeader>
               <AccordionPanel>
                 <ul className={styles.list} role="list">
@@ -531,13 +600,13 @@ function ConvertPage() {
                     <li key={r.name} className={styles.listItem}>
                       <DismissCircleRegular className={styles.errorIcon} />
                       <Text>
-                        {r.name} — {r.error}{" "}
+                        {r.name}: {r.error}{" "}
                         <Link
-                          href={`https://github.com/Azure-Samples/odata-openapi-converter/issues/new?title=${encodeURIComponent(`Conversion error: ${r.name}`)}&body=${encodeURIComponent(`**File:** ${r.name}\n**Error:** ${r.error}\n**Error Type:** ${r.errorType || "Unknown"}\n**Code:** ${r.code || "N/A"}`)}`}
+                          href={`https://github.com/Azure-Samples/odata-openapi-converter/issues/new?title=${encodeURIComponent(UI.convert.issueTitle(r.name))}&body=${encodeURIComponent(UI.convert.issueBody(r.name, r.error, r.errorType, r.code))}`}
                           target="_blank"
                           inline
                         >
-                          Report a bug
+                          {UI.convert.reportIssue}
                         </Link>
                       </Text>
                     </li>
@@ -552,16 +621,15 @@ function ConvertPage() {
       {/* Warnings section */}
       {hasWarnings && (
         <div className={styles.warningsSection}>
-          <MessageBar intent="warning" aria-label="Conversion warnings">
+          <MessageBar intent="warning" aria-label={UI.convert.warningsAriaLabel}>
             <MessageBarBody>
-              Warnings indicate known limitations in the source metadata and do
-              not affect the converted output.{" "}
+              {UI.convert.warningsIntro}{" "}
               <Link
                 href="https://github.com/Azure-Samples/odata-openapi-converter/blob/main/README.md#warnings"
                 target="_blank"
                 inline
               >
-                Learn more
+                {UI.landing.consentLink}
               </Link>
             </MessageBarBody>
           </MessageBar>
@@ -573,8 +641,7 @@ function ConvertPage() {
                 icon={<WarningRegular className={styles.warningIcon} />}
                 expandIconPosition="end"
               >
-                View warnings ({Object.keys(results.warnings).length} file
-                {Object.keys(results.warnings).length === 1 ? "" : "s"})
+                {UI.convert.viewWarnings(Object.keys(results.warnings).length)}
               </AccordionHeader>
               <AccordionPanel>
                 <Accordion collapsible>
@@ -606,6 +673,58 @@ function ConvertPage() {
             </AccordionItem>
           </Accordion>
         </div>
+      )}
+
+      {/* Convert / Download + Reset buttons */}
+      {canDownload ? (
+        <div style={{ display: "flex", gap: "12px", alignSelf: "stretch" }}>
+          <Button
+            appearance="primary"
+            icon={<ArrowDownloadRegular />}
+            className={mergeClasses(styles.buttonBase, styles.buttonEnabled)}
+            style={{ flex: 1 }}
+            onClick={handleDownload}
+            aria-label={
+              results.success.length === 1
+                ? UI.convert.downloadSingle
+                : UI.convert.downloadZip
+            }
+          >
+            {results.success.length === 1
+              ? UI.convert.downloadFile(results.success[0].outputName)
+              : UI.convert.downloadZipLabel(results.success.length)}
+          </Button>
+          <Button
+            appearance="secondary"
+            className={styles.buttonBase}
+            style={{ flex: 1 }}
+            onClick={handleReset}
+          >
+            {UI.convert.resetBtn}
+          </Button>
+        </div>
+      ) : isDone ? (
+        <Button
+          appearance="secondary"
+          className={styles.buttonBase}
+          onClick={handleReset}
+        >
+          {UI.convert.resetBtn}
+        </Button>
+      ) : (
+        <Button
+          appearance="primary"
+          icon={<ConvertRangeRegular />}
+          className={mergeClasses(
+            styles.buttonBase,
+            canConvert ? styles.buttonEnabled : styles.buttonDisabled,
+          )}
+          disabled={!canConvert}
+          onClick={handleConvert}
+          aria-label="Convert all loaded files"
+        >
+          {converting ? UI.convert.convertingBtn : UI.convert.convertBtn}
+        </Button>
       )}
     </div>
   );
