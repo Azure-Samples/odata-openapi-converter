@@ -13,7 +13,7 @@ Available as a **web app**, **CLI**, and **standalone binary**.
 
 Use the hosted converter — no install required:
 
-**[Launch Web App](https://witty-sand-02a41c00f.1.azurestaticapps.net/)**
+**[Launch Web App](https://converter.odata-openapi.net/)**
 
 Drag and drop one or more OData metadata files (or an entire folder), convert, and download the results as a ZIP.
 
@@ -44,12 +44,16 @@ Pre-built binaries (no Node.js required) are available on the
 | macOS Intel | `oasis-converter-mac-x64` |
 | macOS Apple Silicon | `oasis-converter-mac-arm64` |
 | Linux x64 | `oasis-converter-linux-x64` |
+| Linux ARM64 | `oasis-converter-linux-arm64` |
 
 ### Quick Start
 
 ```bash
 # Convert a single file
-oasis-converter convert service.xml api.json
+oasis-converter convert service.xml
+
+# Convert with custom title and server URL
+oasis-converter convert -T "Business Partner API" -s https://myserver.com/sap/opu/odata/sap/API_BUSINESS_PARTNER service.xml
 
 # Convert with explicit output flag
 oasis-converter convert --output-file api.json service.edmx
@@ -59,6 +63,9 @@ oasis-converter batch ./input-folder
 
 # Batch-convert recursively with a custom output directory
 oasis-converter batch -r --target-dir ./output ./dir1 ./dir2
+
+# Batch-convert with shared server URL
+oasis-converter batch -s https://myserver.com/sap/opu/odata/sap/ -r ./input
 
 # View metadata about an OData file
 oasis-converter info service.xml
@@ -79,6 +86,8 @@ oasis-converter info service.xml
 | Flag | Description |
 |------|-------------|
 | `-o, --output-file <path>` | Output file path |
+| `-s, --server-url <url>` | Base URL for the generated OpenAPI spec (e.g., `https://your-sap-server.com/sap/opu/odata/sap/API_NAME`) |
+| `-T, --title <name>` | Custom title — how users find this API in the APIM workspace |
 | `-V, --verbose` | Show detailed conversion logs |
 
 ### batch options
@@ -86,11 +95,30 @@ oasis-converter info service.xml
 | Flag | Description |
 |------|-------------|
 | `-t, --target-dir <path>` | Output directory for converted files |
+| `-s, --server-url <url>` | Base URL shared across all files |
+| `-c, --concurrency <n>` | Maximum files to process in parallel (default: min(CPU count, 8)) |
 | `-r, --recursive` | Search subdirectories for OData files |
 | `-O, --overwrite` | Overwrite existing output files |
 | `-V, --verbose` | Show detailed conversion logs |
 
 Use `oasis-converter <command> --help` for full details on any command.
+
+---
+
+## APIM-Ready Output
+
+The generated OpenAPI specifications include post-processing optimizations for seamless Azure API Management import:
+
+| Enhancement | Description |
+|-------------|-------------|
+| PUT methods | Added alongside PATCH for all updatable entities (SAP OData supports both) |
+| HEAD methods | Root (`/`) and metadata (`/$metadata`) endpoints for CSRF token fetching |
+| If-Match headers | Added to PATCH, PUT, and DELETE operations for optimistic concurrency |
+| SAP parameters | Standard SAP query parameters (`sap-client`, `sap-language`, etc.) and `x-csrf-token` header |
+| Dangling `$ref` fix | Placeholder schemas created for unresolved component references |
+| Localhost removal | Default `localhost` server URLs are stripped so APIM auto-configures the backend |
+
+These transforms run automatically on every conversion — no configuration needed.
 
 ---
 
