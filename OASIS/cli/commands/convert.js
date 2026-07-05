@@ -30,6 +30,7 @@ Flags:
   -o, --output-file string   Output file path (overrides positional OUTPUT_FILE)
   -s, --server-url  string   The base URL for the generated OpenAPI spec (e.g., https://your-sap-server.com/sap/opu/odata/sap/API_NAME)
   -T, --title       string   Custom title is how users find this API in the APIM workspace
+  -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
   -V, --verbose              Show detailed step-by-step conversion logs
   -h, --help                 Show this help message
 
@@ -37,6 +38,7 @@ Examples:
   odata-converter convert input.xml
   odata-converter convert input.xml output.json
   odata-converter convert -T "Business Partner API" input.xml
+  odata-converter convert -A input.xml
   odata-converter convert -s https://myserver.com/sap/opu/odata/sap/API_SALES_ORDER input.xml
   odata-converter convert -o output.json input.xml
   odata-converter convert -V input.xml output.json
@@ -54,6 +56,7 @@ async function execute(args, ctx) {
     "output-file": { short: "o", type: "string" },
     "server-url": { short: "s", type: "string" },
     title: { short: "T", type: "string" },
+    apply: { short: "A", type: "boolean" },
     verbose: { short: "V", type: "boolean" },
     help: { short: "h", type: "boolean" },
   });
@@ -114,6 +117,9 @@ async function execute(args, ctx) {
   }
   if (flags.title) {
     options.defaultTitle = flags.title;
+  }
+  if (flags.apply) {
+    options.includeApply = true;
   }
 
   try {

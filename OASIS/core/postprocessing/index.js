@@ -10,6 +10,7 @@ const { addHeadMethods } = require("./transforms/addHeadMethods.js");
 const { addIfMatchHeaders, IF_MATCH_HEADER } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters, SAP_PARAMETERS } = require("./transforms/addSapParameters.js");
 const { relaxQueryOptionSchemas, RELAXED_QUERY_OPTIONS } = require("./transforms/relaxQueryOptionSchemas.js");
+const { ensureApplyParameter, APPLY_PARAMETER } = require("./transforms/ensureApplyParameter.js");
 const { fixDanglingRefs, PLACEHOLDER_SCHEMA } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -17,10 +18,12 @@ const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
  * Applies the standard post-processing pipeline.
  *
  * @param {object|string} openApiSpec - OpenAPI spec object or JSON string
+ * @param {object} [options={}] - Post-processing options
+ * @param {boolean} [options.includeApply=false] - Inject $apply into collection-GETs
  * @returns {object} Fully post-processed OpenAPI specification
  */
-function postProcess(openApiSpec) {
-  return PostProcessorBuilder.standard().build().apply(openApiSpec);
+function postProcess(openApiSpec, options = {}) {
+  return PostProcessorBuilder.standard(options).build().apply(openApiSpec);
 }
 
 module.exports = {
@@ -31,10 +34,12 @@ module.exports = {
   addIfMatchHeaders,
   addSapParameters,
   relaxQueryOptionSchemas,
+  ensureApplyParameter,
   fixDanglingRefs,
   removeDefaultServer,
   IF_MATCH_HEADER,
   SAP_PARAMETERS,
   RELAXED_QUERY_OPTIONS,
+  APPLY_PARAMETER,
   PLACEHOLDER_SCHEMA,
 };

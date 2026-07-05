@@ -28,6 +28,7 @@ Flags:
   -t, --target-dir   string  Output directory for converted files
   -s, --server-url   string  The base URL for the generated OpenAPI spec, shared across all files (e.g., https://your-sap-server.com/sap/opu/odata/sap/)
   -c, --concurrency  string  Maximum files to process in parallel (default: min(cpu count, 8))
+  -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
   -r, --recursive            Search for OData files in subdirectories
   -O, --overwrite            Overwrite existing output files
   -V, --verbose              Show detailed step-by-step conversion logs
@@ -109,6 +110,7 @@ async function execute(args, ctx) {
     "target-dir": { short: "t", type: "string" },
     "server-url": { short: "s", type: "string" },
     concurrency: { short: "c", type: "string" },
+    apply: { short: "A", type: "boolean" },
     recursive: { short: "r", type: "boolean" },
     overwrite: { short: "O", type: "boolean" },
     verbose: { short: "V", type: "boolean" },
@@ -143,6 +145,9 @@ async function execute(args, ctx) {
       console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://myserver.com/sap/opu/odata/sap/).`);
       process.exit(EXIT_CODE.ERROR);
     }
+  }
+  if (flags.apply) {
+    options.includeApply = true;
   }
 
   const inputDirs = positionalArgs.map((p) => path.resolve(p));

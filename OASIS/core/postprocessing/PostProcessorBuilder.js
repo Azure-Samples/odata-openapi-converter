@@ -12,6 +12,7 @@ const { addHeadMethods } = require("./transforms/addHeadMethods.js");
 const { addIfMatchHeaders } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters } = require("./transforms/addSapParameters.js");
 const { relaxQueryOptionSchemas } = require("./transforms/relaxQueryOptionSchemas.js");
+const { ensureApplyParameter } = require("./transforms/ensureApplyParameter.js");
 const { fixDanglingRefs } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -80,6 +81,16 @@ class PostProcessorBuilder {
    */
   withRelaxedQueryOptions() {
     this._transforms.push(relaxQueryOptionSchemas);
+    return this;
+  }
+
+  /**
+   * Injects the $apply query option into every collection-GET operation so it
+   * passes strict APIM validate-parameters policies. Opt-in.
+   * @returns {PostProcessorBuilder} this (for chaining)
+   */
+  withApplyParameter() {
+    this._transforms.push(ensureApplyParameter);
     return this;
   }
 
@@ -175,17 +186,24 @@ class PostProcessorBuilder {
    * Factory method: creates a builder pre-configured with all standard transforms.
    * This is the default post-processing pipeline matching existing behavior.
    *
+   * @param {object} [options={}] - Post-processing options
+   * @param {boolean} [options.includeApply=false] - When true, inject the $apply
+   *   query option into every collection-GET (opt-in; off by default).
    * @returns {PostProcessorBuilder} Builder with all standard transforms
    */
-  static standard() {
-    return new PostProcessorBuilder()
+  static standard(options = {}) {
+    const builder = new PostProcessorBuilder()
       .withPutMethods()
       .withHeadMethods()
       .withIfMatchHeaders()
       .withSapParameters()
-      .withRelaxedQueryOptions()
-      .withFixDanglingRefs()
-      .withRemoveDefaultServer();
+      .withRelaxedQueryOptions();
+
+    if (options.includeApply) {
+      builder.withApplyParameter();
+    }
+
+    return builder.withFixDanglingRefs().withRemoveDefaultServer();
   }
 }
 

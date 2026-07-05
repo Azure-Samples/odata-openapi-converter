@@ -5,6 +5,7 @@ import {
   Button,
   Input,
   Field,
+  Checkbox,
   ProgressBar,
   Accordion,
   AccordionItem,
@@ -222,6 +223,7 @@ function ConvertPage() {
   const [skippedFiles, setSkippedFiles] = useState([]);
   const [serverUrl, setServerUrl] = useState("");
   const [apiTitle, setApiTitle] = useState("");
+  const [includeApply, setIncludeApply] = useState(false);
   const [converting, setConverting] = useState(false);
   const [converted, setConverted] = useState(0);
   const [totalToConvert, setTotalToConvert] = useState(0);
@@ -278,6 +280,7 @@ function ConvertPage() {
               content: f.content,
               ...(serverUrl.trim() && { serverUrl: serverUrl.trim() }),
               ...(apiTitle.trim() && { title: apiTitle.trim() }),
+              ...(includeApply && { apply: true }),
             }),
           });
 
@@ -472,6 +475,19 @@ function ConvertPage() {
           value={apiTitle}
           onChange={(e, data) => setApiTitle(data.value)}
           disabled={inputsDisabled || files.length > 1}
+        />
+      </Field>
+
+      {/* $apply (aggregation) toggle */}
+      <Field
+        hint={UI.convert.applyHint}
+        className={styles.fullWidth}
+      >
+        <Checkbox
+          label={UI.convert.applyLabel}
+          checked={includeApply}
+          onChange={(e, data) => setIncludeApply(!!data.checked)}
+          disabled={inputsDisabled}
         />
       </Field>
 

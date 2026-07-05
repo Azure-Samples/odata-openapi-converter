@@ -93,7 +93,7 @@ function convertContent(content, options = {}, log = () => {}) {
   // Stage 4: Post-processing
   log("Compiling final output...");
   try {
-    openapi = postProcess(openapi);
+    openapi = postProcess(openapi, { includeApply: options.includeApply });
   } catch (err) {
     log("  ✗ Failed to compile final output.");
     throw new PostProcessingError(err.message, err);

@@ -105,6 +105,7 @@ The converter adds SAP Gateway compatibility on top of the standard OData→Open
 - **x-csrf-token** header on write operations
 - **If-Match** header on PUT/PATCH/DELETE operations
 - **Relaxed query options**: `$select`/`$expand`/`$orderby` schemas are converted from array+enum to free-form `string`, so nested/wildcard/combined OData values pass strict APIM `validate-parameters` policies
+- **Optional `$apply`** (`-A`/`--apply`): declares the `$apply` aggregation query option on all collection endpoints so strict APIM policies accept aggregation requests (off by default)
 - **Server URL** override (replaces localhost default)
 
 ## Third-Party Libraries

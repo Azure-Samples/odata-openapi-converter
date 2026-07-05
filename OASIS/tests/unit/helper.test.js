@@ -832,3 +832,97 @@ describe("postProcess — relaxQueryOptionSchemas behaviour", () => {
     assert.deepEqual(param.schema, { type: "string" });
   });
 });
+
+// ── ensureApplyParameter behaviour (tested via postProcess) ────
+
+describe("postProcess — ensureApplyParameter behaviour", () => {
+  const filterParam = { name: "$filter", in: "query", schema: { type: "string" } };
+  const selectParam = {
+    name: "$select",
+    in: "query",
+    schema: { type: "array", items: { type: "string", enum: ["ID"] } },
+  };
+
+  /**
+   * Finds the $apply parameter (inline or $ref) on an operation.
+   * @param {object} operation - OpenAPI operation object
+   * @returns {object|undefined} The matching parameter entry
+   */
+  function findApply(operation) {
+    return operation.parameters.find(
+      (p) => p.name === "$apply" || p.$ref === "#/components/parameters/apply"
+    );
+  }
+
+  it("should NOT add $apply by default (opt-in)", () => {
+    const spec = { paths: { "/Products": { get: { parameters: [filterParam] } } } };
+    const result = postProcess(spec);
+    assert.equal(findApply(result.paths["/Products"].get), undefined);
+  });
+
+  it("should add $apply to a collection-GET when includeApply is true", () => {
+    const spec = { paths: { "/Products": { get: { parameters: [filterParam] } } } };
+    const result = postProcess(spec, { includeApply: true });
+    const applyRef = findApply(result.paths["/Products"].get);
+    assert.ok(applyRef, "collection-GET should get $apply");
+    assert.equal(applyRef.$ref, "#/components/parameters/apply");
+    assert.equal(result.components.parameters.apply.name, "$apply");
+    assert.deepEqual(result.components.parameters.apply.schema, { type: "string" });
+  });
+
+  it("should NOT add $apply to a single-entity read (no collection options)", () => {
+    const spec = {
+      paths: { "/Products('{id}')": { get: { parameters: [selectParam] } } },
+    };
+    const result = postProcess(spec, { includeApply: true });
+    assert.equal(findApply(result.paths["/Products('{id}')"].get), undefined);
+  });
+
+  it("should detect collection-GETs via $ref markers (top/skip/count)", () => {
+    const spec = {
+      paths: {
+        "/Products": {
+          get: { parameters: [{ $ref: "#/components/parameters/top" }] },
+        },
+      },
+      components: {
+        parameters: { top: { name: "$top", in: "query", schema: { type: "integer" } } },
+      },
+    };
+    const result = postProcess(spec, { includeApply: true });
+    assert.ok(findApply(result.paths["/Products"].get));
+  });
+
+  it("should be idempotent (no duplicate $apply on repeat runs)", () => {
+    const spec = { paths: { "/Products": { get: { parameters: [filterParam] } } } };
+    const once = postProcess(spec, { includeApply: true });
+    const twice = postProcess(once, { includeApply: true });
+    const applies = twice.paths["/Products"].get.parameters.filter(
+      (p) => p.name === "$apply" || p.$ref === "#/components/parameters/apply"
+    );
+    assert.equal(applies.length, 1);
+  });
+
+  it("should preserve a pre-existing apply component and not duplicate the ref", () => {
+    const spec = {
+      paths: {
+        "/Products": {
+          get: {
+            parameters: [filterParam, { $ref: "#/components/parameters/apply" }],
+          },
+        },
+      },
+      components: {
+        parameters: {
+          apply: { name: "$apply", in: "query", description: "Original.", schema: { type: "string" } },
+        },
+      },
+    };
+    const result = postProcess(spec, { includeApply: true });
+    assert.equal(result.components.parameters.apply.description, "Original.");
+    const applies = result.paths["/Products"].get.parameters.filter(
+      (p) => p.$ref === "#/components/parameters/apply"
+    );
+    assert.equal(applies.length, 1);
+  });
+});
