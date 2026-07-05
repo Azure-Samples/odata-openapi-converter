@@ -11,6 +11,7 @@ const { addPutMethods } = require("./transforms/addPutMethods.js");
 const { addHeadMethods } = require("./transforms/addHeadMethods.js");
 const { addIfMatchHeaders } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters } = require("./transforms/addSapParameters.js");
+const { relaxQueryOptionSchemas } = require("./transforms/relaxQueryOptionSchemas.js");
 const { fixDanglingRefs } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -69,6 +70,16 @@ class PostProcessorBuilder {
    */
   withSapParameters() {
     this._transforms.push(addSapParameters);
+    return this;
+  }
+
+  /**
+   * Relaxes $select/$expand/$orderby schemas from array+enum to free-form
+   * string so APIM accepts nested/wildcard/combined OData query values.
+   * @returns {PostProcessorBuilder} this (for chaining)
+   */
+  withRelaxedQueryOptions() {
+    this._transforms.push(relaxQueryOptionSchemas);
     return this;
   }
 
@@ -172,6 +183,7 @@ class PostProcessorBuilder {
       .withHeadMethods()
       .withIfMatchHeaders()
       .withSapParameters()
+      .withRelaxedQueryOptions()
       .withFixDanglingRefs()
       .withRemoveDefaultServer();
   }

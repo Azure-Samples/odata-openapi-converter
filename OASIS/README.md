@@ -104,6 +104,7 @@ The converter adds SAP Gateway compatibility on top of the standard OData→Open
 - **SAP standard parameters**: `sap-client`, `sap-language`, `sap-statistics`, `sap-ds-debug`, `sap-cancel-on-close`
 - **x-csrf-token** header on write operations
 - **If-Match** header on PUT/PATCH/DELETE operations
+- **Relaxed query options**: `$select`/`$expand`/`$orderby` schemas are converted from array+enum to free-form `string`, so nested/wildcard/combined OData values pass strict APIM `validate-parameters` policies
 - **Server URL** override (replaces localhost default)
 
 ## Third-Party Libraries

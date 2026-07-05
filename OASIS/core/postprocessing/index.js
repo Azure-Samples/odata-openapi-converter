@@ -9,6 +9,7 @@ const { addPutMethods } = require("./transforms/addPutMethods.js");
 const { addHeadMethods } = require("./transforms/addHeadMethods.js");
 const { addIfMatchHeaders, IF_MATCH_HEADER } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters, SAP_PARAMETERS } = require("./transforms/addSapParameters.js");
+const { relaxQueryOptionSchemas, RELAXED_QUERY_OPTIONS } = require("./transforms/relaxQueryOptionSchemas.js");
 const { fixDanglingRefs, PLACEHOLDER_SCHEMA } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -29,9 +30,11 @@ module.exports = {
   addHeadMethods,
   addIfMatchHeaders,
   addSapParameters,
+  relaxQueryOptionSchemas,
   fixDanglingRefs,
   removeDefaultServer,
   IF_MATCH_HEADER,
   SAP_PARAMETERS,
+  RELAXED_QUERY_OPTIONS,
   PLACEHOLDER_SCHEMA,
 };

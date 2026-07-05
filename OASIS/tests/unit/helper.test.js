@@ -738,3 +738,97 @@ describe("postProcess — addHeaderParameters behaviour", () => {
     assert.ok(result.paths["/ok('{id}')"].delete.parameters.find((p) => p.name === "If-Match"));
   });
 });
+
+// ── relaxQueryOptionSchemas behaviour (tested via postProcess) ──
+
+describe("postProcess — relaxQueryOptionSchemas behaviour", () => {
+  /**
+   * Builds a GET operation with the given query parameters.
+   * @param {object[]} parameters - OpenAPI parameter objects
+   * @returns {object} Minimal spec with one path
+   */
+  function specWithParams(parameters) {
+    return { paths: { "/Products": { get: { parameters } } } };
+  }
+
+  const arrayEnum = (name, values, extra = {}) => ({
+    name,
+    in: "query",
+    style: "form",
+    explode: false,
+    schema: { type: "array", uniqueItems: true, items: { type: "string", enum: values } },
+    ...extra,
+  });
+
+  for (const name of ["$select", "$expand", "$orderby"]) {
+    it(`should relax ${name} array+enum schema to a free-form string`, () => {
+      const result = postProcess(specWithParams([arrayEnum(name, ["ID", "Name"])]));
+      const param = result.paths["/Products"].get.parameters.find((p) => p.name === name);
+      assert.deepEqual(param.schema, { type: "string" });
+    });
+  }
+
+  it("should drop array-only style/explode keywords", () => {
+    const result = postProcess(specWithParams([arrayEnum("$select", ["ID"])]));
+    const param = result.paths["/Products"].get.parameters.find((p) => p.name === "$select");
+    assert.equal(param.style, undefined);
+    assert.equal(param.explode, undefined);
+  });
+
+  it("should fold enumerated property names into the description", () => {
+    const result = postProcess(specWithParams([arrayEnum("$select", ["ID", "Name"])]));
+    const param = result.paths["/Products"].get.parameters.find((p) => p.name === "$select");
+    assert.ok(param.description.includes("ID, Name"), "description should list properties");
+  });
+
+  it("should preserve an existing description and append the hint", () => {
+    const result = postProcess(
+      specWithParams([arrayEnum("$expand", ["Category"], { description: "Expand nav." })])
+    );
+    const param = result.paths["/Products"].get.parameters.find((p) => p.name === "$expand");
+    assert.ok(param.description.startsWith("Expand nav."));
+    assert.ok(param.description.includes("Category"));
+  });
+
+  it("should not touch scalar query options like $top", () => {
+    const result = postProcess(
+      specWithParams([{ name: "$top", in: "query", schema: { type: "integer", minimum: 0 } }])
+    );
+    const param = result.paths["/Products"].get.parameters.find((p) => p.name === "$top");
+    assert.deepEqual(param.schema, { type: "integer", minimum: 0 });
+  });
+
+  it("should be idempotent (running twice yields the same string schema)", () => {
+    const once = postProcess(specWithParams([arrayEnum("$orderby", ["Name", "Name desc"])]));
+    const twice = postProcess(once);
+    const param = twice.paths["/Products"].get.parameters.find((p) => p.name === "$orderby");
+    assert.deepEqual(param.schema, { type: "string" });
+  });
+
+  it("should relax reusable component parameters", () => {
+    const spec = {
+      paths: {},
+      components: {
+        parameters: {
+          select: arrayEnum("$select", ["ID", "Name"]),
+        },
+      },
+    };
+    const result = postProcess(spec);
+    assert.deepEqual(result.components.parameters.select.schema, { type: "string" });
+  });
+
+  it("should relax path-level shared parameters", () => {
+    const spec = {
+      paths: {
+        "/Products": {
+          parameters: [arrayEnum("$expand", ["Category"])],
+          get: {},
+        },
+      },
+    };
+    const result = postProcess(spec);
+    const param = result.paths["/Products"].parameters.find((p) => p.name === "$expand");
+    assert.deepEqual(param.schema, { type: "string" });
+  });
+});
