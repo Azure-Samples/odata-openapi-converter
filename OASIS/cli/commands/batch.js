@@ -29,6 +29,8 @@ Flags:
   -s, --server-url   string  The base URL for the generated OpenAPI spec, shared across all files (e.g., https://your-sap-server.com/sap/opu/odata/sap/)
   -c, --concurrency  string  Maximum files to process in parallel (default: min(cpu count, 8))
   -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
+  -R, --require-top          Make $top required (default 10) to guard against unbounded reads
+  -B, --include-batch        Include the /$batch path (skipped by default for security)
   -r, --recursive            Search for OData files in subdirectories
   -O, --overwrite            Overwrite existing output files
   -V, --verbose              Show detailed step-by-step conversion logs
@@ -111,6 +113,8 @@ async function execute(args, ctx) {
     "server-url": { short: "s", type: "string" },
     concurrency: { short: "c", type: "string" },
     apply: { short: "A", type: "boolean" },
+    "require-top": { short: "R", type: "boolean" },
+    "include-batch": { short: "B", type: "boolean" },
     recursive: { short: "r", type: "boolean" },
     overwrite: { short: "O", type: "boolean" },
     verbose: { short: "V", type: "boolean" },
@@ -148,6 +152,12 @@ async function execute(args, ctx) {
   }
   if (flags.apply) {
     options.includeApply = true;
+  }
+  if (flags["require-top"]) {
+    options.requireTop = true;
+  }
+  if (flags["include-batch"]) {
+    options.includeBatch = true;
   }
 
   const inputDirs = positionalArgs.map((p) => path.resolve(p));

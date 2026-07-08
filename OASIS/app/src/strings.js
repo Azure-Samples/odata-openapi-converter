@@ -45,6 +45,12 @@ export const UI = Object.freeze({
     applyLabel: "Add $apply (aggregation) query option",
     applyHint:
       "Declares the $apply query option on all collection endpoints so strict APIM validate-parameters policies accept aggregation requests. Enable only if your services support aggregation.",
+    requireTopLabel: "Require $top (default 10)",
+    requireTopHint:
+      "Makes $top required with a default of 10 on all collection endpoints, guarding against unbounded full-table reads.",
+    includeBatchLabel: "Include the /$batch endpoint",
+    includeBatchHint:
+      "The /$batch endpoint is skipped by default because batched request contents cannot be validated individually by APIM. Enable only if you deliberately grant batch access.",
     convertBtn: "Convert",
     convertingBtn: "Converting…",
     resetBtn: "Reset",

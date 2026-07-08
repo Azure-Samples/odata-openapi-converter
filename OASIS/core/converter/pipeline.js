@@ -74,7 +74,12 @@ function convertContent(content, options = {}, log = () => {}) {
   const openapiMessages = [];
 
   try {
-    openapi = csdl2openapi(csdl, { ...options, diagram: true, messages: openapiMessages });
+    openapi = csdl2openapi(csdl, {
+      ...options,
+      diagram: true,
+      skipBatchPath: !options.includeBatch,
+      messages: openapiMessages,
+    });
   } catch (err) {
     log("  ✗ OpenAPI conversion failed.");
     const userMessage =
@@ -103,7 +108,10 @@ function convertContent(content, options = {}, log = () => {}) {
   // Stage 4: Post-processing
   log("Compiling final output...");
   try {
-    openapi = postProcess(openapi, { includeApply: options.includeApply });
+    openapi = postProcess(openapi, {
+      includeApply: options.includeApply,
+      requireTop: options.requireTop,
+    });
   } catch (err) {
     log("  ✗ Failed to compile final output.");
     throw new PostProcessingError(err.message, err);

@@ -106,6 +106,8 @@ The converter adds SAP Gateway compatibility on top of the standard OData→Open
 - **If-Match** header on PUT/PATCH/DELETE operations
 - **Relaxed query options**: `$select`/`$expand`/`$orderby` schemas are converted from array+enum to free-form `string`, so nested/wildcard/combined OData values pass strict APIM `validate-parameters` policies
 - **Optional `$apply`** (`-A`/`--apply`): declares the `$apply` aggregation query option on all collection endpoints so strict APIM policies accept aggregation requests (off by default)
+- **Optional required `$top`** (`-R`/`--require-top`): makes `$top` required with a default of `10` on all collection endpoints, guarding against unbounded full-table reads (off by default)
+- **Optional `/$batch`** (`-B`/`--include-batch`): the `/$batch` endpoint is skipped by default because batched request contents can't be individually validated by APIM; pass this flag to include it when batch access is deliberately granted
 - **Field descriptions**: SAP field captions and tooltips become OpenAPI `title`/`description` for both OData V2 (`sap:label`/`sap:quickinfo`) and V4 (`Common.Label`/`Common.QuickInfo`), which the upstream libraries otherwise drop or mislabel
 - **Malformed-XML repair**: SAP production systems sometimes export unescaped `&`, `<`, `>` inside attribute values (e.g. `sap:label="x & y"`), which makes the metadata invalid XML and unconvertible; the converter escapes these stray characters as a pre-parse step so the file can be processed
 - **Entity-relationship diagram**: an "Entity Data Model" section with an ER diagram is added to the spec's `info.description` for use in API-catalog documentation

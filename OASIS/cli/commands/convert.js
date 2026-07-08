@@ -32,6 +32,8 @@ Flags:
   -T, --title       string   Custom title is how users find this API in the APIM workspace
   -D, --description string   Custom API description for the generated spec (info.description)
   -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
+  -R, --require-top          Make $top required (default 10) to guard against unbounded reads
+  -B, --include-batch        Include the /$batch path (skipped by default for security)
   -V, --verbose              Show detailed step-by-step conversion logs
   -h, --help                 Show this help message
 
@@ -41,6 +43,8 @@ Examples:
   odata-converter convert -T "Business Partner API" input.xml
   odata-converter convert -D "Product master data service" input.xml
   odata-converter convert -A input.xml
+  odata-converter convert -R input.xml
+  odata-converter convert -B input.xml
   odata-converter convert -s https://myserver.com/sap/opu/odata/sap/API_SALES_ORDER input.xml
   odata-converter convert -o output.json input.xml
   odata-converter convert -V input.xml output.json
@@ -60,6 +64,8 @@ async function execute(args, ctx) {
     title: { short: "T", type: "string" },
     description: { short: "D", type: "string" },
     apply: { short: "A", type: "boolean" },
+    "require-top": { short: "R", type: "boolean" },
+    "include-batch": { short: "B", type: "boolean" },
     verbose: { short: "V", type: "boolean" },
     help: { short: "h", type: "boolean" },
   });
@@ -126,6 +132,12 @@ async function execute(args, ctx) {
   }
   if (flags.apply) {
     options.includeApply = true;
+  }
+  if (flags["require-top"]) {
+    options.requireTop = true;
+  }
+  if (flags["include-batch"]) {
+    options.includeBatch = true;
   }
 
   try {

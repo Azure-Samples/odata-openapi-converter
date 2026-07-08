@@ -226,6 +226,8 @@ function ConvertPage() {
   const [apiTitle, setApiTitle] = useState("");
   const [apiDescription, setApiDescription] = useState("");
   const [includeApply, setIncludeApply] = useState(false);
+  const [requireTop, setRequireTop] = useState(false);
+  const [includeBatch, setIncludeBatch] = useState(false);
   const [converting, setConverting] = useState(false);
   const [converted, setConverted] = useState(0);
   const [totalToConvert, setTotalToConvert] = useState(0);
@@ -284,6 +286,8 @@ function ConvertPage() {
               ...(apiTitle.trim() && { title: apiTitle.trim() }),
               ...(apiDescription.trim() && { description: apiDescription.trim() }),
               ...(includeApply && { apply: true }),
+              ...(requireTop && { requireTop: true }),
+              ...(includeBatch && { includeBatch: true }),
             }),
           });
 
@@ -506,6 +510,32 @@ function ConvertPage() {
           label={UI.convert.applyLabel}
           checked={includeApply}
           onChange={(e, data) => setIncludeApply(!!data.checked)}
+          disabled={inputsDisabled}
+        />
+      </Field>
+
+      {/* $top guard toggle */}
+      <Field
+        hint={UI.convert.requireTopHint}
+        className={styles.fullWidth}
+      >
+        <Checkbox
+          label={UI.convert.requireTopLabel}
+          checked={requireTop}
+          onChange={(e, data) => setRequireTop(!!data.checked)}
+          disabled={inputsDisabled}
+        />
+      </Field>
+
+      {/* /$batch inclusion toggle */}
+      <Field
+        hint={UI.convert.includeBatchHint}
+        className={styles.fullWidth}
+      >
+        <Checkbox
+          label={UI.convert.includeBatchLabel}
+          checked={includeBatch}
+          onChange={(e, data) => setIncludeBatch(!!data.checked)}
           disabled={inputsDisabled}
         />
       </Field>

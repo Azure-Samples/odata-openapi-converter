@@ -13,6 +13,7 @@ const { addIfMatchHeaders } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters } = require("./transforms/addSapParameters.js");
 const { relaxQueryOptionSchemas } = require("./transforms/relaxQueryOptionSchemas.js");
 const { ensureApplyParameter } = require("./transforms/ensureApplyParameter.js");
+const { requireTopParameter } = require("./transforms/requireTopParameter.js");
 const { fixDanglingRefs } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -91,6 +92,16 @@ class PostProcessorBuilder {
    */
   withApplyParameter() {
     this._transforms.push(ensureApplyParameter);
+    return this;
+  }
+
+  /**
+   * Makes the shared $top query option required with a default page size, as a
+   * guard against unbounded full-table reads. Opt-in.
+   * @returns {PostProcessorBuilder} this (for chaining)
+   */
+  withRequireTopParameter() {
+    this._transforms.push(requireTopParameter);
     return this;
   }
 
@@ -189,6 +200,8 @@ class PostProcessorBuilder {
    * @param {object} [options={}] - Post-processing options
    * @param {boolean} [options.includeApply=false] - When true, inject the $apply
    *   query option into every collection-GET (opt-in; off by default).
+   * @param {boolean} [options.requireTop=false] - When true, make the shared
+   *   $top query option required with a default page size (opt-in; off by default).
    * @returns {PostProcessorBuilder} Builder with all standard transforms
    */
   static standard(options = {}) {
@@ -198,6 +211,10 @@ class PostProcessorBuilder {
       .withIfMatchHeaders()
       .withSapParameters()
       .withRelaxedQueryOptions();
+
+    if (options.requireTop) {
+      builder.withRequireTopParameter();
+    }
 
     if (options.includeApply) {
       builder.withApplyParameter();
