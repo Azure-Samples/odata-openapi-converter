@@ -7,8 +7,9 @@ Convert OData CSDL/EDMX metadata (v2, v3, v4) to fully compliant OpenAPI 3.0 spe
 - Converts XML (EDMX) and JSON (CSDL) OData metadata to OpenAPI 3.0
 - Supports OData v2, v3, and v4
 - Adds SAP-specific parameters (sap-client, sap-language, x-csrf-token, etc.)
-- Adds HEAD methods for CSRF token fetching
-- Configurable server URL and API title
+- Adds HEAD methods for CSRF token fetching (with `X-CSRF-Token` response header)
+- Configurable server URL, API title, and API description
+- Opt-in APIM hardening: `$apply` aggregation, required `$top`, and `/$batch` inclusion
 - Available as CLI, web app, or standalone binary
 - Batch conversion with parallel processing
 
@@ -34,48 +35,63 @@ Download the pre-built binary for your platform from the [Releases](https://gith
 ### Convert a single file
 
 ```bash
-oasis-odata-openapi convert <input-file> [options]
+odata-converter convert <input-file> [options]
 ```
 
 **Options:**
 
 | Flag | Description |
 |------|-------------|
-| `--server-url <url>` | Base URL for the generated OpenAPI spec (e.g., `https://your-server.com/sap/opu/odata/sap/API_NAME`) |
-| `--title <title>` | Custom title for `openapi.info.title` |
-| `-o, --output <path>` | Output file path (defaults to `<input>.openapi.json`) |
+| `-o, --output-file <path>` | Output file path (overrides positional output; defaults to `<input>-openapi.json`) |
+| `-s, --server-url <url>` | Base URL for the generated OpenAPI spec (e.g., `https://your-server.com/sap/opu/odata/sap/API_NAME`) |
+| `-T, --title <title>` | Custom title for `openapi.info.title` (how users find this API in the APIM workspace) |
+| `-D, --description <text>` | Custom API description (`info.description`); the ER diagram is still appended after it |
+| `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
+| `-R, --require-top` | Make `$top` required with a default of `10` on all collection endpoints (off by default) |
+| `-B, --include-batch` | Include the `/$batch` path, skipped by default for security (off by default) |
+| `-V, --verbose` | Show detailed step-by-step conversion logs |
 
 **Example:**
 
 ```bash
-oasis-odata-openapi convert metadata.xml --server-url https://myserver.com/sap/opu/odata/sap/API_SALES_ORDER --title "Sales Order API"
+odata-converter convert metadata.xml --server-url https://your-server.com/sap/opu/odata/sap/API_NAME --title "My API"
+
+# With optional APIM hardening (required $top + $apply aggregation)
+odata-converter convert -R -A metadata.xml
 ```
 
 ### Batch convert a folder
 
 ```bash
-oasis-odata-openapi batch <input-folder> [options]
+odata-converter batch <input-folder> [options]
 ```
 
 **Options:**
 
 | Flag | Description |
 |------|-------------|
-| `--server-url <url>` | Base URL applied to all files |
-| `--title <title>` | Custom title applied to all files |
-| `-o, --output <path>` | Output directory (defaults to `./output`) |
-| `--concurrency <n>` | Number of parallel conversions (default: auto-detect CPU cores, max 8) |
+| `-t, --target-dir <path>` | Output directory (defaults to `./output`) |
+| `-s, --server-url <url>` | Base URL applied to all files |
+| `-c, --concurrency <n>` | Number of parallel conversions (default: auto-detect CPU cores, max 8) |
+| `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
+| `-R, --require-top` | Make `$top` required with a default of `10` (off by default) |
+| `-B, --include-batch` | Include the `/$batch` path, skipped by default (off by default) |
+| `-r, --recursive` | Search subdirectories for OData files |
+| `-O, --overwrite` | Overwrite existing output files |
+| `-V, --verbose` | Show detailed step-by-step conversion logs |
 
 **Example:**
 
 ```bash
-oasis-odata-openapi batch ./metadata-files -o ./openapi-output --concurrency 4
+odata-converter batch ./metadata-files -t ./openapi-output --concurrency 4
 ```
+
+> **Note:** After `npm install -g oasis-odata-openapi`, the command you run is `odata-converter`.
 
 ### Get file info
 
 ```bash
-oasis-odata-openapi info <input-file>
+odata-converter info <input-file>
 ```
 
 Displays detected OData version, format (XML/JSON), and namespace without converting.
@@ -84,9 +100,15 @@ Displays detected OData version, format (XML/JSON), and namespace without conver
 
 The web interface provides drag-and-drop conversion with the same engine:
 
-1. Upload one or more EDMX/CSDL files
-2. Optionally set a server URL and title
-3. Download converted OpenAPI 3.0 JSON files
+1. Upload one or more EDMX/CSDL files (or a whole folder)
+2. Optionally set a **Server URL**, **Title**, and **Description**
+3. Optionally enable the toggles (each mirrors a CLI flag):
+   - **Add $apply (aggregation) query option** — same as `-A, --apply`
+   - **Require $top (default 10)** — same as `-R, --require-top`
+   - **Include the /$batch endpoint** — same as `-B, --include-batch` (skipped by default)
+4. Download the converted OpenAPI 3.0 JSON file(s), or a ZIP for multiple files
+
+Each field and toggle has an inline hint in the UI explaining its effect.
 
 ## Supported Formats
 

@@ -40,12 +40,12 @@ Flags:
 Examples:
   odata-converter convert input.xml
   odata-converter convert input.xml output.json
-  odata-converter convert -T "Business Partner API" input.xml
-  odata-converter convert -D "Product master data service" input.xml
+  odata-converter convert -T "My API" input.xml
+  odata-converter convert -D "My API description" input.xml
   odata-converter convert -A input.xml
   odata-converter convert -R input.xml
   odata-converter convert -B input.xml
-  odata-converter convert -s https://myserver.com/sap/opu/odata/sap/API_SALES_ORDER input.xml
+  odata-converter convert -s https://your-server.com/sap/opu/odata/sap/API_NAME input.xml
   odata-converter convert -o output.json input.xml
   odata-converter convert -V input.xml output.json
 `);
@@ -120,7 +120,7 @@ async function execute(args, ctx) {
       options.host = url.host;
       options.basePath = url.pathname || "/";
     } catch {
-      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://myserver.com/sap/opu/odata/sap/API_NAME).`);
+      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://your-server.com/sap/opu/odata/sap/API_NAME).`);
       process.exit(EXIT_CODE.ERROR);
     }
   }

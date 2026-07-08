@@ -82,6 +82,13 @@ const useStyles = makeStyles({
       borderBottomColor: tokens.colorNeutralForeground1,
     },
   },
+  checkboxField: {
+    alignSelf: "stretch",
+    "& .fui-Field__hint": {
+      paddingLeft: `calc(16px + 2 * ${tokens.spacingHorizontalS} + ${tokens.spacingHorizontalXS})`,
+      marginTop: tokens.spacingVerticalXXS,
+    },
+  },
   skippedNotice: {
     alignSelf: "stretch",
     display: "flex",
@@ -504,7 +511,7 @@ function ConvertPage() {
       {/* $apply (aggregation) toggle */}
       <Field
         hint={UI.convert.applyHint}
-        className={styles.fullWidth}
+        className={styles.checkboxField}
       >
         <Checkbox
           label={UI.convert.applyLabel}
@@ -517,7 +524,7 @@ function ConvertPage() {
       {/* $top guard toggle */}
       <Field
         hint={UI.convert.requireTopHint}
-        className={styles.fullWidth}
+        className={styles.checkboxField}
       >
         <Checkbox
           label={UI.convert.requireTopLabel}
@@ -530,7 +537,7 @@ function ConvertPage() {
       {/* /$batch inclusion toggle */}
       <Field
         hint={UI.convert.includeBatchHint}
-        className={styles.fullWidth}
+        className={styles.checkboxField}
       >
         <Checkbox
           label={UI.convert.includeBatchLabel}

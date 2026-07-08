@@ -23,7 +23,7 @@ const { postProcess } = require("../postprocessing/index.js");
 /**
  * Extracts the API type/name from the parsed CSDL JSON.
  * In OData CSDL JSON, schema namespaces are top-level keys (not prefixed with $).
- * E.g., "API_BUSINESS_PARTNER" or "com.sap.gateway.srvd_a2x.api_businesspartner"
+ * E.g., "API_NAME" or "com.example.service.api_name"
  *
  * @param {object} csdl - Parsed CSDL JSON object
  * @returns {string} The primary schema namespace, or "unknown"

@@ -32,25 +32,25 @@ export const UI = Object.freeze({
     serverUrlPlaceholder: "https://your-sap-server.com/sap/opu/odata/sap/API_NAME",
     titleLabel: "Title (optional)",
     titleHint:
-      "Custom title is how users find this API in the APIM workspace",
+      "This title is used to find the API in the APIM workspace.",
     titleMultiFileHint:
-      "Title is disabled for multiple files. Each file will use its own namespace as the title.",
-    titlePlaceholder: "e.g., Business Partner API",
+      "Disabled for multiple files. Each file uses its own namespace as the title.",
+    titlePlaceholder: "e.g., My API",
     descriptionLabel: "Description (optional)",
     descriptionHint:
-      "Custom API description shown in the generated spec (info.description). The entity-relationship diagram is still appended after it.",
+      "Shown as the API description (info.description). The entity-relationship diagram is appended after it.",
     descriptionMultiFileHint:
-      "Description is disabled for multiple files. Each file will use its own generated description.",
-    descriptionPlaceholder: "e.g., Product master data service exposed via SAP OData",
+      "Disabled for multiple files. Each file uses its own generated description.",
+    descriptionPlaceholder: "e.g., Short description of the API",
     applyLabel: "Add $apply (aggregation) query option",
     applyHint:
-      "Declares the $apply query option on all collection endpoints so strict APIM validate-parameters policies accept aggregation requests. Enable only if your services support aggregation.",
+      "Allows aggregation queries ($apply) on collection endpoints. Enable only if your services support aggregation.",
     requireTopLabel: "Require $top (default 10)",
     requireTopHint:
-      "Makes $top required with a default of 10 on all collection endpoints, guarding against unbounded full-table reads.",
+      "Requires $top (default 10) on collection endpoints to prevent unbounded full-table reads.",
     includeBatchLabel: "Include the /$batch endpoint",
     includeBatchHint:
-      "The /$batch endpoint is skipped by default because batched request contents cannot be validated individually by APIM. Enable only if you deliberately grant batch access.",
+      "Includes the /$batch endpoint, skipped by default because APIM can't validate batched requests individually. Enable only if you allow batch access.",
     convertBtn: "Convert",
     convertingBtn: "Converting…",
     resetBtn: "Reset",

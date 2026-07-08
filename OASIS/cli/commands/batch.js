@@ -39,7 +39,7 @@ Flags:
 Examples:
   odata-converter batch ./input
   odata-converter batch -t ./output ./input
-  odata-converter batch -s https://myserver.com/sap/opu/odata/sap/ -r ./input
+  odata-converter batch -s https://your-server.com/sap/opu/odata/sap/ -r ./input
   odata-converter batch -t ./output -r ./input1 ./input2
 `);
 }
@@ -146,7 +146,7 @@ async function execute(args, ctx) {
       options.host = url.host;
       options.basePath = url.pathname || "/";
     } catch {
-      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://myserver.com/sap/opu/odata/sap/).`);
+      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://your-server.com/sap/opu/odata/sap/).`);
       process.exit(EXIT_CODE.ERROR);
     }
   }

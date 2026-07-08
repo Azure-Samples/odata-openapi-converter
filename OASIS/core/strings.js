@@ -14,12 +14,12 @@
 const STRINGS = Object.freeze({
   errors: {
     MISSING_BODY_FIELDS: "Request body must include 'fileName' and 'content'.",
-    INVALID_SERVER_URL: "Invalid serverUrl. Must be a valid URL (e.g., https://myserver.com/sap/opu/odata/sap/API_NAME).",
+    INVALID_SERVER_URL: "Invalid serverUrl. Must be a valid URL (e.g., https://your-server.com/sap/opu/odata/sap/API_NAME).",
     INTERNAL_ERROR: "Internal server error. Please retry after a few minutes. If the issue persists, contact support.",
   },
   cli: {
     NO_FILES_FOUND: "No supported OData files found in the specified directories.",
-    INVALID_SERVER_URL: "Error: Invalid --server-url. Must be a valid URL (e.g., https://myserver.com/sap/opu/odata/sap/).",
+    INVALID_SERVER_URL: "Error: Invalid --server-url. Must be a valid URL (e.g., https://your-server.com/sap/opu/odata/sap/).",
     DIR_NOT_FOUND: "Error: Input directory not found:",
     NOT_A_DIR: "Error: Not a directory:",
     NOT_A_DIR_HINT: 'Hint: Use "oasis-converter convert" to convert a single file.',
