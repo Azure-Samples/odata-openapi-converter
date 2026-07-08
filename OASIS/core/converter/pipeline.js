@@ -16,6 +16,7 @@ const { OPENAPI_OUTPUT_SUFFIX, INPUT_EXTENSION_RE, SUPPRESSED_WARNING_PATTERNS }
 const { OpenApiConversionError, PostProcessingError, FileIOError } = require("../errors.js");
 const { detectFormat, validateExtension, isSupportedFile } = require("../validation/index.js");
 const { createConverter } = require("./ConverterFactory.js");
+const { enrichDescriptions } = require("./enrichDescriptions.js");
 const { postProcess } = require("../postprocessing/index.js");
 
 /**
@@ -57,6 +58,9 @@ function convertContent(content, options = {}, log = () => {}) {
     (msg) => (typeof msg === "string" ? msg : msg.message || String(msg))
   );
   log("  Parsed successfully.");
+  
+  log("Enriching field descriptions...");
+  enrichDescriptions(csdl, format === "json" ? undefined : content);
 
   // Stage 3: Convert CSDL to OpenAPI
   log("Converting CSDL to OpenAPI 3.0...");
