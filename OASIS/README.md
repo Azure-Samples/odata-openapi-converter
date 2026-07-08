@@ -107,6 +107,7 @@ The converter adds SAP Gateway compatibility on top of the standard OData→Open
 - **Relaxed query options**: `$select`/`$expand`/`$orderby` schemas are converted from array+enum to free-form `string`, so nested/wildcard/combined OData values pass strict APIM `validate-parameters` policies
 - **Optional `$apply`** (`-A`/`--apply`): declares the `$apply` aggregation query option on all collection endpoints so strict APIM policies accept aggregation requests (off by default)
 - **Field descriptions**: SAP field captions and tooltips become OpenAPI `title`/`description` for both OData V2 (`sap:label`/`sap:quickinfo`) and V4 (`Common.Label`/`Common.QuickInfo`), which the upstream libraries otherwise drop or mislabel
+- **Malformed-XML repair**: SAP production systems sometimes export unescaped `&`, `<`, `>` inside attribute values (e.g. `sap:label="x & y"`), which makes the metadata invalid XML and unconvertible; the converter escapes these stray characters as a pre-parse step so the file can be processed
 - **Server URL** override (replaces localhost default)
 
 ## Third-Party Libraries
