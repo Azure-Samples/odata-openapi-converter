@@ -99,7 +99,7 @@ The web interface provides drag-and-drop conversion with the same engine:
 
 The converter adds SAP Gateway compatibility on top of the standard OData→OpenAPI conversion:
 
-- **HEAD methods** on `/` and `/$metadata` for CSRF token fetching
+- **HEAD methods** on `/` and `/$metadata` for CSRF token fetching; both HEAD `200` responses declare the `X-CSRF-Token` response header so consumers can see where SAP returns the token
 - **PUT methods** mirroring PATCH operations
 - **SAP standard parameters**: `sap-client`, `sap-language`, `sap-statistics`, `sap-ds-debug`, `sap-cancel-on-close`
 - **x-csrf-token** header on write operations

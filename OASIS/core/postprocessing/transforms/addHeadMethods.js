@@ -5,6 +5,29 @@
 // ---------------------------------------------------------------
 
 /**
+ * Response header SAP OData services return on the service root, carrying the
+ * CSRF token fetched via a HEAD/GET request (`X-CSRF-Token: Fetch`).
+ */
+const CSRF_TOKEN_RESPONSE_HEADER = Object.freeze({
+  schema: { type: "string" },
+});
+
+/**
+ * Declares the X-CSRF-Token response header on a HEAD operation's 200 response
+ * so consumers can discover where SAP returns the CSRF token.
+ *
+ * @param {object} headOperation - HEAD operation object (may be undefined)
+ */
+function declareCsrfTokenHeader(headOperation) {
+  const ok = headOperation?.responses?.["200"];
+  if (!ok || typeof ok !== "object") return;
+  if (!ok.headers) ok.headers = {};
+  if (!ok.headers["X-CSRF-Token"]) {
+    ok.headers["X-CSRF-Token"] = { ...CSRF_TOKEN_RESPONSE_HEADER };
+  }
+}
+
+/**
  * Adds HEAD method to root "/" and "/$metadata" paths.
  * Root HEAD is needed for CSRF token fetching (SAP OData services).
  * Metadata HEAD allows lightweight availability checks.
@@ -44,6 +67,8 @@ function addHeadMethods(spec) {
     };
   }
 
+  declareCsrfTokenHeader(spec.paths["/"].head);
+
   // Ensure "/$metadata" path exists with GET and HEAD
   if (!spec.paths["/$metadata"]) {
     spec.paths["/$metadata"] = {};
@@ -69,7 +94,9 @@ function addHeadMethods(spec) {
     };
   }
 
+  declareCsrfTokenHeader(spec.paths["/$metadata"].head);
+
   return spec;
 }
 
-module.exports = { addHeadMethods };
+module.exports = { addHeadMethods, CSRF_TOKEN_RESPONSE_HEADER };

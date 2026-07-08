@@ -315,6 +315,34 @@ describe("postProcess — addHeadMethods behaviour", () => {
     assert.ok(result.paths["/"].head.responses["200"]);
   });
 
+  it("should declare the X-CSRF-Token response header on the root HEAD 200", () => {
+    const spec = { paths: { "/items": { get: { summary: "List" } } } };
+
+    const result = postProcess(spec);
+    const headers = result.paths["/"].head.responses["200"].headers;
+
+    assert.ok(headers, "root HEAD 200 should have a headers object");
+    assert.deepEqual(
+      headers["X-CSRF-Token"],
+      { schema: { type: "string" } },
+      "X-CSRF-Token header should be declared with a string schema"
+    );
+  });
+
+  it("should add the X-CSRF-Token header even when a HEAD op already exists", () => {
+    const spec = {
+      paths: {
+        "/": { head: { summary: "Custom", responses: { "200": { description: "ok" } } } },
+      },
+    };
+
+    const result = postProcess(spec);
+
+    assert.deepEqual(result.paths["/"].head.responses["200"].headers["X-CSRF-Token"], {
+      schema: { type: "string" },
+    });
+  });
+
   it("should create root '/' path with GET and HEAD if it does not exist", () => {
     const spec = {
       paths: {
@@ -346,6 +374,11 @@ describe("postProcess — addHeadMethods behaviour", () => {
     assert.ok(result.paths["/$metadata"].head, "HEAD should be added");
     assert.equal(result.paths["/$metadata"].head.operationId, "metadata/head");
     assert.ok(result.paths["/$metadata"].head.responses["200"]);
+    assert.deepEqual(
+      result.paths["/$metadata"].head.responses["200"].headers["X-CSRF-Token"],
+      { schema: { type: "string" } },
+      "/$metadata HEAD 200 should also declare the X-CSRF-Token header"
+    );
   });
 
   it("should not overwrite existing GET on '/$metadata'", () => {
