@@ -12,6 +12,7 @@ const { addSapParameters, SAP_PARAMETERS } = require("./transforms/addSapParamet
 const { relaxQueryOptionSchemas, RELAXED_QUERY_OPTIONS } = require("./transforms/relaxQueryOptionSchemas.js");
 const { ensureApplyParameter, APPLY_PARAMETER } = require("./transforms/ensureApplyParameter.js");
 const { requireTopParameter, TOP_DEFAULT_PAGE_SIZE } = require("./transforms/requireTopParameter.js");
+const { collapseErrorResponses } = require("./transforms/collapseErrorResponses.js");
 const { fixDanglingRefs, PLACEHOLDER_SCHEMA } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -38,6 +39,7 @@ module.exports = {
   relaxQueryOptionSchemas,
   ensureApplyParameter,
   requireTopParameter,
+  collapseErrorResponses,
   fixDanglingRefs,
   removeDefaultServer,
   IF_MATCH_HEADER,
