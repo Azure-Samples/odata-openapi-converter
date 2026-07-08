@@ -74,7 +74,7 @@ function convertContent(content, options = {}, log = () => {}) {
   const openapiMessages = [];
 
   try {
-    openapi = csdl2openapi(csdl, { ...options, messages: openapiMessages });
+    openapi = csdl2openapi(csdl, { ...options, diagram: true, messages: openapiMessages });
   } catch (err) {
     log("  ✗ OpenAPI conversion failed.");
     const userMessage =

@@ -46,6 +46,37 @@ describe("convertContent — logger integration", () => {
   });
 });
 
+describe("convertContent — entity-relationship diagram", () => {
+  const minimalCsdl = JSON.stringify({
+    "$Version": "4.0",
+    "$EntityContainer": "TestService.Container",
+    "TestService": {
+      "$Kind": "Schema",
+      "TestEntity": {
+        "$Kind": "EntityType",
+        "$Key": ["ID"],
+        "ID": { "$Type": "Edm.Int32" },
+      },
+      "Container": {
+        "$Kind": "EntityContainer",
+        "TestSet": {
+          "$Collection": true,
+          "$Type": "TestService.TestEntity",
+        },
+      },
+    },
+  });
+
+  it("should embed the Entity Data Model diagram in info.description", () => {
+    const { openapi } = convertContent(minimalCsdl);
+    assert.ok(openapi.info.description, "info.description should exist");
+    assert.ok(
+      openapi.info.description.includes("## Entity Data Model"),
+      "info.description should contain the entity-relationship diagram section"
+    );
+  });
+});
+
 describe("convertContent — JSON CSDL input", () => {
   it("should convert minimal valid OData V4 CSDL JSON", () => {
     const json = JSON.stringify({
