@@ -33,7 +33,7 @@ async function convertHandler(request, context) {
   const responseHeaders = { "x-ms-request-id": correlationId };
 
   try {
-    const { fileName, content, serverUrl, title, apply } = await request.json();
+    const { fileName, content, serverUrl, title, description, apply } = await request.json();
 
     if (!fileName || !content) {
       return {
@@ -72,6 +72,9 @@ async function convertHandler(request, context) {
     }
     if (title) {
       options.defaultTitle = title;
+    }
+    if (description) {
+      options.defaultDescription = description;
     }
     if (apply) {
       options.includeApply = true;

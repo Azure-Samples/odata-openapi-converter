@@ -36,6 +36,12 @@ export const UI = Object.freeze({
     titleMultiFileHint:
       "Title is disabled for multiple files. Each file will use its own namespace as the title.",
     titlePlaceholder: "e.g., Business Partner API",
+    descriptionLabel: "Description (optional)",
+    descriptionHint:
+      "Custom API description shown in the generated spec (info.description). The entity-relationship diagram is still appended after it.",
+    descriptionMultiFileHint:
+      "Description is disabled for multiple files. Each file will use its own generated description.",
+    descriptionPlaceholder: "e.g., Product master data service exposed via SAP OData",
     applyLabel: "Add $apply (aggregation) query option",
     applyHint:
       "Declares the $apply query option on all collection endpoints so strict APIM validate-parameters policies accept aggregation requests. Enable only if your services support aggregation.",

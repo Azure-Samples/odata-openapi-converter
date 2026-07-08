@@ -4,6 +4,7 @@ import {
   Text,
   Button,
   Input,
+  Textarea,
   Field,
   Checkbox,
   ProgressBar,
@@ -223,6 +224,7 @@ function ConvertPage() {
   const [skippedFiles, setSkippedFiles] = useState([]);
   const [serverUrl, setServerUrl] = useState("");
   const [apiTitle, setApiTitle] = useState("");
+  const [apiDescription, setApiDescription] = useState("");
   const [includeApply, setIncludeApply] = useState(false);
   const [converting, setConverting] = useState(false);
   const [converted, setConverted] = useState(0);
@@ -280,6 +282,7 @@ function ConvertPage() {
               content: f.content,
               ...(serverUrl.trim() && { serverUrl: serverUrl.trim() }),
               ...(apiTitle.trim() && { title: apiTitle.trim() }),
+              ...(apiDescription.trim() && { description: apiDescription.trim() }),
               ...(includeApply && { apply: true }),
             }),
           });
@@ -419,6 +422,7 @@ function ConvertPage() {
     setSkippedFiles([]);
     setServerUrl("");
     setApiTitle("");
+    setApiDescription("");
     setResults(null);
     setConverted(0);
     setTotalToConvert(0);
@@ -475,6 +479,21 @@ function ConvertPage() {
           value={apiTitle}
           onChange={(e, data) => setApiTitle(data.value)}
           disabled={inputsDisabled || files.length > 1}
+        />
+      </Field>
+
+      {/* API Description input — disabled for multi-file (each file uses its own default) */}
+      <Field
+        label={UI.convert.descriptionLabel}
+        hint={files.length > 1 ? UI.convert.descriptionMultiFileHint : UI.convert.descriptionHint}
+        className={styles.fullWidth}
+      >
+        <Textarea
+          placeholder={UI.convert.descriptionPlaceholder}
+          value={apiDescription}
+          onChange={(e, data) => setApiDescription(data.value)}
+          disabled={inputsDisabled || files.length > 1}
+          resize="vertical"
         />
       </Field>
 

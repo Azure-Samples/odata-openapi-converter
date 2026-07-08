@@ -75,6 +75,18 @@ describe("convertContent — entity-relationship diagram", () => {
       "info.description should contain the entity-relationship diagram section"
     );
   });
+
+  it("should use a custom description via defaultDescription option", () => {
+    const { openapi } = convertContent(minimalCsdl, { defaultDescription: "My custom API description" });
+    assert.ok(
+      openapi.info.description.startsWith("My custom API description"),
+      "info.description should start with the custom description"
+    );
+    assert.ok(
+      openapi.info.description.includes("## Entity Data Model"),
+      "the ER diagram should still be appended after the custom description"
+    );
+  });
 });
 
 describe("convertContent — JSON CSDL input", () => {
