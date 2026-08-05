@@ -14,7 +14,6 @@ const { addSapParameters } = require("./transforms/addSapParameters.js");
 const { relaxQueryOptionSchemas } = require("./transforms/relaxQueryOptionSchemas.js");
 const { ensureApplyParameter } = require("./transforms/ensureApplyParameter.js");
 const { requireTopParameter } = require("./transforms/requireTopParameter.js");
-const { collapseErrorResponses } = require("./transforms/collapseErrorResponses.js");
 const { fixDanglingRefs } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -103,16 +102,6 @@ class PostProcessorBuilder {
    */
   withRequireTopParameter() {
     this._transforms.push(requireTopParameter);
-    return this;
-  }
-
-  /**
-   * Collapses concrete 4xx/5xx error status codes into the `4XX`/`5XX` ranges
-   * so error responses are expressed uniformly for tooling/portal clarity.
-   * @returns {PostProcessorBuilder} this (for chaining)
-   */
-  withCollapsedErrorResponses() {
-    this._transforms.push(collapseErrorResponses);
     return this;
   }
 
@@ -221,8 +210,7 @@ class PostProcessorBuilder {
       .withHeadMethods()
       .withIfMatchHeaders()
       .withSapParameters()
-      .withRelaxedQueryOptions()
-      .withCollapsedErrorResponses();
+      .withRelaxedQueryOptions();
 
     if (options.requireTop) {
       builder.withRequireTopParameter();

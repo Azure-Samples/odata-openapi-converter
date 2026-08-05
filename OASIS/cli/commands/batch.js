@@ -31,6 +31,7 @@ Flags:
   -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
   -R, --require-top          Make $top required (default 10) to guard against unbounded reads
   -B, --include-batch        Include the /$batch path (skipped by default for security)
+      --diagram              Append an entity-relationship diagram to info.description
   -r, --recursive            Search for OData files in subdirectories
   -O, --overwrite            Overwrite existing output files
   -V, --verbose              Show detailed step-by-step conversion logs
@@ -115,6 +116,7 @@ async function execute(args, ctx) {
     apply: { short: "A", type: "boolean" },
     "require-top": { short: "R", type: "boolean" },
     "include-batch": { short: "B", type: "boolean" },
+    diagram: { type: "boolean" },
     recursive: { short: "r", type: "boolean" },
     overwrite: { short: "O", type: "boolean" },
     verbose: { short: "V", type: "boolean" },
@@ -158,6 +160,9 @@ async function execute(args, ctx) {
   }
   if (flags["include-batch"]) {
     options.includeBatch = true;
+  }
+  if (flags.diagram) {
+    options.includeDiagram = true;
   }
 
   const inputDirs = positionalArgs.map((p) => path.resolve(p));

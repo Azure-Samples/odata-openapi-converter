@@ -93,10 +93,11 @@ oasis-converter info service.xml
 | `-o, --output-file <path>` | Output file path |
 | `-s, --server-url <url>` | Base URL for the generated OpenAPI spec (e.g., `https://your-sap-server.com/sap/opu/odata/sap/API_NAME`) |
 | `-T, --title <name>` | Custom title — how users find this API in the APIM workspace |
-| `-D, --description <text>` | Custom API description for the generated spec (`info.description`); the ER diagram is still appended after it |
+| `-D, --description <text>` | Custom API description for the generated spec (`info.description`) |
 | `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
 | `-R, --require-top` | Make `$top` required with a default of `10` on all collection endpoints, guarding against unbounded full-table reads (off by default) |
 | `-B, --include-batch` | Include the `/$batch` path — skipped by default because its batched contents can't be validated individually by APIM (off by default) |
+| `--diagram` | Append an entity-relationship diagram to `info.description` (off by default) |
 | `-V, --verbose` | Show detailed conversion logs |
 
 ### batch options
@@ -109,6 +110,7 @@ oasis-converter info service.xml
 | `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
 | `-R, --require-top` | Make `$top` required with a default of `10` on all collection endpoints (off by default) |
 | `-B, --include-batch` | Include the `/$batch` path, skipped by default (off by default) |
+| `--diagram` | Append an entity-relationship diagram to `info.description` (off by default) |
 | `-r, --recursive` | Search subdirectories for OData files |
 | `-O, --overwrite` | Overwrite existing output files |
 | `-V, --verbose` | Show detailed conversion logs |
@@ -130,10 +132,8 @@ The generated OpenAPI specifications include post-processing optimizations for s
 | If-Match headers | Added to PATCH, PUT, and DELETE operations for optimistic concurrency |
 | SAP parameters | Standard SAP query parameters (`sap-client`, `sap-language`, etc.) and `x-csrf-token` header |
 | Relaxed query options | `$select` / `$expand` / `$orderby` schemas are converted from array+enum to free-form `string`, so nested / wildcard / combined OData values pass strict APIM `validate-parameters` policies |
-| Range error responses | Concrete `4xx` / `5xx` error status codes are collapsed into the `4XX` / `5XX` ranges for uniform tooling / portal handling |
 | Field descriptions | SAP field captions and tooltips become OpenAPI `title` / `description` for both V2 (`sap:label` / `sap:quickinfo`) and V4 (`Common.Label` / `Common.QuickInfo`) |
 | Malformed-XML repair | Unescaped `&`, `<`, `>` inside attribute values (which SAP sometimes exports) are escaped in a pre-parse step so otherwise-invalid metadata still converts |
-| Entity-relationship diagram | An "Entity Data Model" section with an ER diagram is appended to `info.description` for API-catalog documentation |
 | Dangling `$ref` fix | Placeholder schemas created for unresolved component references |
 | Localhost removal | Default `localhost` server URLs are stripped so APIM auto-configures the backend |
 
@@ -146,6 +146,7 @@ These transforms run automatically on every conversion — no configuration need
 | `$apply` aggregation | `-A, --apply` | Add $apply (aggregation) query option | Declares `$apply` on all collection endpoints so strict APIM policies accept aggregation requests. Enable only if your services support aggregation. |
 | Required `$top` | `-R, --require-top` | Require $top (default 10) | Makes `$top` required with a default of `10` on all collection endpoints, guarding against unbounded full-table reads. |
 | `/$batch` endpoint | `-B, --include-batch` | Include the /$batch endpoint | Includes the `/$batch` path, which is **skipped by default** because batched request contents cannot be validated individually by APIM. Enable only when batch access is deliberately granted. |
+| Entity-relationship diagram | `--diagram` | Include entity-relationship diagram | Appends an externally hosted ER diagram to `info.description`. Disabled by default to keep APIM imports smaller. |
 
 ---
 

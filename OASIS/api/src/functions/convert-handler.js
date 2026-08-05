@@ -33,7 +33,7 @@ async function convertHandler(request, context) {
   const responseHeaders = { "x-ms-request-id": correlationId };
 
   try {
-    const { fileName, content, serverUrl, title, description, apply, requireTop, includeBatch } = await request.json();
+    const { fileName, content, serverUrl, title, description, apply, requireTop, includeBatch, diagram } = await request.json();
 
     if (!fileName || !content) {
       return {
@@ -84,6 +84,9 @@ async function convertHandler(request, context) {
     }
     if (includeBatch) {
       options.includeBatch = true;
+    }
+    if (diagram) {
+      options.includeDiagram = true;
     }
 
     const outputName = fileName.replace(INPUT_EXTENSION_RE, "-openapi.json");

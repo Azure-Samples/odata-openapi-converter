@@ -77,6 +77,22 @@ describe("convertHandler — success", () => {
 
     assert.equal(response.headers["x-ms-request-id"], correlationId);
   });
+
+  it("should include an ER diagram only when requested", async () => {
+    if (!sampleAvailable) return;
+
+    const withoutDiagram = await convertHandler(
+      mockRequest({ fileName: SAMPLE_FILE, content: sampleXml }),
+      mockContext
+    );
+    const withDiagram = await convertHandler(
+      mockRequest({ fileName: SAMPLE_FILE, content: sampleXml, diagram: true }),
+      mockContext
+    );
+
+    assert.ok(!withoutDiagram.jsonBody.data.info.description.includes("## Entity Data Model"));
+    assert.ok(withDiagram.jsonBody.data.info.description.includes("## Entity Data Model"));
+  });
 });
 
 // ── convertHandler — validation ───────────────────────────────

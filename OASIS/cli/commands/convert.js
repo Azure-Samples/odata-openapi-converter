@@ -34,6 +34,7 @@ Flags:
   -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
   -R, --require-top          Make $top required (default 10) to guard against unbounded reads
   -B, --include-batch        Include the /$batch path (skipped by default for security)
+      --diagram              Append an entity-relationship diagram to info.description
   -V, --verbose              Show detailed step-by-step conversion logs
   -h, --help                 Show this help message
 
@@ -66,6 +67,7 @@ async function execute(args, ctx) {
     apply: { short: "A", type: "boolean" },
     "require-top": { short: "R", type: "boolean" },
     "include-batch": { short: "B", type: "boolean" },
+    diagram: { type: "boolean" },
     verbose: { short: "V", type: "boolean" },
     help: { short: "h", type: "boolean" },
   });
@@ -138,6 +140,9 @@ async function execute(args, ctx) {
   }
   if (flags["include-batch"]) {
     options.includeBatch = true;
+  }
+  if (flags.diagram) {
+    options.includeDiagram = true;
   }
 
   try {

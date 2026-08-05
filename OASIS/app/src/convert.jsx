@@ -235,6 +235,7 @@ function ConvertPage() {
   const [includeApply, setIncludeApply] = useState(false);
   const [requireTop, setRequireTop] = useState(false);
   const [includeBatch, setIncludeBatch] = useState(false);
+  const [includeDiagram, setIncludeDiagram] = useState(false);
   const [converting, setConverting] = useState(false);
   const [converted, setConverted] = useState(0);
   const [totalToConvert, setTotalToConvert] = useState(0);
@@ -295,6 +296,7 @@ function ConvertPage() {
               ...(includeApply && { apply: true }),
               ...(requireTop && { requireTop: true }),
               ...(includeBatch && { includeBatch: true }),
+              ...(includeDiagram && { diagram: true }),
             }),
           });
 
@@ -434,6 +436,10 @@ function ConvertPage() {
     setServerUrl("");
     setApiTitle("");
     setApiDescription("");
+    setIncludeApply(false);
+    setRequireTop(false);
+    setIncludeBatch(false);
+    setIncludeDiagram(false);
     setResults(null);
     setConverted(0);
     setTotalToConvert(0);
@@ -543,6 +549,19 @@ function ConvertPage() {
           label={UI.convert.includeBatchLabel}
           checked={includeBatch}
           onChange={(e, data) => setIncludeBatch(!!data.checked)}
+          disabled={inputsDisabled}
+        />
+      </Field>
+
+      {/* Entity-relationship diagram toggle */}
+      <Field
+        hint={UI.convert.diagramHint}
+        className={styles.checkboxField}
+      >
+        <Checkbox
+          label={UI.convert.diagramLabel}
+          checked={includeDiagram}
+          onChange={(e, data) => setIncludeDiagram(!!data.checked)}
           disabled={inputsDisabled}
         />
       </Field>

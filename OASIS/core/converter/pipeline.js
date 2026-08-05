@@ -76,7 +76,7 @@ function convertContent(content, options = {}, log = () => {}) {
   try {
     openapi = csdl2openapi(csdl, {
       ...options,
-      diagram: true,
+      diagram: options.includeDiagram === true,
       skipBatchPath: !options.includeBatch,
       messages: openapiMessages,
     });

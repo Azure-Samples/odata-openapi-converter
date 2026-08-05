@@ -67,17 +67,25 @@ describe("convertContent — entity-relationship diagram", () => {
     },
   });
 
-  it("should embed the Entity Data Model diagram in info.description", () => {
+  it("should omit the Entity Data Model diagram by default", () => {
     const { openapi } = convertContent(minimalCsdl);
     assert.ok(openapi.info.description, "info.description should exist");
     assert.ok(
-      openapi.info.description.includes("## Entity Data Model"),
-      "info.description should contain the entity-relationship diagram section"
+      !openapi.info.description.includes("## Entity Data Model"),
+      "info.description should not contain the entity-relationship diagram section"
     );
   });
 
+  it("should embed the Entity Data Model diagram when includeDiagram is set", () => {
+    const { openapi } = convertContent(minimalCsdl, { includeDiagram: true });
+    assert.ok(openapi.info.description.includes("## Entity Data Model"));
+  });
+
   it("should use a custom description via defaultDescription option", () => {
-    const { openapi } = convertContent(minimalCsdl, { defaultDescription: "My custom API description" });
+    const { openapi } = convertContent(minimalCsdl, {
+      defaultDescription: "My custom API description",
+      includeDiagram: true,
+    });
     assert.ok(
       openapi.info.description.startsWith("My custom API description"),
       "info.description should start with the custom description"

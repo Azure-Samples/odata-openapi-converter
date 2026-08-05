@@ -38,7 +38,7 @@ export const UI = Object.freeze({
     titlePlaceholder: "e.g., My API",
     descriptionLabel: "Description (optional)",
     descriptionHint:
-      "Shown as the API description (info.description). The entity-relationship diagram is appended after it.",
+      "Shown as the API description (info.description).",
     descriptionMultiFileHint:
       "Disabled for multiple files. Each file uses its own generated description.",
     descriptionPlaceholder: "e.g., Short description of the API",
@@ -51,6 +51,9 @@ export const UI = Object.freeze({
     includeBatchLabel: "Include the /$batch endpoint",
     includeBatchHint:
       "Includes the /$batch endpoint, skipped by default because APIM can't validate batched requests individually. Enable only if you allow batch access.",
+    diagramLabel: "Include entity-relationship diagram",
+    diagramHint:
+      "Appends an ER diagram to the API description. Disabled by default to keep APIM imports smaller.",
     convertBtn: "Convert",
     convertingBtn: "Converting…",
     resetBtn: "Reset",

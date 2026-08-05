@@ -41,14 +41,15 @@ odata-converter convert <input-file> [options]
 **Options:**
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `-o, --output-file <path>` | Output file path (overrides positional output; defaults to `<input>-openapi.json`) |
 | `-s, --server-url <url>` | Base URL for the generated OpenAPI spec (e.g., `https://your-server.com/sap/opu/odata/sap/API_NAME`) |
 | `-T, --title <title>` | Custom title for `openapi.info.title` (how users find this API in the APIM workspace) |
-| `-D, --description <text>` | Custom API description (`info.description`); the ER diagram is still appended after it |
+| `-D, --description <text>` | Custom API description (`info.description`) |
 | `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
 | `-R, --require-top` | Make `$top` required with a default of `10` on all collection endpoints (off by default) |
 | `-B, --include-batch` | Include the `/$batch` path, skipped by default for security (off by default) |
+| `--diagram` | Append an entity-relationship diagram to `info.description` (off by default) |
 | `-V, --verbose` | Show detailed step-by-step conversion logs |
 
 **Example:**
@@ -69,13 +70,14 @@ odata-converter batch <input-folder> [options]
 **Options:**
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `-t, --target-dir <path>` | Output directory (defaults to `./output`) |
 | `-s, --server-url <url>` | Base URL applied to all files |
 | `-c, --concurrency <n>` | Number of parallel conversions (default: auto-detect CPU cores, max 8) |
 | `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
 | `-R, --require-top` | Make `$top` required with a default of `10` (off by default) |
 | `-B, --include-batch` | Include the `/$batch` path, skipped by default (off by default) |
+| `--diagram` | Append an entity-relationship diagram to `info.description` (off by default) |
 | `-r, --recursive` | Search subdirectories for OData files |
 | `-O, --overwrite` | Overwrite existing output files |
 | `-V, --verbose` | Show detailed step-by-step conversion logs |
@@ -106,6 +108,7 @@ The web interface provides drag-and-drop conversion with the same engine:
    - **Add $apply (aggregation) query option** — same as `-A, --apply`
    - **Require $top (default 10)** — same as `-R, --require-top`
    - **Include the /$batch endpoint** — same as `-B, --include-batch` (skipped by default)
+   - **Include entity-relationship diagram** — same as `--diagram` (off by default)
 4. Download the converted OpenAPI 3.0 JSON file(s), or a ZIP for multiple files
 
 Each field and toggle has an inline hint in the UI explaining its effect.
@@ -127,13 +130,12 @@ The converter adds SAP Gateway compatibility on top of the standard OData→Open
 - **x-csrf-token** header on write operations
 - **If-Match** header on PUT/PATCH/DELETE operations
 - **Relaxed query options**: `$select`/`$expand`/`$orderby` schemas are converted from array+enum to free-form `string`, so nested/wildcard/combined OData values pass strict APIM `validate-parameters` policies
-- **Range error responses**: concrete `4xx`/`5xx` error status codes (emitted when the metadata declares `ErrorResponses` capability annotations) are collapsed into the `4XX`/`5XX` ranges, so error responses are expressed uniformly for tooling/portal clarity
 - **Optional `$apply`** (`-A`/`--apply`): declares the `$apply` aggregation query option on all collection endpoints so strict APIM policies accept aggregation requests (off by default)
 - **Optional required `$top`** (`-R`/`--require-top`): makes `$top` required with a default of `10` on all collection endpoints, guarding against unbounded full-table reads (off by default)
 - **Optional `/$batch`** (`-B`/`--include-batch`): the `/$batch` endpoint is skipped by default because batched request contents can't be individually validated by APIM; pass this flag to include it when batch access is deliberately granted
 - **Field descriptions**: SAP field captions and tooltips become OpenAPI `title`/`description` for both OData V2 (`sap:label`/`sap:quickinfo`) and V4 (`Common.Label`/`Common.QuickInfo`), which the upstream libraries otherwise drop or mislabel
 - **Malformed-XML repair**: SAP production systems sometimes export unescaped `&`, `<`, `>` inside attribute values (e.g. `sap:label="x & y"`), which makes the metadata invalid XML and unconvertible; the converter escapes these stray characters as a pre-parse step so the file can be processed
-- **Entity-relationship diagram**: an "Entity Data Model" section with an ER diagram is added to the spec's `info.description` for use in API-catalog documentation
+- **Optional entity-relationship diagram** (`--diagram`): appends an "Entity Data Model" section to `info.description` for API-catalog documentation (off by default)
 - **Server URL** override (replaces localhost default)
 
 ## Third-Party Libraries
