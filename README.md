@@ -17,6 +17,8 @@ Use the hosted converter — no install required:
 
 Drag and drop one or more OData metadata files (or an entire folder), convert, and download the results as a ZIP.
 
+Before converting, you can optionally set a **Server URL**, **Title**, and **Description**, and enable four toggles that mirror the CLI flags: **Add $apply (aggregation) query option**, **Require $top (default 10)**, **Include the /$batch endpoint**, and **Include entity-relationship diagram**. Each toggle has an inline explanation in the UI — see [APIM-Ready Output](#apim-ready-output) for details.
+
 ---
 
 ## Supported Formats
@@ -53,10 +55,13 @@ Pre-built binaries (no Node.js required) are available on the
 oasis-converter convert service.xml
 
 # Convert with custom title and server URL
-oasis-converter convert -T "Business Partner API" -s https://myserver.com/sap/opu/odata/sap/API_BUSINESS_PARTNER service.xml
+oasis-converter convert -T "My API" -s https://your-server.com/sap/opu/odata/sap/API_NAME service.xml
 
 # Convert with explicit output flag
 oasis-converter convert --output-file api.json service.edmx
+
+# Convert with optional APIM hardening: required $top and $apply aggregation
+oasis-converter convert -R -A service.xml
 
 # Batch-convert all files in a folder
 oasis-converter batch ./input-folder
@@ -65,7 +70,7 @@ oasis-converter batch ./input-folder
 oasis-converter batch -r --target-dir ./output ./dir1 ./dir2
 
 # Batch-convert with shared server URL
-oasis-converter batch -s https://myserver.com/sap/opu/odata/sap/ -r ./input
+oasis-converter batch -s https://your-server.com/sap/opu/odata/sap/ -r ./input
 
 # View metadata about an OData file
 oasis-converter info service.xml
@@ -88,6 +93,11 @@ oasis-converter info service.xml
 | `-o, --output-file <path>` | Output file path |
 | `-s, --server-url <url>` | Base URL for the generated OpenAPI spec (e.g., `https://your-sap-server.com/sap/opu/odata/sap/API_NAME`) |
 | `-T, --title <name>` | Custom title — how users find this API in the APIM workspace |
+| `-D, --description <text>` | Custom API description for the generated spec (`info.description`) |
+| `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
+| `-R, --require-top` | Make `$top` required with a default of `10` on all collection endpoints, guarding against unbounded full-table reads (off by default) |
+| `-B, --include-batch` | Include the `/$batch` path — skipped by default because its batched contents can't be validated individually by APIM (off by default) |
+| `--diagram` | Append an entity-relationship diagram to `info.description` (off by default) |
 | `-V, --verbose` | Show detailed conversion logs |
 
 ### batch options
@@ -97,28 +107,46 @@ oasis-converter info service.xml
 | `-t, --target-dir <path>` | Output directory for converted files |
 | `-s, --server-url <url>` | Base URL shared across all files |
 | `-c, --concurrency <n>` | Maximum files to process in parallel (default: min(CPU count, 8)) |
+| `-A, --apply` | Add the `$apply` (aggregation) query option to all collection endpoints (off by default) |
+| `-R, --require-top` | Make `$top` required with a default of `10` on all collection endpoints (off by default) |
+| `-B, --include-batch` | Include the `/$batch` path, skipped by default (off by default) |
+| `--diagram` | Append an entity-relationship diagram to `info.description` (off by default) |
 | `-r, --recursive` | Search subdirectories for OData files |
 | `-O, --overwrite` | Overwrite existing output files |
 | `-V, --verbose` | Show detailed conversion logs |
 
-Use `oasis-converter <command> --help` for full details on any command.
+The `-A`, `-R`, `-B`, and `--diagram` flags mirror the **$apply**, **Require $top**, **Include /$batch**, and **Include entity-relationship diagram** checkboxes in the [web app](#web-app). Use `oasis-converter <command> --help` for full details on any command.
 
 ---
 
 ## APIM-Ready Output
 
-The generated OpenAPI specifications include post-processing optimizations for seamless Azure API Management import:
+The generated OpenAPI specifications include post-processing optimizations for seamless Azure API Management import.
+
+### Always applied
 
 | Enhancement | Description |
 |-------------|-------------|
 | PUT methods | Added alongside PATCH for all updatable entities (SAP OData supports both) |
-| HEAD methods | Root (`/`) and metadata (`/$metadata`) endpoints for CSRF token fetching |
+| HEAD methods | Root (`/`) and metadata (`/$metadata`) endpoints for CSRF token fetching; both `200` responses declare the `X-CSRF-Token` response header so consumers can see where SAP returns the token |
 | If-Match headers | Added to PATCH, PUT, and DELETE operations for optimistic concurrency |
 | SAP parameters | Standard SAP query parameters (`sap-client`, `sap-language`, etc.) and `x-csrf-token` header |
+| Relaxed query options | `$select` / `$expand` / `$orderby` schemas are converted from array+enum to free-form `string`, so nested / wildcard / combined OData values pass strict APIM `validate-parameters` policies |
+| Field descriptions | SAP field captions and tooltips become OpenAPI `title` / `description` for both V2 (`sap:label` / `sap:quickinfo`) and V4 (`Common.Label` / `Common.QuickInfo`) |
+| Malformed-XML repair | Unescaped `&`, `<`, `>` inside attribute values (which SAP sometimes exports) are escaped in a pre-parse step so otherwise-invalid metadata still converts |
 | Dangling `$ref` fix | Placeholder schemas created for unresolved component references |
 | Localhost removal | Default `localhost` server URLs are stripped so APIM auto-configures the backend |
 
 These transforms run automatically on every conversion — no configuration needed.
+
+### Opt-in (CLI flags / web-app toggles)
+
+| Enhancement | CLI flag | Web-app toggle | Description |
+|-------------|----------|----------------|-------------|
+| `$apply` aggregation | `-A, --apply` | Add $apply (aggregation) query option | Declares `$apply` on all collection endpoints so strict APIM policies accept aggregation requests. Enable only if your services support aggregation. |
+| Required `$top` | `-R, --require-top` | Require $top (default 10) | Makes `$top` required with a default of `10` on all collection endpoints, guarding against unbounded full-table reads. |
+| `/$batch` endpoint | `-B, --include-batch` | Include the /$batch endpoint | Includes the `/$batch` path, which is **skipped by default** because batched request contents cannot be validated individually by APIM. Enable only when batch access is deliberately granted. |
+| Entity-relationship diagram | `--diagram` | Include entity-relationship diagram | Appends an externally hosted ER diagram to `info.description`. Disabled by default to keep APIM imports smaller. |
 
 ---
 

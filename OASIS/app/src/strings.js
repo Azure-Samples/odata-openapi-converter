@@ -32,10 +32,28 @@ export const UI = Object.freeze({
     serverUrlPlaceholder: "https://your-sap-server.com/sap/opu/odata/sap/API_NAME",
     titleLabel: "Title (optional)",
     titleHint:
-      "Custom title is how users find this API in the APIM workspace",
+      "This title is used to find the API in the APIM workspace.",
     titleMultiFileHint:
-      "Title is disabled for multiple files. Each file will use its own namespace as the title.",
-    titlePlaceholder: "e.g., Business Partner API",
+      "Disabled for multiple files. Each file uses its own namespace as the title.",
+    titlePlaceholder: "e.g., My API",
+    descriptionLabel: "Description (optional)",
+    descriptionHint:
+      "Shown as the API description (info.description).",
+    descriptionMultiFileHint:
+      "Disabled for multiple files. Each file uses its own generated description.",
+    descriptionPlaceholder: "e.g., Short description of the API",
+    applyLabel: "Add $apply (aggregation) query option",
+    applyHint:
+      "Allows aggregation queries ($apply) on collection endpoints. Enable only if your services support aggregation.",
+    requireTopLabel: "Require $top (default 10)",
+    requireTopHint:
+      "Requires $top (default 10) on collection endpoints to prevent unbounded full-table reads.",
+    includeBatchLabel: "Include the /$batch endpoint",
+    includeBatchHint:
+      "Includes the /$batch endpoint, skipped by default because APIM can't validate batched requests individually. Enable only if you allow batch access.",
+    diagramLabel: "Include entity-relationship diagram",
+    diagramHint:
+      "Appends an ER diagram to the API description. Disabled by default to keep APIM imports smaller.",
     convertBtn: "Convert",
     convertingBtn: "Converting…",
     resetBtn: "Reset",

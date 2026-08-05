@@ -33,7 +33,7 @@ async function convertHandler(request, context) {
   const responseHeaders = { "x-ms-request-id": correlationId };
 
   try {
-    const { fileName, content, serverUrl, title } = await request.json();
+    const { fileName, content, serverUrl, title, description, apply, requireTop, includeBatch, diagram } = await request.json();
 
     if (!fileName || !content) {
       return {
@@ -70,8 +70,23 @@ async function convertHandler(request, context) {
         };
       }
     }
-    if (title) {
-      options.defaultTitle = title;
+    if (typeof title === "string" && title.trim()) {
+      options.defaultTitle = title.trim();
+    }
+    if (typeof description === "string" && description.trim()) {
+      options.defaultDescription = description.trim();
+    }
+    if (apply === true) {
+      options.includeApply = true;
+    }
+    if (requireTop === true) {
+      options.requireTop = true;
+    }
+    if (includeBatch === true) {
+      options.includeBatch = true;
+    }
+    if (diagram === true) {
+      options.includeDiagram = true;
     }
 
     const outputName = fileName.replace(INPUT_EXTENSION_RE, "-openapi.json");

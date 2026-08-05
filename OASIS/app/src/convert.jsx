@@ -4,7 +4,9 @@ import {
   Text,
   Button,
   Input,
+  Textarea,
   Field,
+  Checkbox,
   ProgressBar,
   Accordion,
   AccordionItem,
@@ -78,6 +80,13 @@ const useStyles = makeStyles({
     alignSelf: "stretch",
     "& .fui-Input::after": {
       borderBottomColor: tokens.colorNeutralForeground1,
+    },
+  },
+  checkboxField: {
+    alignSelf: "stretch",
+    "& .fui-Field__hint": {
+      paddingLeft: `calc(16px + 2 * ${tokens.spacingHorizontalS} + ${tokens.spacingHorizontalXS})`,
+      marginTop: tokens.spacingVerticalXXS,
     },
   },
   skippedNotice: {
@@ -222,6 +231,11 @@ function ConvertPage() {
   const [skippedFiles, setSkippedFiles] = useState([]);
   const [serverUrl, setServerUrl] = useState("");
   const [apiTitle, setApiTitle] = useState("");
+  const [apiDescription, setApiDescription] = useState("");
+  const [includeApply, setIncludeApply] = useState(false);
+  const [requireTop, setRequireTop] = useState(false);
+  const [includeBatch, setIncludeBatch] = useState(false);
+  const [includeDiagram, setIncludeDiagram] = useState(false);
   const [converting, setConverting] = useState(false);
   const [converted, setConverted] = useState(0);
   const [totalToConvert, setTotalToConvert] = useState(0);
@@ -277,7 +291,12 @@ function ConvertPage() {
               fileName: f.name,
               content: f.content,
               ...(serverUrl.trim() && { serverUrl: serverUrl.trim() }),
-              ...(apiTitle.trim() && { title: apiTitle.trim() }),
+              ...(files.length === 1 && apiTitle.trim() && { title: apiTitle.trim() }),
+              ...(files.length === 1 && apiDescription.trim() && { description: apiDescription.trim() }),
+              ...(includeApply && { apply: true }),
+              ...(requireTop && { requireTop: true }),
+              ...(includeBatch && { includeBatch: true }),
+              ...(includeDiagram && { diagram: true }),
             }),
           });
 
@@ -416,6 +435,11 @@ function ConvertPage() {
     setSkippedFiles([]);
     setServerUrl("");
     setApiTitle("");
+    setApiDescription("");
+    setIncludeApply(false);
+    setRequireTop(false);
+    setIncludeBatch(false);
+    setIncludeDiagram(false);
     setResults(null);
     setConverted(0);
     setTotalToConvert(0);
@@ -472,6 +496,73 @@ function ConvertPage() {
           value={apiTitle}
           onChange={(e, data) => setApiTitle(data.value)}
           disabled={inputsDisabled || files.length > 1}
+        />
+      </Field>
+
+      {/* API Description input — disabled for multi-file (each file uses its own default) */}
+      <Field
+        label={UI.convert.descriptionLabel}
+        hint={files.length > 1 ? UI.convert.descriptionMultiFileHint : UI.convert.descriptionHint}
+        className={styles.fullWidth}
+      >
+        <Textarea
+          placeholder={UI.convert.descriptionPlaceholder}
+          value={apiDescription}
+          onChange={(e, data) => setApiDescription(data.value)}
+          disabled={inputsDisabled || files.length > 1}
+          resize="vertical"
+        />
+      </Field>
+
+      {/* $apply (aggregation) toggle */}
+      <Field
+        hint={UI.convert.applyHint}
+        className={styles.checkboxField}
+      >
+        <Checkbox
+          label={UI.convert.applyLabel}
+          checked={includeApply}
+          onChange={(e, data) => setIncludeApply(!!data.checked)}
+          disabled={inputsDisabled}
+        />
+      </Field>
+
+      {/* $top guard toggle */}
+      <Field
+        hint={UI.convert.requireTopHint}
+        className={styles.checkboxField}
+      >
+        <Checkbox
+          label={UI.convert.requireTopLabel}
+          checked={requireTop}
+          onChange={(e, data) => setRequireTop(!!data.checked)}
+          disabled={inputsDisabled}
+        />
+      </Field>
+
+      {/* /$batch inclusion toggle */}
+      <Field
+        hint={UI.convert.includeBatchHint}
+        className={styles.checkboxField}
+      >
+        <Checkbox
+          label={UI.convert.includeBatchLabel}
+          checked={includeBatch}
+          onChange={(e, data) => setIncludeBatch(!!data.checked)}
+          disabled={inputsDisabled}
+        />
+      </Field>
+
+      {/* Entity-relationship diagram toggle */}
+      <Field
+        hint={UI.convert.diagramHint}
+        className={styles.checkboxField}
+      >
+        <Checkbox
+          label={UI.convert.diagramLabel}
+          checked={includeDiagram}
+          onChange={(e, data) => setIncludeDiagram(!!data.checked)}
+          disabled={inputsDisabled}
         />
       </Field>
 

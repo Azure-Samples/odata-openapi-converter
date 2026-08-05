@@ -28,6 +28,10 @@ Flags:
   -t, --target-dir   string  Output directory for converted files
   -s, --server-url   string  The base URL for the generated OpenAPI spec, shared across all files (e.g., https://your-sap-server.com/sap/opu/odata/sap/)
   -c, --concurrency  string  Maximum files to process in parallel (default: min(cpu count, 8))
+  -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
+  -R, --require-top          Make $top required (default 10) to guard against unbounded reads
+  -B, --include-batch        Include the /$batch path (skipped by default for security)
+      --diagram              Append an entity-relationship diagram to info.description
   -r, --recursive            Search for OData files in subdirectories
   -O, --overwrite            Overwrite existing output files
   -V, --verbose              Show detailed step-by-step conversion logs
@@ -36,7 +40,7 @@ Flags:
 Examples:
   odata-converter batch ./input
   odata-converter batch -t ./output ./input
-  odata-converter batch -s https://myserver.com/sap/opu/odata/sap/ -r ./input
+  odata-converter batch -s https://your-server.com/sap/opu/odata/sap/ -r ./input
   odata-converter batch -t ./output -r ./input1 ./input2
 `);
 }
@@ -109,6 +113,10 @@ async function execute(args, ctx) {
     "target-dir": { short: "t", type: "string" },
     "server-url": { short: "s", type: "string" },
     concurrency: { short: "c", type: "string" },
+    apply: { short: "A", type: "boolean" },
+    "require-top": { short: "R", type: "boolean" },
+    "include-batch": { short: "B", type: "boolean" },
+    diagram: { type: "boolean" },
     recursive: { short: "r", type: "boolean" },
     overwrite: { short: "O", type: "boolean" },
     verbose: { short: "V", type: "boolean" },
@@ -140,9 +148,21 @@ async function execute(args, ctx) {
       options.host = url.host;
       options.basePath = url.pathname || "/";
     } catch {
-      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://myserver.com/sap/opu/odata/sap/).`);
+      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://your-server.com/sap/opu/odata/sap/).`);
       process.exit(EXIT_CODE.ERROR);
     }
+  }
+  if (flags.apply) {
+    options.includeApply = true;
+  }
+  if (flags["require-top"]) {
+    options.requireTop = true;
+  }
+  if (flags["include-batch"]) {
+    options.includeBatch = true;
+  }
+  if (flags.diagram) {
+    options.includeDiagram = true;
   }
 
   const inputDirs = positionalArgs.map((p) => path.resolve(p));

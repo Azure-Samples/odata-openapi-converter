@@ -11,6 +11,9 @@ const { addPutMethods } = require("./transforms/addPutMethods.js");
 const { addHeadMethods } = require("./transforms/addHeadMethods.js");
 const { addIfMatchHeaders } = require("./transforms/addIfMatchHeaders.js");
 const { addSapParameters } = require("./transforms/addSapParameters.js");
+const { relaxQueryOptionSchemas } = require("./transforms/relaxQueryOptionSchemas.js");
+const { ensureApplyParameter } = require("./transforms/ensureApplyParameter.js");
+const { requireTopParameter } = require("./transforms/requireTopParameter.js");
 const { fixDanglingRefs } = require("./transforms/fixDanglingRefs.js");
 const { removeDefaultServer } = require("./transforms/removeDefaultServer.js");
 
@@ -69,6 +72,36 @@ class PostProcessorBuilder {
    */
   withSapParameters() {
     this._transforms.push(addSapParameters);
+    return this;
+  }
+
+  /**
+   * Relaxes $select/$expand/$orderby schemas from array+enum to free-form
+   * string so APIM accepts nested/wildcard/combined OData query values.
+   * @returns {PostProcessorBuilder} this (for chaining)
+   */
+  withRelaxedQueryOptions() {
+    this._transforms.push(relaxQueryOptionSchemas);
+    return this;
+  }
+
+  /**
+   * Injects the $apply query option into every collection-GET operation so it
+   * passes strict APIM validate-parameters policies. Opt-in.
+   * @returns {PostProcessorBuilder} this (for chaining)
+   */
+  withApplyParameter() {
+    this._transforms.push(ensureApplyParameter);
+    return this;
+  }
+
+  /**
+   * Makes the shared $top query option required with a default page size, as a
+   * guard against unbounded full-table reads. Opt-in.
+   * @returns {PostProcessorBuilder} this (for chaining)
+   */
+  withRequireTopParameter() {
+    this._transforms.push(requireTopParameter);
     return this;
   }
 
@@ -164,16 +197,30 @@ class PostProcessorBuilder {
    * Factory method: creates a builder pre-configured with all standard transforms.
    * This is the default post-processing pipeline matching existing behavior.
    *
+   * @param {object} [options={}] - Post-processing options
+   * @param {boolean} [options.includeApply=false] - When true, inject the $apply
+   *   query option into every collection-GET (opt-in; off by default).
+   * @param {boolean} [options.requireTop=false] - When true, make the shared
+   *   $top query option required with a default page size (opt-in; off by default).
    * @returns {PostProcessorBuilder} Builder with all standard transforms
    */
-  static standard() {
-    return new PostProcessorBuilder()
+  static standard(options = {}) {
+    const builder = new PostProcessorBuilder()
       .withPutMethods()
       .withHeadMethods()
       .withIfMatchHeaders()
       .withSapParameters()
-      .withFixDanglingRefs()
-      .withRemoveDefaultServer();
+      .withRelaxedQueryOptions();
+
+    if (options.requireTop) {
+      builder.withRequireTopParameter();
+    }
+
+    if (options.includeApply) {
+      builder.withApplyParameter();
+    }
+
+    return builder.withFixDanglingRefs().withRemoveDefaultServer();
   }
 }
 

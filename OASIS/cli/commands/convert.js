@@ -30,14 +30,23 @@ Flags:
   -o, --output-file string   Output file path (overrides positional OUTPUT_FILE)
   -s, --server-url  string   The base URL for the generated OpenAPI spec (e.g., https://your-sap-server.com/sap/opu/odata/sap/API_NAME)
   -T, --title       string   Custom title is how users find this API in the APIM workspace
+  -D, --description string   Custom API description for the generated spec (info.description)
+  -A, --apply                Add the $apply (aggregation) query option to all collection endpoints
+  -R, --require-top          Make $top required (default 10) to guard against unbounded reads
+  -B, --include-batch        Include the /$batch path (skipped by default for security)
+      --diagram              Append an entity-relationship diagram to info.description
   -V, --verbose              Show detailed step-by-step conversion logs
   -h, --help                 Show this help message
 
 Examples:
   odata-converter convert input.xml
   odata-converter convert input.xml output.json
-  odata-converter convert -T "Business Partner API" input.xml
-  odata-converter convert -s https://myserver.com/sap/opu/odata/sap/API_SALES_ORDER input.xml
+  odata-converter convert -T "My API" input.xml
+  odata-converter convert -D "My API description" input.xml
+  odata-converter convert -A input.xml
+  odata-converter convert -R input.xml
+  odata-converter convert -B input.xml
+  odata-converter convert -s https://your-server.com/sap/opu/odata/sap/API_NAME input.xml
   odata-converter convert -o output.json input.xml
   odata-converter convert -V input.xml output.json
 `);
@@ -54,6 +63,11 @@ async function execute(args, ctx) {
     "output-file": { short: "o", type: "string" },
     "server-url": { short: "s", type: "string" },
     title: { short: "T", type: "string" },
+    description: { short: "D", type: "string" },
+    apply: { short: "A", type: "boolean" },
+    "require-top": { short: "R", type: "boolean" },
+    "include-batch": { short: "B", type: "boolean" },
+    diagram: { type: "boolean" },
     verbose: { short: "V", type: "boolean" },
     help: { short: "h", type: "boolean" },
   });
@@ -108,12 +122,27 @@ async function execute(args, ctx) {
       options.host = url.host;
       options.basePath = url.pathname || "/";
     } catch {
-      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://myserver.com/sap/opu/odata/sap/API_NAME).`);
+      console.error(`Error: Invalid --server-url. Must be a valid URL (e.g., https://your-server.com/sap/opu/odata/sap/API_NAME).`);
       process.exit(EXIT_CODE.ERROR);
     }
   }
   if (flags.title) {
     options.defaultTitle = flags.title;
+  }
+  if (flags.description) {
+    options.defaultDescription = flags.description;
+  }
+  if (flags.apply) {
+    options.includeApply = true;
+  }
+  if (flags["require-top"]) {
+    options.requireTop = true;
+  }
+  if (flags["include-batch"]) {
+    options.includeBatch = true;
+  }
+  if (flags.diagram) {
+    options.includeDiagram = true;
   }
 
   try {

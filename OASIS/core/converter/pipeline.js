@@ -12,16 +12,18 @@ const fs = require("fs");
 const path = require("path");
 const { csdl2openapi } = require("odata-openapi");
 
-const { OPENAPI_OUTPUT_SUFFIX, INPUT_EXTENSION_RE, SUPPRESSED_WARNING_PATTERNS } = require("../constants.js");
+const { OPENAPI_OUTPUT_SUFFIX, INPUT_EXTENSION_RE, SUPPRESSED_WARNING_PATTERNS, BOM } = require("../constants.js");
 const { OpenApiConversionError, PostProcessingError, FileIOError } = require("../errors.js");
 const { detectFormat, validateExtension, isSupportedFile } = require("../validation/index.js");
 const { createConverter } = require("./ConverterFactory.js");
+const { escapeStrayXmlChars } = require("./escapeXml.js");
+const { enrichDescriptions } = require("./enrichDescriptions.js");
 const { postProcess } = require("../postprocessing/index.js");
 
 /**
  * Extracts the API type/name from the parsed CSDL JSON.
  * In OData CSDL JSON, schema namespaces are top-level keys (not prefixed with $).
- * E.g., "API_BUSINESS_PARTNER" or "com.sap.gateway.srvd_a2x.api_businesspartner"
+ * E.g., "API_NAME" or "com.example.service.api_name"
  *
  * @param {object} csdl - Parsed CSDL JSON object
  * @returns {string} The primary schema namespace, or "unknown"
@@ -43,20 +45,28 @@ function extractApiType(csdl) {
  * @throws {InvalidContentError|XmlParseError|JsonParseError|CsdlParseError|OpenApiConversionError|PostProcessingError}
  */
 function convertContent(content, options = {}, log = () => {}) {
+  const looksLikeXml =
+    typeof content === "string" && content.replace(BOM, "").trimStart().startsWith("<");
+  const normalized = looksLikeXml ? escapeStrayXmlChars(content) : content;
+
   // Stage 1: Detect format
   log("Detecting content format...");
-  const format = detectFormat(content);
+  const format = detectFormat(normalized);
   log(`  Format detected: ${format}`);
+  const isXml = format !== "json";
 
   // Stage 2: Parse content into CSDL using appropriate strategy
   log(`Parsing ${format.toUpperCase()} to CSDL...`);
   const converter = createConverter(format);
-  const parseResult = converter.convert(content);
+  const parseResult = converter.convert(normalized);
   const csdl = parseResult.csdl;
   const csdlWarnings = (parseResult.messages || []).map(
     (msg) => (typeof msg === "string" ? msg : msg.message || String(msg))
   );
   log("  Parsed successfully.");
+  
+  log("Enriching field descriptions...");
+  enrichDescriptions(csdl, isXml ? normalized : undefined);
 
   // Stage 3: Convert CSDL to OpenAPI
   log("Converting CSDL to OpenAPI 3.0...");
@@ -64,7 +74,12 @@ function convertContent(content, options = {}, log = () => {}) {
   const openapiMessages = [];
 
   try {
-    openapi = csdl2openapi(csdl, { ...options, messages: openapiMessages });
+    openapi = csdl2openapi(csdl, {
+      ...options,
+      diagram: options.includeDiagram === true,
+      skipBatchPath: !options.includeBatch,
+      messages: openapiMessages,
+    });
   } catch (err) {
     log("  ✗ OpenAPI conversion failed.");
     const userMessage =
@@ -93,7 +108,10 @@ function convertContent(content, options = {}, log = () => {}) {
   // Stage 4: Post-processing
   log("Compiling final output...");
   try {
-    openapi = postProcess(openapi);
+    openapi = postProcess(openapi, {
+      includeApply: options.includeApply,
+      requireTop: options.requireTop,
+    });
   } catch (err) {
     log("  ✗ Failed to compile final output.");
     throw new PostProcessingError(err.message, err);

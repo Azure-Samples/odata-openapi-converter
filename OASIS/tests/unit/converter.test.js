@@ -46,6 +46,105 @@ describe("convertContent — logger integration", () => {
   });
 });
 
+describe("convertContent — entity-relationship diagram", () => {
+  const minimalCsdl = JSON.stringify({
+    "$Version": "4.0",
+    "$EntityContainer": "TestService.Container",
+    "TestService": {
+      "$Kind": "Schema",
+      "TestEntity": {
+        "$Kind": "EntityType",
+        "$Key": ["ID"],
+        "ID": { "$Type": "Edm.Int32" },
+      },
+      "Container": {
+        "$Kind": "EntityContainer",
+        "TestSet": {
+          "$Collection": true,
+          "$Type": "TestService.TestEntity",
+        },
+      },
+    },
+  });
+
+  it("should omit the Entity Data Model diagram by default", () => {
+    const { openapi } = convertContent(minimalCsdl);
+    assert.ok(openapi.info.description, "info.description should exist");
+    assert.ok(
+      !openapi.info.description.includes("## Entity Data Model"),
+      "info.description should not contain the entity-relationship diagram section"
+    );
+  });
+
+  it("should embed the Entity Data Model diagram when includeDiagram is set", () => {
+    const { openapi } = convertContent(minimalCsdl, { includeDiagram: true });
+    assert.ok(openapi.info.description.includes("## Entity Data Model"));
+  });
+
+  it("should use a custom description via defaultDescription option", () => {
+    const { openapi } = convertContent(minimalCsdl, {
+      defaultDescription: "My custom API description",
+      includeDiagram: true,
+    });
+    assert.ok(
+      openapi.info.description.startsWith("My custom API description"),
+      "info.description should start with the custom description"
+    );
+    assert.ok(
+      openapi.info.description.includes("## Entity Data Model"),
+      "the ER diagram should still be appended after the custom description"
+    );
+  });
+});
+
+describe("convertContent — $top guard and /$batch handling", () => {
+  const minimalCsdl = JSON.stringify({
+    "$Version": "4.0",
+    "$EntityContainer": "TestService.Container",
+    "TestService": {
+      "$Kind": "Schema",
+      "TestEntity": {
+        "$Kind": "EntityType",
+        "$Key": ["ID"],
+        "ID": { "$Type": "Edm.Int32" },
+      },
+      "Container": {
+        "$Kind": "EntityContainer",
+        "TestSet": {
+          "$Collection": true,
+          "$Type": "TestService.TestEntity",
+        },
+      },
+    },
+  });
+
+  it("leaves $top optional with no default by default", () => {
+    const { openapi } = convertContent(minimalCsdl);
+    const top = openapi.components.parameters.top;
+    assert.ok(top, "the $top parameter component should exist");
+    assert.notEqual(top.required, true, "$top should not be required by default");
+    assert.equal(top.schema.default, undefined, "$top should have no default by default");
+  });
+
+  it("makes $top required with default 10 when requireTop is set", () => {
+    const { openapi } = convertContent(minimalCsdl, { requireTop: true });
+    const top = openapi.components.parameters.top;
+    assert.equal(top.required, true, "$top should be required");
+    assert.equal(top.schema.default, 10, "$top should default to 10");
+  });
+
+  it("skips the /$batch path by default", () => {
+    const { openapi } = convertContent(minimalCsdl);
+    assert.equal(openapi.paths["/$batch"], undefined, "/$batch should be omitted by default");
+  });
+
+  it("includes the /$batch path when includeBatch is set", () => {
+    const { openapi } = convertContent(minimalCsdl, { includeBatch: true });
+    assert.ok(openapi.paths["/$batch"], "/$batch should be present when opted in");
+    assert.ok(openapi.paths["/$batch"].post, "/$batch should expose a POST operation");
+  });
+});
+
 describe("convertContent — JSON CSDL input", () => {
   it("should convert minimal valid OData V4 CSDL JSON", () => {
     const json = JSON.stringify({
