@@ -70,22 +70,22 @@ async function convertHandler(request, context) {
         };
       }
     }
-    if (title) {
-      options.defaultTitle = title;
+    if (typeof title === "string" && title.trim()) {
+      options.defaultTitle = title.trim();
     }
-    if (description) {
-      options.defaultDescription = description;
+    if (typeof description === "string" && description.trim()) {
+      options.defaultDescription = description.trim();
     }
-    if (apply) {
+    if (apply === true) {
       options.includeApply = true;
     }
-    if (requireTop) {
+    if (requireTop === true) {
       options.requireTop = true;
     }
-    if (includeBatch) {
+    if (includeBatch === true) {
       options.includeBatch = true;
     }
-    if (diagram) {
+    if (diagram === true) {
       options.includeDiagram = true;
     }
 

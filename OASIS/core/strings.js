@@ -22,7 +22,7 @@ const STRINGS = Object.freeze({
     INVALID_SERVER_URL: "Error: Invalid --server-url. Must be a valid URL (e.g., https://your-server.com/sap/opu/odata/sap/).",
     DIR_NOT_FOUND: "Error: Input directory not found:",
     NOT_A_DIR: "Error: Not a directory:",
-    NOT_A_DIR_HINT: 'Hint: Use "oasis-converter convert" to convert a single file.',
+    NOT_A_DIR_HINT: 'Hint: Use "odata-converter convert" to convert a single file.',
     FILE_NOT_FOUND: "Error: Input file not found:",
     OVERWRITE_HINT: "output exists, use -O to overwrite",
   },

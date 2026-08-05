@@ -93,6 +93,56 @@ describe("convertHandler — success", () => {
     assert.ok(!withoutDiagram.jsonBody.data.info.description.includes("## Entity Data Model"));
     assert.ok(withDiagram.jsonBody.data.info.description.includes("## Entity Data Model"));
   });
+
+  it("should enable feature options only for boolean true", async () => {
+    if (!sampleAvailable) return;
+
+    const response = await convertHandler(
+      mockRequest({
+        fileName: SAMPLE_FILE,
+        content: sampleXml,
+        apply: "false",
+        requireTop: 1,
+        includeBatch: "true",
+        diagram: 1,
+      }),
+      mockContext
+    );
+    const spec = response.jsonBody.data;
+
+    assert.equal(spec.components.parameters.apply, undefined);
+    assert.notEqual(spec.components.parameters.top.required, true);
+    assert.equal(spec.paths["/$batch"], undefined);
+    assert.ok(!spec.info.description.includes("## Entity Data Model"));
+  });
+
+  it("should trim string metadata and ignore invalid values", async () => {
+    if (!sampleAvailable) return;
+
+    const trimmed = await convertHandler(
+      mockRequest({
+        fileName: SAMPLE_FILE,
+        content: sampleXml,
+        title: "  Trimmed title  ",
+        description: "  Trimmed description  ",
+      }),
+      mockContext
+    );
+    const ignored = await convertHandler(
+      mockRequest({
+        fileName: SAMPLE_FILE,
+        content: sampleXml,
+        title: 42,
+        description: "   ",
+      }),
+      mockContext
+    );
+
+    assert.equal(trimmed.jsonBody.data.info.title, "Trimmed title");
+    assert.equal(trimmed.jsonBody.data.info.description, "Trimmed description");
+    assert.notEqual(ignored.jsonBody.data.info.title, 42);
+    assert.notEqual(ignored.jsonBody.data.info.description, "   ");
+  });
 });
 
 // ── convertHandler — validation ───────────────────────────────

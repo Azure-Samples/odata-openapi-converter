@@ -17,7 +17,7 @@ Use the hosted converter — no install required:
 
 Drag and drop one or more OData metadata files (or an entire folder), convert, and download the results as a ZIP.
 
-Before converting, you can optionally set a **Server URL**, **Title**, and **Description**, and enable three toggles that mirror the CLI flags: **Add $apply (aggregation) query option**, **Require $top (default 10)**, and **Include the /$batch endpoint**. Each toggle has an inline explanation in the UI — see [APIM-Ready Output](#apim-ready-output) for details.
+Before converting, you can optionally set a **Server URL**, **Title**, and **Description**, and enable four toggles that mirror the CLI flags: **Add $apply (aggregation) query option**, **Require $top (default 10)**, **Include the /$batch endpoint**, and **Include entity-relationship diagram**. Each toggle has an inline explanation in the UI — see [APIM-Ready Output](#apim-ready-output) for details.
 
 ---
 
@@ -115,7 +115,7 @@ oasis-converter info service.xml
 | `-O, --overwrite` | Overwrite existing output files |
 | `-V, --verbose` | Show detailed conversion logs |
 
-The `-A`, `-R`, and `-B` flags mirror the **$apply**, **Require $top**, and **Include /$batch** checkboxes in the [web app](#web-app). Use `oasis-converter <command> --help` for full details on any command.
+The `-A`, `-R`, `-B`, and `--diagram` flags mirror the **$apply**, **Require $top**, **Include /$batch**, and **Include entity-relationship diagram** checkboxes in the [web app](#web-app). Use `oasis-converter <command> --help` for full details on any command.
 
 ---
 
