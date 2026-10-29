@@ -57,6 +57,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
+          skip_deploy_on_missing_secrets: true
           app_location: "/OASIS/app"
           api_location: "/OASIS/api/dist"
           output_location: "dist"
